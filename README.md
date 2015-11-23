@@ -41,19 +41,186 @@ This project aims to make it easy to build good-citizen JavaScript network clien
 - Node-compatible
 - Drop-in replacement for `fetch`
 
-## Hooks
+## API Design
 
-This outlines the places where plugins might be able to hook into of a `fetch` call, and what they could do:
+Taken from #1.
 
-- pre-fetch
-  - dedupe
-  - add authentication data
-  - throttle
-- fetch
-  - timeouts
-- post-fetch
-  - retry (eg. on 503)
-  - track performance
+There'd be two main constructors that come with `fetch-engine`: `FetchEngine` and `FetchPreset`. What they'd do is documented below:
+
+### `FetchEngine`
+
+```js
+const fetch = new FetchEngine({
+  plugins: [ ... ]
+});
+```
+
+- on creation, compose each plugin method into one method
+- on fetch(...), run methods in order:
+  - `shouldFetch`
+    - if `false`, bail with CancelledError
+  - `getRequest`
+    - produces a (`Promise` for a) `Request`
+  - `willFetch`
+    - side-effects, ignore return value
+  - (internal-only) `fetch`
+    - make the `Request` with an inner `fetch` implementation
+  - `fetch`
+    - allow plugins to `cancel`
+  - `getResponse`
+    - produce a (`Promise` for a) `Response`
+  - `didFetch`
+    - side-effects only, ignore return value
+
+### `FetchPreset`
+
+```js
+const preset = new FetchPreset({
+  filters: [ ... ],
+  plugins: [ ... ]
+});
+```
+
+- compose filter + plugin methods into functions, then act like a plugin
+- gates each method based on filter responses
+
+## Plugins
+
+The plugin API would be as below. They're just simple objects with methods. All are optional.
+
+#### `shouldFetch`
+
+Passed the current `Request` object.
+
+Allows a plugin to prevent a request from being made.
+
+Return a (`Promise` for a) Boolean. If `false`, the request is `Cancelled`.
+
+#### `getRequest`
+
+Passed the current `Request` object.
+
+Allows plugins to add data to `Request`, or produce an entirely new `Request`.
+
+Should return a (`Promise` for a) `Request`.
+
+#### `willFetch`
+
+Passed the current `Request` object.
+
+Allows a plugin to react to a request being made, but not affect it.
+
+Return value would be ignored.
+
+#### `fetch`
+
+Passed an object of the form `{ promise, cancel }`.
+
+Allows plugins to react to the completion of the `fetch` but not affect it, or `cancel` the request.
+
+Return value is ignored.
+
+####  `getResponse`
+
+Passed the current `Response` object.
+
+Allows plugins to add data to `Response`, or produce an entirely new `Response`.
+
+Should return a (`Promise` for a) `Response`.
+
+#### `didFetch`
+
+Passed the current `Response` object.
+
+Allows a plugin to react to a response arriving being made, but not affect it.
+
+Return value would be ignored.
+
+## Filters
+
+The filter API would be as below. Filters are used to gate the application of plugins within a `FetchPreset`. They're just simple objects with methods. All are optional.
+
+#### `testRequest`
+
+Passed the current `Request`.
+
+Run before `shouldFetch`, `getRequest`, `willFetch` and `fetch`, which will not be applied if `testRequest` resolves to `false`.
+
+Should return a (`Promise` for a) `Boolean`.
+
+#### `testResponse`
+
+Passed the current `Response`.
+
+Run before `getResponse` and `didFetch`, which will not be applied if `testResponse` resolves to `false`.
+
+Should return a (`Promise` for a) `Boolean`.
+
+## Example
+
+Here's an example without an implementation, just in case this is super unclear...
+
+```js
+import { FetchEngine, FetchPreset } from 'fetch-engine';
+
+class PathPrefixFilter {
+  constructor(prefix) {
+    this.prefix = prefix;
+  }
+  testRequest(request) {
+    const url = new URL(request.url);
+    return url.pathname.startsWith(prefix);
+  }
+}
+
+class CORSAuthPlugin {
+  getRequest(request) {
+    return new Request(request, {
+      mode: 'cors',
+      credentials: 'include',
+      headers: Object.assign(request.headers, {
+        'X-Csrf-Token': getCsrfToken()
+      })
+    });
+  }
+}
+
+class RateLimitPlugin {
+  shouldFetch(request) {
+    return !isRateLimited(request);
+  }
+}
+
+class TimeoutPlugin {
+  constructor(time=1000) {
+    this.time = time;
+  }
+  fetch({ cancel }) {
+    setTimeout(cancel, this.time);
+  }
+}
+
+class MetricsPlugin {
+  willFetch(request) {
+    trackRequest(request);
+  }
+  didFetch(response) {
+    trackResponse(response);
+  }
+}
+
+let fetch = new FetchEngine({
+  plugins: [
+    new TimeoutPlugin(5000),
+    new CORSAuthPlugin(),
+    new FetchPreset({
+      filters: [ new PathPrefixFilter('/1.1/') ],
+      plugins: [ new RateLimitPlugin() ]
+    }),
+    new MetricsPlugin()
+  ]
+});
+```
 
 ## Notes
 
