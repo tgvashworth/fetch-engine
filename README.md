@@ -6,7 +6,7 @@ Current status: _Design_
 
 ## Rationale
 
-The idea for this project comes from [TweetDeck][tweetdeck], a very 'chatty' native web app. The client-side is an oft-forgetten but important component of a distributed system. They're capable of bringing down servers with unexpected traffic or behaviour that exacerbates capacity problems.
+The idea for this project comes from [TweetDeck][tweetdeck], a very 'chatty' native web app. The client-side is an oft-forgetten but important component of a distributed system, capable of bringing down servers with large amounts of traffic.
 
 To mitigate the risk that TweetDeck contributes to a system failure we have developed a fairly complex networking layer. In various places, often ad-hoc, we do some of the following:
 
