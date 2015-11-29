@@ -21,11 +21,11 @@ export interface FetchEngineFilter {
 }
 
 export interface FetchEngineOptions {
-	plugins?: Array<FetchEnginePlugin>
+	plugins?: Array<FetchEnginePlugin>;
 }
 
 export interface Fetch {
-  (url: string|Request, init?: RequestInit): Promise<Response>
+  (url: string|Request, init?: RequestInit): Promise<Response>;
 }
 
 export const fetchEngine = (opts: FetchEngineOptions): Fetch => window.fetch;
