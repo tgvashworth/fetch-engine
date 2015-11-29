@@ -1,9 +1,11 @@
 /// <reference path="../typings/tsd.d.ts"/>
 
+export type PromiseOrValue<T> = T | Promise<T>;
+
 export interface FetchEnginePlugin {
 	// pre-fetch
 	shouldFetch?: (Request) => boolean;
-	getRequest?: (Request) => Request;
+	getRequest?: (Request) => PromiseOrValue<Request>;
 	willFetch?: (Request) => void;
 	// fetch
 	fetch?: (args: {
@@ -11,7 +13,7 @@ export interface FetchEnginePlugin {
 		promise: Promise<Response>;
 	}) => void;
 	// post-fetch
-	getResponse?: (Response) => Response;
+	getResponse?: (Response) => PromiseOrValue<Response>;
 	didFetch?: (Response) => void;
 }
 
@@ -24,8 +26,22 @@ export interface FetchEngineOptions {
 	plugins?: Array<FetchEnginePlugin>
 }
 
+export interface FetchGroupOptions extends FetchEngineOptions {
+  filters?: Array<FetchEngineFilter>
+}
+
 export interface Fetch {
-  (url: string|Request, init?: RequestInit): Promise<Response>
+  (url: string | Request, init?: RequestInit): Promise<Response>
+}
+
+export class FetchGroup {
+  filters: Array<FetchEngineFilter>;
+  plugins: Array<FetchEnginePlugin>;
+  constructor(opts: FetchGroupOptions) {
+    const { filters=[], plugins=[] } = opts;
+    this.filters = filters;
+    this.plugins = plugins;
+  }
 }
 
 export const fetchEngine = (opts: FetchEngineOptions): Fetch => window.fetch;
