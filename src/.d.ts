@@ -1,8 +1,8 @@
 /// <reference path="../typings/tsd.d.ts"/>
 
-export declare type PromiseOrValue<T> = T | Promise<T>;
+declare type PromiseOrValue<T> = T | Promise<T>;
 
-export declare interface FetchEnginePlugin {
+declare interface FetchEnginePlugin {
 	// pre-fetch
 	shouldFetch?: (Request) => boolean;
 	getRequest?: (Request) => PromiseOrValue<Request>;
@@ -17,19 +17,19 @@ export declare interface FetchEnginePlugin {
 	didFetch?: (Response) => void;
 }
 
-export declare interface FetchEngineFilter {
+declare interface FetchEngineFilter {
 	testRequest?: (Request) => boolean;
 	testResponse?: (Response, Request) => boolean;
 }
 
-export declare interface FetchEngineOptions {
+declare interface FetchEngineOptions {
 	plugins?: Array<FetchEnginePlugin>
 }
 
-export declare interface FetchGroupOptions extends FetchEngineOptions {
+declare interface FetchGroupOptions extends FetchEngineOptions {
   filters?: Array<FetchEngineFilter>
 }
 
-export declare interface Fetch {
+declare interface Fetch {
   (url: string | Request, init?: RequestInit): Promise<Response>
 }
