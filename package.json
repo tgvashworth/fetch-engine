@@ -1,0 +1,24 @@
+{
+  "name": "fetch-engine",
+  "version": "1.0.0",
+  "description": "A smart request-making library that makes sure your Javascript client is a good citizen of your distributed system.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/phuu/fetch-engine.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/phuu/fetch-engine/issues"
+  },
+  "homepage": "https://github.com/phuu/fetch-engine#readme",
+  "devDependencies": {
+    "tsd": "^0.6.5",
+    "typescript": "^1.6.2"
+  }
+}
