@@ -1,13 +1,16 @@
 /// <reference path="./.d.ts"/>
+"use strict";
 
 export class FetchGroup {
-  filters: Array<FetchEngineFilter>;
-  plugins: Array<FetchEnginePlugin>;
+  public filters: Array<FetchEngineFilter>;
+  public plugins: Array<FetchEnginePlugin>;
   constructor(opts: FetchGroupOptions) {
-    const { filters=[], plugins=[] } = opts;
+    const { filters = [], plugins = [] }: FetchGroupOptions = opts;
     this.filters = filters;
     this.plugins = plugins;
   }
 }
 
-export const fetchEngine = (opts: FetchEngineOptions): Fetch => window.fetch;
+export function fetchEngine(opts: FetchEngineOptions): Fetch {
+  return window.fetch;
+};
