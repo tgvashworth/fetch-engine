@@ -1,5 +1,6 @@
 /// <reference path="./.d.ts"/>
 "use strict";
+import * as Maybe from "./Maybe";
 
 export class Request implements Request {
   constructor(input: string | Request, init?: RequestInit)  {}

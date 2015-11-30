@@ -8,9 +8,15 @@
         "suppressImplicitAnyIndexErrors": true,
         "outDir": "dist"
     },
+    "filesGlob": [
+        "src/**/*.ts",
+        "!./node_modules/**/*.ts"
+    ],
     "files": [
         "src/index.test.ts",
-        "src/index.ts"
+        "src/index.ts",
+        "src/Maybe.test.ts",
+        "src/Maybe.ts"
     ],
     "atom": {
         "rewriteTsconfig": true

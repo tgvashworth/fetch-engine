@@ -6,8 +6,9 @@
   "scripts": {
     "build": "tsc",
     "watch": "tsc --watch",
+    "test": "npm test && npm run lint",
     "lint": "find src -name '*.ts' | xargs tslint",
-    "test": "tsc && ava dist/index.test.js"
+    "specs": "tsc && ava dist/*.test.js"
   },
   "repository": {
     "type": "git",
