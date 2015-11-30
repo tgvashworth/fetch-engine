@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsc",
     "watch": "tsc --watch",
-    "lint": "find src -name '*.ts' | xargs tslint"
+    "lint": "find src -name '*.ts' | xargs tslint",
+    "test": "tsc && ava dist/index.test.js"
   },
   "repository": {
     "type": "git",
@@ -20,6 +21,7 @@
   },
   "homepage": "https://github.com/phuu/fetch-engine#readme",
   "devDependencies": {
+    "ava": "^0.6.1",
     "tsd": "^0.6.5",
     "tslint": "^3.0.0",
     "typescript": "^1.6.2"
