@@ -1,7 +1,7 @@
 /// <reference path="./.d.test.ts" />
 "use strict";
 import test = require("ava");
-import { fetchEngine, FetchGroup, Request } from "./";
+import { fetchEngine, FetchGroup, Request, Response } from "./";
 
 test("fetchEngine is requireable", (t: TestAssertions) => {
   t.ok(fetchEngine);
@@ -15,6 +15,17 @@ test("FetchGroup is requireable", (t: TestAssertions) => {
 
 test("FetchGroup acts like a plugin", (t: TestAssertions) => {
   const group = new FetchGroup();
-  t.true(group.shouldFetch(new Request("/mock")));
-  t.end();
+  const mockRequest = new Request("/mock");
+  const mockResponse = new Response();
+  t.true(group.shouldFetch(mockRequest));
+  t.true(typeof group.willFetch === 'function');
+  t.true(typeof group.fetch === 'function');
+  t.true(typeof group.didFetch === 'function');
+  return Promise.all([
+    group.getRequest(mockRequest),
+    group.getResponse(mockResponse)
+  ]).then(([req, res]: [Request, Response]): void => {
+    t.is(req, mockRequest);
+    t.is(res, mockResponse);
+  });
 });

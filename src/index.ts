@@ -20,6 +20,15 @@ export class FetchGroup implements FetchEnginePlugin {
   shouldFetch(req: Request): boolean {
     return true;
   }
+  getRequest(req: Request): Promise<Request> {
+    return Promise.resolve(req);
+  }
+  willFetch(req: Request): void {}
+  fetch({ promise: Promise, cancel: Function }): void {}
+  getResponse(res: Response): Promise<Response> {
+    return Promise.resolve(res);
+  }
+  didFetch(res: Response): void {}
 }
 
 export function fetchEngine(group: FetchGroup): Fetch {

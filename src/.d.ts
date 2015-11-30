@@ -8,12 +8,10 @@ declare interface Fetch {
 
 // fetch-engine types
 
-declare type PromiseOrValue<T> = T | Promise<T>;
-
 declare interface FetchEnginePlugin {
   // pre-fetch
   shouldFetch?: (req: Request) => boolean;
-  getRequest?: (req: Request) => PromiseOrValue<Request>;
+  getRequest?: (req: Request) => Promise<Request>;
   willFetch?: (req: Request) => void;
   // fetch
   fetch?: (args: {
@@ -21,7 +19,7 @@ declare interface FetchEnginePlugin {
     promise: Promise<Response>;
   }) => void;
   // post-fetch
-  getResponse?: (req: Response) => PromiseOrValue<Response>;
+  getResponse?: (req: Response) => Promise<Response>;
   didFetch?: (req: Response) => void;
 }
 
