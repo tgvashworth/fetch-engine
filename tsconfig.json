@@ -8,8 +8,8 @@
         "outDir": "dist"
     },
     "files": [
-        "src/index.ts",
-        "src/index.test.ts"
+        "src/index.test.ts",
+        "src/index.ts"
     ],
     "atom": {
         "rewriteTsconfig": true

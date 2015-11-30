@@ -1,5 +1,13 @@
 /// <reference path="../typings/tsd.d.ts"/>
 
+// fetch-spec extensions
+
+declare interface Fetch {
+  (url: string | Request, init?: RequestInit): Promise<Response>;
+}
+
+// fetch-engine types
+
 declare type PromiseOrValue<T> = T | Promise<T>;
 
 declare interface FetchEnginePlugin {
@@ -22,14 +30,7 @@ declare interface FetchEngineFilter {
   testResponse?: (req: Response, res: Request) => boolean;
 }
 
-declare interface FetchEngineOptions {
+declare interface FetchGroupOptions {
   plugins?: Array<FetchEnginePlugin>;
-}
-
-declare interface FetchGroupOptions extends FetchEngineOptions {
   filters?: Array<FetchEngineFilter>;
-}
-
-declare interface Fetch {
-  (url: string | Request, init?: RequestInit): Promise<Response>;
 }

@@ -21,6 +21,7 @@ declare interface Test {
 }
 
 declare module "ava" {
-  function test(f: Test): void
+  function test(f: Test): void;
+  function test(message: string, f: Test): void;
   export = test;
 }
