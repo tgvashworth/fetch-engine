@@ -1,6 +1,7 @@
 /// <reference path="../typings/node/node.d.ts" />
 
 declare interface TestAssertions {
+  end: () => void;
   pass: (message?: string) => void;
   fail: (message?: string) => void;
   ok: (value: any, message?: string) => void;

@@ -3,4 +3,5 @@ const test = require("ava");
 
 test((t: TestAssertions) => {
   t.pass();
+  t.end();
 });
