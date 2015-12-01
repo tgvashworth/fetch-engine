@@ -20,13 +20,13 @@ test("Making a None", (t: TestAssertions) => {
 });
 
 test("Mapping Some gives a Some", (t: TestAssertions) => {
-  const inc = x => x + 1;
+  const inc = (x: number) => x + 1;
   t.same(Maybe.some(10).map(inc), new Maybe.Some(11));
   t.end();
 });
 
 test("Mapping None gives a None", (t: TestAssertions) => {
-  const inc = x => x + 1;
+  const inc = (x: number) => x + 1;
   const none = new Maybe.None();
   t.same(none.map(inc), new Maybe.None());
   t.end();
