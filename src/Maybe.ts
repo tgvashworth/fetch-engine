@@ -18,6 +18,8 @@ export class None<T> implements Functor<T> {
   }
 }
 
+const theNone = new None<any>();
+
 export type Maybe<T> = Some<T> | None<T>;
 export const some = <T>(v: T) => new Some<T>(v);
-export const none = <T>() => new None<T>();
+export const none = () => theNone;

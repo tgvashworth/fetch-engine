@@ -20,7 +20,7 @@ test("Making a None", (t: TestAssertions) => {
 });
 
 test("Mapping Some gives a Some", (t: TestAssertions) => {
-  const inc = (x) => x + 1;
+  const inc = x => x + 1;
   t.same(Maybe.some(10).map(inc), new Maybe.Some(11));
   t.end();
 });
