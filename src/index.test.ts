@@ -18,9 +18,9 @@ test("FetchGroup acts like a plugin", (t: TestAssertions) => {
   const mockRequest = new Request("/mock");
   const mockResponse = new Response();
   t.true(group.shouldFetch(mockRequest));
-  t.true(typeof group.willFetch === 'function');
-  t.true(typeof group.fetch === 'function');
-  t.true(typeof group.didFetch === 'function');
+  t.true(typeof group.willFetch === "function");
+  t.true(typeof group.fetch === "function");
+  t.true(typeof group.didFetch === "function");
   return Promise.all([
     group.getRequest(mockRequest),
     group.getResponse(mockResponse)
