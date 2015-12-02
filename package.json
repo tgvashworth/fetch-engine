@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc",
     "watch": "tsc --watch",
-    "test": "npm test && npm run lint",
+    "test": "npm run specs && npm run lint",
     "lint": "find src -name '*.ts' | xargs tslint",
     "specs": "tsc && ava dist/*.test.js"
   },
