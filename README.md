@@ -45,7 +45,7 @@ This project aims to make it easy to build good-citizen JavaScript network clien
 
 Taken from #1.
 
-There'd be two main constructors that come with `fetch-engine`: `FetchEngine` and `FetchPreset`. What they'd do is documented below:
+There'd be two main constructors that come with `fetch-engine`: `FetchEngine` and `FetchGroup`. What they'd do is documented below:
 
 ### `FetchEngine`
 
@@ -72,10 +72,10 @@ const fetch = new FetchEngine({
   - `didFetch`
     - side-effects only, ignore return value
 
-### `FetchPreset`
+### `FetchGroup`
 
 ```js
-const preset = new FetchPreset({
+const preset = new FetchGroup({
   filters: [ ... ],
   plugins: [ ... ]
 });
@@ -138,7 +138,7 @@ Return value would be ignored.
 
 ## Filters
 
-The filter API would be as below. Filters are used to gate the application of plugins within a `FetchPreset`. They're just simple objects with methods. All are optional.
+The filter API would be as below. Filters are used to gate the application of plugins within a `FetchGroup`. They're just simple objects with methods. All are optional.
 
 #### `testRequest`
 
@@ -161,7 +161,7 @@ Should return a (`Promise` for a) `Boolean`.
 Here's an example without an implementation, just in case this is super unclear...
 
 ```js
-import { FetchEngine, FetchPreset } from 'fetch-engine';
+import { FetchEngine, FetchGroup } from 'fetch-engine';
 
 class PathPrefixFilter {
   constructor(prefix) {
@@ -213,7 +213,7 @@ let fetch = new FetchEngine({
   plugins: [
     new TimeoutPlugin(5000),
     new CORSAuthPlugin(),
-    new FetchPreset({
+    new FetchGroup({
       filters: [ new PathPrefixFilter('/1.1/') ],
       plugins: [ new RateLimitPlugin() ]
     }),
