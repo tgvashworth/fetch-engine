@@ -1,4 +1,4 @@
-import { FetchEngine, FetchPreset } from 'fetch-engine';
+import { FetchEngine, FetchGroup } from 'fetch-engine';
 
 class PathPrefixFilter {
   constructor(prefix) {
@@ -50,7 +50,7 @@ let fetch = new FetchEngine({
   plugins: [
     new TimeoutPlugin(5000),
     new CORSAuthPlugin(),
-    new FetchPreset({
+    new FetchGroup({
       filters: [ new PathPrefixFilter('/1.1/') ],
       plugins: [ new RateLimitPlugin() ]
     }),
