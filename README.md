@@ -2,7 +2,7 @@
 
 A smart request-making library that makes sure your Javascript client is a good citizen of your distributed system.
 
-Current status: _Design_
+Current status: _Implementation_
 
 ## Rationale
 
