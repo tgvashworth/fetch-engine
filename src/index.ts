@@ -1,9 +1,17 @@
 /// <reference path="./.d.ts"/>
 "use strict";
-import * as Maybe from "./Maybe";
+import { Maybe } from "./Maybe";
 
 export class Request implements Request {
-  constructor(input: string | Request, init?: RequestInit)  {}
+  method: string = "GET";
+  url: string;
+  constructor(input: string | Request, init?: RequestInit)  {
+    if (typeof input === "string") {
+      this.url = input;
+    } else {
+      this.url = input.url;
+    }
+  }
 }
 
 export class Response implements Response {
@@ -17,6 +25,24 @@ export class FetchGroup implements FetchEnginePlugin {
     const { filters = [], plugins = [] }: FetchGroupOptions = opts;
     this.filters = filters;
     this.plugins = plugins;
+
+    type ShouldFetch = (Request) => boolean;
+    this.shouldFetch =
+      plugins
+        .map(plugin => [plugin, plugin.shouldFetch])
+        .reduceRight(
+          (
+            next: ShouldFetch,
+            [plugin, shouldFetch]: [FetchEnginePlugin, ShouldFetch]
+          ): ShouldFetch => (
+            (req: Request): boolean => (
+              shouldFetch.call(plugin, req)
+                ? next(req)
+                : false
+            )
+          ),
+          (r: Request): boolean => true
+        );
   }
   shouldFetch(req: Request): boolean {
     return true;

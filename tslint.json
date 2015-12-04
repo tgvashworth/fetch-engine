@@ -98,7 +98,6 @@
     "typedef": [
       true,
       "call-signature",
-      "parameter",
       "property-declaration",
       "member-variable-declaration"
     ],
@@ -117,7 +116,7 @@
       "check-module"
     ],
     "variable-name": [
-      true,
+      false,
       "check-format",
       "allow-leading-underscore",
       "ban-keywords"
