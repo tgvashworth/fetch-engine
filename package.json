@@ -23,6 +23,8 @@
   "homepage": "https://github.com/phuu/fetch-engine#readme",
   "devDependencies": {
     "ava": "^0.6.1",
+    "deeper": "^2.1.0",
+    "jsverify": "^0.7.1",
     "tsd": "^0.6.5",
     "tslint": "^3.0.0",
     "typescript": "^1.6.2"
