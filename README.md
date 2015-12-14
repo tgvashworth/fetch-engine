@@ -169,25 +169,32 @@ class PathPrefixFilter {
   }
   testRequest(request) {
     const url = new URL(request.url);
-    return url.pathname.startsWith(prefix);
+    return url.pathname.startsWith(this.prefix);
   }
 }
 
 class CORSAuthPlugin {
+  constructor(csrfToken) {
+    this.csrfToken = csrfToken;
+  }
   getRequest(request) {
     return new Request(request, {
       mode: 'cors',
       credentials: 'include',
       headers: Object.assign(request.headers, {
-        'X-Csrf-Token': getCsrfToken()
+        'X-Csrf-Token': this.csrfToken
       })
     });
   }
 }
 
 class RateLimitPlugin {
+  isRateLimited(request) {
+    /* ... */
+    return false;
+  }
   shouldFetch(request) {
-    return !isRateLimited(request);
+    return !this.isRateLimited(request);
   }
 }
 
