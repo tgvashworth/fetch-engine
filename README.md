@@ -227,6 +227,16 @@ let fetch = new FetchEngine({
     new MetricsPlugin()
   ]
 });
+
+// The above could be a shorthand for the following:
+
+let fetch = new FetchEngine(new FetchGroup({
+  plugins: [
+    new TimeoutPlugin(5000),
+    new CORSAuthPlugin(),
+    // ...
+  ]
+}));
 ```
 
 ## Notes
