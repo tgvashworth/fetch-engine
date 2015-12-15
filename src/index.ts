@@ -15,6 +15,8 @@ export class Request implements Request {
   }
 }
 
+export class Response implements Response {}
+
 export class FetchGroup implements FetchEnginePlugin, FetchEngineFilter {
   constructor(opts: FetchGroupOptions = {}) {
     const { plugins = [] }: FetchGroupOptions = opts;
@@ -39,15 +41,15 @@ export class FetchGroup implements FetchEnginePlugin, FetchEngineFilter {
   getRequest(req: Request): Promise<Request> {
     return Promise.resolve(req);
   }
-  // willFetch(req: Request): void {}
-  // fetch({ promise: Promise, cancel: Function }): void {}
+  willFetch(req: Request): void {}
+  fetch(): void {}
   testResponse(req: Response): boolean {
     return true;
   }
   getResponse(res: Response): Promise<Response> {
     return Promise.resolve(res);
   }
-  // didFetch(res: Response): void {}
+  didFetch(): void {}
 }
 
 export function fetchEngine(group: FetchGroup): Fetch {
