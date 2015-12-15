@@ -1,6 +1,8 @@
 /// <reference path="./.d.ts"/>
 "use strict";
 import { Maybe } from "./Maybe";
+import composeEvery from "./composeEvery";
+import getBoundImplementations from "./getBoundImplementations";
 
 export class Request implements Request {
   method: string = "GET";
@@ -18,31 +20,23 @@ export class Response implements Response {
   constructor() {}
 }
 
-export class FetchGroup implements FetchEnginePlugin {
-  filters: Array<FetchEngineFilter>;
-  plugins: Array<FetchEnginePlugin>;
+export class FetchGroup implements FetchEnginePlugin, FetchEngineFilter {
   constructor(opts: FetchGroupOptions = {}) {
     const { filters = [], plugins = [] }: FetchGroupOptions = opts;
-    this.filters = filters;
-    this.plugins = plugins;
 
-    type ShouldFetch = (Request) => boolean;
+    this.testRequest =
+      composeEvery(getBoundImplementations("testRequest", plugins));
     this.shouldFetch =
-      plugins
-        .map(plugin => [plugin, plugin.shouldFetch])
-        .reduceRight(
-          (
-            next: ShouldFetch,
-            [plugin, shouldFetch]: [FetchEnginePlugin, ShouldFetch]
-          ): ShouldFetch => (
-            (req: Request): boolean => (
-              shouldFetch.call(plugin, req)
-                ? next(req)
-                : false
-            )
-          ),
-          (r: Request): boolean => true
-        );
+      composeEvery(getBoundImplementations("shouldFetch", plugins));
+    // TODO: getRequest
+    // TODO: willFetch
+    // TODO: fetch
+    // TODO: getResponse
+    // TODO: testResponse
+    // TODO: didFetch
+  }
+  testRequest(req: Request): boolean {
+    return true;
   }
   shouldFetch(req: Request): boolean {
     return true;
@@ -52,6 +46,9 @@ export class FetchGroup implements FetchEnginePlugin {
   }
   willFetch(req: Request): void {}
   fetch({ promise: Promise, cancel: Function }): void {}
+  testResponse(req: Response): boolean {
+    return true;
+  }
   getResponse(res: Response): Promise<Response> {
     return Promise.resolve(res);
   }

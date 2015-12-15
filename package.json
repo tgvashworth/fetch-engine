@@ -4,11 +4,12 @@
   "description": "A smart request-making library that makes sure your Javascript client is a good citizen of your distributed system.",
   "main": "index.js",
   "scripts": {
-    "build": "tsc",
-    "watch": "tsc --watch",
+    "clean": "rm -rf ./dist",
+    "build": "npm run clean && tsc",
+    "watch": "npm run clean && tsc --watch",
     "test": "npm run specs && npm run lint",
     "lint": "find src -name '*.ts' | xargs tslint",
-    "specs": "tsc && ava dist/*.test.js"
+    "specs": "npm run build && ava dist/*.test.js"
   },
   "repository": {
     "type": "git",
