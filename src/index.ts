@@ -1,6 +1,5 @@
 /// <reference path="./.d.ts"/>
 "use strict";
-import { Maybe } from "./Maybe";
 import composeEvery from "./composeEvery";
 import getBoundImplementations from "./getBoundImplementations";
 
@@ -16,13 +15,9 @@ export class Request implements Request {
   }
 }
 
-export class Response implements Response {
-  constructor() {}
-}
-
 export class FetchGroup implements FetchEnginePlugin, FetchEngineFilter {
   constructor(opts: FetchGroupOptions = {}) {
-    const { filters = [], plugins = [] }: FetchGroupOptions = opts;
+    const { plugins = [] }: FetchGroupOptions = opts;
 
     this.testRequest =
       composeEvery(getBoundImplementations("testRequest", plugins));
@@ -44,15 +39,15 @@ export class FetchGroup implements FetchEnginePlugin, FetchEngineFilter {
   getRequest(req: Request): Promise<Request> {
     return Promise.resolve(req);
   }
-  willFetch(req: Request): void {}
-  fetch({ promise: Promise, cancel: Function }): void {}
+  // willFetch(req: Request): void {}
+  // fetch({ promise: Promise, cancel: Function }): void {}
   testResponse(req: Response): boolean {
     return true;
   }
   getResponse(res: Response): Promise<Response> {
     return Promise.resolve(res);
   }
-  didFetch(res: Response): void {}
+  // didFetch(res: Response): void {}
 }
 
 export function fetchEngine(group: FetchGroup): Fetch {

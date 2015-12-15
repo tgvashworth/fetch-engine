@@ -10,8 +10,7 @@
     "class-name": true,
     "comment-format": [
       true,
-      "check-space",
-      "check-lowercase"
+      "check-space"
     ],
     "curly": true,
     "eofline": true,
@@ -85,11 +84,7 @@
     "semicolon": true,
     "switch-default": true,
     "trailing-comma": [
-      true,
-      {
-        "multiline": "always",
-        "singleline": "never"
-      }
+      false
     ],
     "triple-equals": [
       true,
