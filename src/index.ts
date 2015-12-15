@@ -4,10 +4,10 @@ import composeEvery from "./composeEvery";
 import composePromise from "./composePromise";
 import getBoundImplementations from "./getBoundImplementations";
 
-export class Request implements Request {
+export class Request {
   method: string = "GET";
   url: string;
-  constructor(input: string | Request, init?: RequestInit)  {
+  constructor(input: string | Request, init?: FetchRequestInit)  {
     if (typeof input === "string") {
       this.url = input;
     } else {
@@ -16,7 +16,7 @@ export class Request implements Request {
   }
 }
 
-export class Response implements Response {}
+export class Response {}
 
 export class FetchGroup implements FetchEnginePlugin, FetchEngineFilter {
   constructor(opts: FetchGroupOptions = {}) {
@@ -57,7 +57,7 @@ export class FetchGroup implements FetchEnginePlugin, FetchEngineFilter {
 }
 
 export function fetchEngine(group: FetchGroup): Fetch {
-  return function (request: string, init?: RequestInit): Promise<Response> {
+  return function (request: string, init?: FetchRequestInit): Promise<Response> {
     return Promise.resolve(new Response());
   };
 };
