@@ -13,6 +13,16 @@ class ShouldFetchPlugin implements FetchEnginePlugin {
   }
 }
 
+class TestRequestPlugin implements FetchEnginePlugin {
+  passTest: boolean = true;
+  constructor(passTest: boolean) {
+    this.passTest = passTest;
+  }
+  testRequest(req: Request): boolean {
+    return this.passTest;
+  }
+}
+
 test("fetchEngine is requireable", (t: TestAssertions) => {
   t.ok(fetchEngine);
   t.end();
@@ -66,6 +76,34 @@ test("FetchGroup composes plugin shouldFetch", (t: TestAssertions) => {
   const mockRequest = new Request("/mock");
   specs.forEach(([group, expected]: [FetchGroup, boolean]) => {
     t.same(group.shouldFetch(mockRequest), expected);
+  });
+  t.end();
+});
+
+test("FetchGroup composes plugin testRequest", (t: TestAssertions) => {
+  const specs = [
+    [
+      new FetchGroup({
+        plugins: [
+          new TestRequestPlugin(true),
+          new TestRequestPlugin(false)
+        ]
+      }),
+      false
+    ],
+    [
+      new FetchGroup({
+        plugins: [
+          new TestRequestPlugin(true),
+          new TestRequestPlugin(true)
+        ]
+      }),
+      true
+    ]
+  ];
+  const mockRequest = new Request("/mock");
+  specs.forEach(([group, expected]: [FetchGroup, boolean]) => {
+    t.same(group.testRequest(mockRequest), expected);
   });
   t.end();
 });

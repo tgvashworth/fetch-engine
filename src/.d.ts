@@ -25,7 +25,7 @@ declare interface FetchEnginePlugin {
 
 declare interface FetchEngineFilter {
   testRequest?: (req: Request) => boolean;
-  testResponse?: (req: Response, res: Request) => boolean;
+  testResponse?: (req: Response) => boolean;
 }
 
 declare interface FetchGroupOptions {

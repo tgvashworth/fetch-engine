@@ -1,6 +1,7 @@
 /// <reference path="../typings/node/node.d.ts" />
 
 declare interface TestAssertions {
+  plan: (n: number) => void;
   end: () => void;
   pass: (message?: string) => void;
   fail: (message?: string) => void;
@@ -20,8 +21,13 @@ declare interface Test {
   (t: TestAssertions): Promise<void> | void;
 }
 
-declare module "ava" {
-  function test(f: Test): void;
-  function test(message: string, f: Test): void;
+declare interface Ava {
+  (f: Test): void;
+  (message: string, f: Test): void;
+  only: Ava;
+}
+
+declare module "ava"  {
+  const test: Ava;
   export = test;
 }

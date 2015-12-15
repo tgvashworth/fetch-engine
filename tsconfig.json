@@ -13,6 +13,10 @@
         "!./node_modules/**/*.ts"
     ],
     "files": [
+        "src/composeEvery.test.ts",
+        "src/composeEvery.ts",
+        "src/getBoundImplementations.test.ts",
+        "src/getBoundImplementations.ts",
         "src/index.test.ts",
         "src/index.ts",
         "src/Maybe.test.ts",
