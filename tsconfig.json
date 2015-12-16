@@ -17,6 +17,8 @@
         "src/composeEvery.ts",
         "src/composePromise.test.ts",
         "src/composePromise.ts",
+        "src/composeVoid.test.ts",
+        "src/composeVoid.ts",
         "src/getBoundImplementations.test.ts",
         "src/getBoundImplementations.ts",
         "src/Headers.test.ts",

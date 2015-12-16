@@ -2,6 +2,7 @@
 "use strict";
 import composeEvery from "./composeEvery";
 import composePromise from "./composePromise";
+import composeVoid from "./composeVoid";
 import getBoundImplementations from "./getBoundImplementations";
 
 export class Request {
@@ -28,13 +29,16 @@ export class FetchGroup implements FetchEnginePlugin, FetchEngineFilter {
       composeEvery(getBoundImplementations("shouldFetch", plugins));
     this.getRequest =
       composePromise(getBoundImplementations("getRequest", plugins));
-    // TODO: willFetch
-    // TODO: fetch
+    this.willFetch =
+      composeVoid(getBoundImplementations("willFetch", plugins));
+    this.fetch =
+      composeVoid(getBoundImplementations("fetch", plugins));
     this.getRequest =
       composePromise(getBoundImplementations("getResponse", plugins));
     this.testResponse =
       composeEvery(getBoundImplementations("testResponse", plugins));
-    // TODO: didFetch
+    this.didFetch =
+      composeVoid(getBoundImplementations("didFetch", plugins));
   }
   testRequest(req: Request): boolean {
     return true;
@@ -46,14 +50,14 @@ export class FetchGroup implements FetchEnginePlugin, FetchEngineFilter {
     return Promise.resolve(req);
   }
   willFetch(req: Request): void {}
-  fetch(): void {}
+  fetch(args: FetchArgs): void {}
   testResponse(req: Response): boolean {
     return true;
   }
   getResponse(res: Response): Promise<Response> {
     return Promise.resolve(res);
   }
-  didFetch(): void {}
+  didFetch(res: Response): void {}
 }
 
 export function fetchEngine(group: FetchGroup): Fetch {
