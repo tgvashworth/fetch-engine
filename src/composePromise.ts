@@ -3,9 +3,14 @@
 export default function composePromise<T>(
   fns: Array<(t: T) => Promise<T>>
 ): (T) => Promise<T> {
-  return (v: T) =>
-    fns.reduce(
-      (pPrev: Promise<T>, f: (t: T) => Promise<T>): Promise<T> => pPrev.then(f),
-      Promise.resolve(v)
-    );
+  type Fn = (v: T) => Promise<T>;
+  return fns.reduceRight(
+    (
+      next: Fn,
+      f: Fn
+    ): Fn => (
+      (v: T): Promise<T> => f(v).then(next)
+    ),
+    (v: T): Promise<T> => Promise.resolve(v)
+  );
 };
