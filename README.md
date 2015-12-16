@@ -1,5 +1,7 @@
 # fetch-engine
 
+[![Build Status](https://travis-ci.org/phuu/fetch-engine.svg?branch=master)](https://travis-ci.org/phuu/fetch-engine) [![Stories in Ready](https://badge.waffle.io/phuu/fetch-engine.svg?label=ready&title=Ready)](http://waffle.io/phuu/fetch-engine)
+
 A smart request-making library that makes sure your Javascript client is a good citizen of your distributed system.
 
 Current status: _Implementation_ (not ready for use, but please contribute)
