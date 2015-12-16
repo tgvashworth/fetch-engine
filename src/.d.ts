@@ -83,16 +83,18 @@ declare interface Fetch {
 
 // fetch-engine types
 
+declare interface FetchArgs {
+  promise: Promise<FetchResponse>;
+  cancel(): void;
+}
+
 declare interface FetchEnginePlugin {
   // pre-fetch
   shouldFetch?: (req: FetchRequest) => boolean;
   getRequest?: (req: FetchRequest) => Promise<FetchRequest>;
   willFetch?: (req: FetchRequest) => void;
   // fetch
-  fetch?: (args: {
-    cancel(): void;
-    promise: Promise<FetchResponse>;
-  }) => void;
+  fetch?: (args: FetchArgs) => void;
   // post-fetch
   getResponse?: (req: FetchResponse) => Promise<FetchResponse>;
   didFetch?: (req: FetchResponse) => void;
