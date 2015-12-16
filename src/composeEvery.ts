@@ -1,7 +1,9 @@
 /// <reference path="./.d.ts"/>
 
-export default function composeEvery<T>(fns: Array<(T) => boolean>): (T) => boolean {
-  type Fn = (T) => boolean;
+export default function composeEvery<T>(
+  fns: Array<(v: T) => boolean>
+): (v: T) => boolean {
+  type Fn = (v: T) => boolean;
   return fns.reduceRight(
     (
       next: Fn,
@@ -13,6 +15,6 @@ export default function composeEvery<T>(fns: Array<(T) => boolean>): (T) => bool
           : false
       )
     ),
-    (r: T): boolean => true
+    (_: T): boolean => true
   );
 };

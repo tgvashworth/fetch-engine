@@ -1,6 +1,7 @@
 /// <reference path="./.d.ts"/>
 "use strict";
 import composeEvery from "./composeEvery";
+import composePromise from "./composePromise";
 import getBoundImplementations from "./getBoundImplementations";
 
 export class Request implements Request {
@@ -25,11 +26,14 @@ export class FetchGroup implements FetchEnginePlugin, FetchEngineFilter {
       composeEvery(getBoundImplementations("testRequest", plugins));
     this.shouldFetch =
       composeEvery(getBoundImplementations("shouldFetch", plugins));
-    // TODO: getRequest
+    this.getRequest =
+      composePromise(getBoundImplementations("getRequest", plugins));
     // TODO: willFetch
     // TODO: fetch
-    // TODO: getResponse
-    // TODO: testResponse
+    this.getRequest =
+      composePromise(getBoundImplementations("getResponse", plugins));
+    this.testResponse =
+      composeEvery(getBoundImplementations("testResponse", plugins));
     // TODO: didFetch
   }
   testRequest(req: Request): boolean {
