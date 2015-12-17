@@ -1,6 +1,8 @@
 /// <reference path="./.d.test.ts" />
 "use strict";
 import test = require("ava");
+import jsc = require("jsverify");
+import deepEqual = require("deeper");
 import * as Maybe from "./Maybe";
 
 test("Maybe is requireable", (t: TestAssertions) => {
@@ -9,8 +11,9 @@ test("Maybe is requireable", (t: TestAssertions) => {
 });
 
 test("Making a maybe value gives a Some", (t: TestAssertions) => {
-  t.ok(Maybe.some(10));
-  t.same(Maybe.some(10), new Maybe.Some(10));
+  jsc.assert(jsc.forall("nat", (i: number) => {
+    return deepEqual(Maybe.some(i), new Maybe.Some(i));
+  }));
   t.end();
 });
 
@@ -21,13 +24,34 @@ test("Making a None", (t: TestAssertions) => {
 
 test("Mapping Some gives a Some", (t: TestAssertions) => {
   const inc = (x: number) => x + 1;
-  t.same(Maybe.some(10).map(inc), new Maybe.Some(11));
+  jsc.assert(jsc.forall("nat", (i: number) => {
+    return deepEqual(Maybe.some(i).map(inc), new Maybe.Some(i + 1));
+  }));
+  t.end();
+});
+
+test("Mapping the identity gives the same object", (t: TestAssertions) => {
+  const id = (x) => x;
+  jsc.assert(jsc.forall("nat", (i: number) => {
+    return deepEqual(Maybe.some(i).map(id), new Maybe.Some(i));
+  }));
   t.end();
 });
 
 test("Mapping None gives a None", (t: TestAssertions) => {
   const inc = (x: number) => x + 1;
-  const none = new Maybe.None();
-  t.same(none.map(inc), new Maybe.None());
+  jsc.assert(jsc.forall("nat", (i: number) => {
+    const none = new Maybe.None();
+    return deepEqual(none.map(inc), new Maybe.None());
+  }));
+  t.end();
+});
+
+test("Mapping None gives a None", (t: TestAssertions) => {
+  const inc = (x: number) => x + 1;
+  jsc.assert(jsc.forall("nat", (i: number) => {
+    const none = new Maybe.None();
+    return deepEqual(none.map(inc), new Maybe.None());
+  }));
   t.end();
 });

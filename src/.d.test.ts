@@ -31,3 +31,18 @@ declare module "ava"  {
   const test: Ava;
   export = test;
 }
+
+declare module "deeper" {
+  function deepEqual<T>(a: T, b: T): boolean;
+  export = deepEqual;
+}
+
+// Partial definition.
+
+declare interface Property {
+}
+
+declare module "jsverify" {
+  function forall(arbs: String, assertion: (input: any) => void): Property;
+  function assert(prop: Property): void;
+}
