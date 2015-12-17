@@ -18,7 +18,7 @@ declare interface TestAssertions {
 }
 
 declare interface Test {
-  (t: TestAssertions): Promise<void> | void;
+  (t: TestAssertions): Promise<any> | any;
 }
 
 declare interface Ava {

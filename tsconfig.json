@@ -19,6 +19,9 @@
         "src/composePromise.ts",
         "src/composeVoid.test.ts",
         "src/composeVoid.ts",
+        "src/fetch.ts",
+        "src/fetchEngine.test.ts",
+        "src/fetchEngine.ts",
         "src/FetchGroup.test.ts",
         "src/FetchGroup.ts",
         "src/getBoundImplementations.test.ts",
@@ -27,9 +30,11 @@
         "src/Headers.ts",
         "src/HeadersUtils.test.ts",
         "src/HeadersUtils.ts",
-        "src/index.ts",
         "src/Maybe.test.ts",
-        "src/Maybe.ts"
+        "src/Maybe.ts",
+        "src/mocks.ts",
+        "src/sideEffect.test.ts",
+        "src/sideEffect.ts"
     ],
     "atom": {
         "rewriteTsconfig": true

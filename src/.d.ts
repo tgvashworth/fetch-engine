@@ -16,7 +16,7 @@ declare class FetchHeaders {
 declare class FetchResponse {}
 
 declare interface Fetch {
-  (url: string | FetchRequest): Promise<FetchResponse>;
+  (request: FetchRequest): Promise<FetchResponse>;
 }
 
 // fetch-engine types

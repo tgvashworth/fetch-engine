@@ -2,25 +2,7 @@
 "use strict";
 import test = require("ava");
 import FetchGroup from "./FetchGroup";
-
-class MockRequest implements FetchRequest {
-  url: string;
-  constructor(input: string) {
-    this.url = input;
-  }
-}
-class MockResponse implements FetchResponse {}
-class Mock implements FetchEnginePlugin, FetchEngineFilter {
-  constructor(args = {}) {
-    Object.keys(args).forEach((method) => this.mock(method, args[method]));
-  }
-  mockReturn(method: string, value: any): void {
-    this.mock(method, () => value);
-  }
-  mock(method: string, fn: Function): void {
-    this[method] = fn;
-  }
-}
+import { Mock, MockRequest, MockResponse } from "./mocks";
 
 test("FetchGroup is requireable", (t: TestAssertions) => {
   t.ok(FetchGroup);
