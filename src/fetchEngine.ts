@@ -9,7 +9,7 @@ export default function fetchEngine(
 ): Fetch {
   return function (originalRequest: FetchRequest): Promise<FetchResponse> {
     return Promise.resolve(originalRequest)
-      .then(sideEffect(request => {
+      .then(sideEffect((request: FetchRequest) => {
         if (!plugin.shouldFetch(request)) {
           throw new Error("shouldFetch prevented the request from being made");
         }

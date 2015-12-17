@@ -2,7 +2,9 @@
 
 // fetch-spec
 
-declare class FetchRequest {}
+declare class FetchRequest {
+  url: string;
+}
 
 declare class FetchHeaders {
   append(name: string, value: string): void;

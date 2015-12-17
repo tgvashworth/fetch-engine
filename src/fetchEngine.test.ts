@@ -41,7 +41,7 @@ test(
     const fetch = fetchEngine(new FetchGroup({
       plugins: [
         new Mock({
-          getRequest: (req: FetchRequest): FetchRequest => {
+          getRequest: (req: FetchRequest): Promise<FetchRequest> => {
             t.same(req, firstMockReq);
             return Promise.resolve(secondMockReq);
           },
