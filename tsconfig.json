@@ -13,6 +13,8 @@
         "!./node_modules/**/*.ts"
     ],
     "files": [
+        "src/Body.test.ts",
+        "src/Body.ts",
         "src/composeEvery.test.ts",
         "src/composeEvery.ts",
         "src/composePromise.test.ts",
