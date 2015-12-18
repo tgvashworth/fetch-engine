@@ -1,4 +1,4 @@
-/// <reference path="./.d.ts"/>
+/// <reference path="../.d.ts"/>
 
 export default function composePromise<T>(
   fns: Array<(t: T) => Promise<T>>

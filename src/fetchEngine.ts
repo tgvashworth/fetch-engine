@@ -2,7 +2,7 @@
 "use strict";
 import fetch from "./fetch";
 import FetchGroup from "./FetchGroup";
-import sideEffect from "./sideEffect";
+import sideEffect from "./utils/sideEffect";
 
 export default function fetchEngine(
   plugin: FetchEnginePlugin = new FetchGroup()

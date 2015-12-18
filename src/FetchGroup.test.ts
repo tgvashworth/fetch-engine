@@ -2,7 +2,7 @@
 "use strict";
 import test = require("ava");
 import FetchGroup from "./FetchGroup";
-import { Mock, MockRequest, MockResponse } from "./mocks";
+import { Mock, MockRequest, MockResponse } from "./utils/mocks";
 
 test("FetchGroup is requireable", (t: TestAssertions) => {
   t.ok(FetchGroup);

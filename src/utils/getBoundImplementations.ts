@@ -1,4 +1,4 @@
-/// <reference path="./.d.ts"/>
+/// <reference path="../.d.ts"/>
 
 /**
  * Pull all implementations of `methodName` from the objects in the `objs` list,

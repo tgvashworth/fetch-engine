@@ -1,4 +1,4 @@
-/// <reference path="./.d.test.ts" />
+/// <reference path="../.d.test.ts" />
 "use strict";
 import test = require("ava");
 import composeVoid from "./composeVoid";

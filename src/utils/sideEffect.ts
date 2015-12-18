@@ -1,4 +1,4 @@
-/// <reference path="./.d.ts"/>
+/// <reference path="../.d.ts"/>
 
 export default function sideEffect<T>(
   fn: (v: T, ...rest: Array<any>) => any

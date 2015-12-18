@@ -9,7 +9,7 @@
     "watch": "npm run clean && tsc --watch",
     "test": "npm run specs && npm run lint",
     "lint": "find src -name '*.ts' | xargs tslint",
-    "specs": "npm run build && ava dist/*.test.js"
+    "specs": "npm run build && ava dist/*.test.js dist/**/*.test.js "
   },
   "repository": {
     "type": "git",

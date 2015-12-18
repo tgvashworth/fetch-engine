@@ -1,9 +1,9 @@
 /// <reference path="./.d.ts"/>
 "use strict";
-import composeEvery from "./composeEvery";
-import composePromise from "./composePromise";
-import composeVoid from "./composeVoid";
-import getBoundImplementations from "./getBoundImplementations";
+import composeEvery from "./utils/composeEvery";
+import composePromise from "./utils/composePromise";
+import composeVoid from "./utils/composeVoid";
+import getBoundImplementations from "./utils/getBoundImplementations";
 
 export default class FetchGroup implements FetchEnginePlugin {
   // Filters

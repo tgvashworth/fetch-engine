@@ -1,4 +1,4 @@
-/// <reference path="./.d.ts"/>
+/// <reference path="../.d.ts"/>
 
 export default function composeEvery<T>(
   fns: Array<(v: T) => boolean>
