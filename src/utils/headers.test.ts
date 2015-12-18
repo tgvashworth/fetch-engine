@@ -7,7 +7,7 @@ import {
   isForbiddenResponseHeaderName,
   isSimpleHeader,
   getNormalizedHeaderName,
-} from "./HeadersUtils";
+} from "./headers";
 
 test(
   "Functions are requireable",

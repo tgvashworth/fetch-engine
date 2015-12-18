@@ -30,8 +30,8 @@
         "src/utils/composeVoid.ts",
         "src/utils/getBoundImplementations.test.ts",
         "src/utils/getBoundImplementations.ts",
-        "src/utils/HeadersUtils.test.ts",
-        "src/utils/HeadersUtils.ts",
+        "src/utils/headers.test.ts",
+        "src/utils/headers.ts",
         "src/utils/mocks.ts",
         "src/utils/sideEffect.test.ts",
         "src/utils/sideEffect.ts"

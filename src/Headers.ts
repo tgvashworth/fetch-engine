@@ -6,7 +6,7 @@ import {
   isForbiddenResponseHeaderName,
   isSimpleHeader,
   getNormalizedHeaderName,
-} from "./utils/HeadersUtils";
+} from "./utils/headers";
 
 export interface Header {
   name: string;
