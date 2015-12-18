@@ -2,10 +2,6 @@
 
 // fetch-spec
 
-declare class FetchRequest {
-  url: string;
-}
-
 declare class FetchBody {
   bodyUsed: boolean;
   arrayBuffer(): Promise<ArrayBuffer>;
@@ -14,6 +10,27 @@ declare class FetchBody {
   json(): Promise<any>;
   json<T>(): Promise<T>;
   text(): Promise<string>;
+}
+
+declare class FetchRequest extends FetchBody {
+  constructor (input: string|FetchRequest, init?: FetchRequestInit);
+  method: string;
+  url: string;
+  headers: FetchHeaders;
+  context: string;
+  referrer: string;
+  mode: string;
+  credentials: string;
+  cache: string;
+}
+
+interface FetchRequestInit {
+  method?: string;
+  headers?: FetchHeaderInit|{ [index: string]: string };
+  body?: FetchBodyInit;
+  mode?: string;
+  credentials?: string;
+  cache?: string;
 }
 
 declare class FetchHeaders {
@@ -30,6 +47,9 @@ declare class FetchResponse {}
 declare interface Fetch {
   (request: FetchRequest): Promise<FetchResponse>;
 }
+
+declare type FetchHeaderInit = FetchHeaders|Array<string>;
+declare type FetchBodyInit = Blob|FormData|string;
 
 // fetch-engine types
 

@@ -22,6 +22,8 @@
         "src/FetchGroup.ts",
         "src/Headers.test.ts",
         "src/Headers.ts",
+        "src/Request/index.test.ts",
+        "src/Request/index.ts",
         "src/utils/composeEvery.test.ts",
         "src/utils/composeEvery.ts",
         "src/utils/composePromise.test.ts",
@@ -32,6 +34,7 @@
         "src/utils/getBoundImplementations.ts",
         "src/utils/headers.test.ts",
         "src/utils/headers.ts",
+        "src/utils/http.ts",
         "src/utils/mocks.ts",
         "src/utils/sideEffect.test.ts",
         "src/utils/sideEffect.ts"
