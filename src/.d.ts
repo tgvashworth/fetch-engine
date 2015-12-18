@@ -6,6 +6,16 @@ declare class FetchRequest {
   url: string;
 }
 
+declare class FetchBody {
+  bodyUsed: boolean;
+  arrayBuffer(): Promise<ArrayBuffer>;
+  blob(): Promise<Blob>;
+  formData(): Promise<FormData>;
+  json(): Promise<any>;
+  json<T>(): Promise<T>;
+  text(): Promise<string>;
+}
+
 declare class FetchHeaders {
   append(name: string, value: string): void;
   delete(name: string): void;
