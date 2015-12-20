@@ -1,11 +1,11 @@
-/// <reference path="./../.d.ts"/>
+/// <reference path="../.d.ts"/>
 "use strict";
 
-import Body from "./../Body";
-import { RequestHeaders } from "./../Headers";
-import { normalizeMethod } from "./../utils/http";
+import Body from "../Body";
+import { RequestHeaders } from "../Headers";
+import { normalizeMethod } from "../utils/http";
 
-export default class Request extends Body {
+export default class Request extends Body implements FetchRequest {
   method: string;
   url: string;
   headers: FetchHeaders;
