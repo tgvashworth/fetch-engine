@@ -3,9 +3,11 @@
 
 export default class Body implements FetchBody {
   bodyUsed: boolean = false;
+  rawBody: string;
   private _bodyText: string;
 
   constructor(body) {
+    this.rawBody = body;
     if (typeof body === "string") {
       this._bodyText = body;
     } else if (Blob.prototype.isPrototypeOf(body)) {

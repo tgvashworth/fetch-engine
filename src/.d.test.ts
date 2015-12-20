@@ -10,6 +10,7 @@ declare interface TestAssertions {
   true: (value: boolean, message?: string) => void;
   false: (value: boolean, message?: string) => void;
   is: <T>(value: T, expected: T, message?: string) => void;
+  not: <T>(value: T, expected: T, message?: string) => void;
   same: <T>(value: T, expected: T, message?: string) => void;
   notSame: <T>(value: T, expected: T, message?: string) => void;
   throws: (value: Function | Promise<any>, error: any, message?: string) => void;
