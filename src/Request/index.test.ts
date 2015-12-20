@@ -121,6 +121,31 @@ test(
 );
 
 test(
+  "Can create new Request with Request and some init",
+  (t: TestAssertions) => {
+    let request = new Request("mine.json", {
+      method: "delete",
+      credentials: "omit",
+    });
+    let newRequest = new Request(request, {
+      headers: {"A-Header": "A-Value"},
+      mode:  "cors",
+      cache: "default",
+      body: "This is the body"
+    });
+    t.same(newRequest.url, "mine.json");
+    t.same(newRequest.method, "DELETE");
+    t.same(newRequest.headers.getAll("A-Header"), ["A-Value"]);
+    t.same(newRequest.mode, "cors");
+    t.same(newRequest.credentials, "omit");
+    t.same(newRequest.cache, "default");
+    return newRequest.text().then((v) => {
+      t.same(v, "This is the body");
+    });
+  }
+);
+
+test(
   "Should set original Request bodyUsed to true",
   (t: TestAssertions) => {
     let request = new Request("brain.gif");
@@ -135,8 +160,12 @@ test(
 test(
   "Throws if creating a GET/HEAD with a body",
   (t: TestAssertions) => {
-    /* tslint:disable:no-unused-expression */
-    t.throws(() => { new Request("mine.json", {body: "something"}); }, TypeError);
+    t.throws(
+      () => {
+        new Request("mine.json", {body: "something"});
+      },
+      TypeError
+    );
     t.end();
   }
 );
