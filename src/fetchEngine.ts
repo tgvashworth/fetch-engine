@@ -19,7 +19,7 @@ export default function fetchEngine(
       .then((request: FetchRequest): Promise<FetchResponse> => {
         const pFetch = fetch(request);
         // Side effects!
-        plugin.fetch({
+        plugin.fetching({
           promise: pFetch,
           request: request,
           // cancel: TODO

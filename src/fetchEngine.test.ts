@@ -63,7 +63,7 @@ test(
     const fetch = fetchEngine(new FetchGroup({
       plugins: [
         new Mock({
-          fetch: (args: FetchArgs): void => {
+          fetching: (args: FetchFetchingArgs): void => {
             t.same(args.request, mockReq);
             t.ok(args.promise);
             t.same(typeof args.promise.then, "function");
@@ -118,7 +118,7 @@ test(
           willFetch: (req: FetchRequest): void => {
             t.same(req, secondMockReq);
           },
-          fetch: (args: FetchArgs): void => {
+          fetching: (args: FetchFetchingArgs): void => {
             t.same(args.request, secondMockReq);
           },
           getResponse: (res: FetchResponse): Promise<FetchResponse> => {
