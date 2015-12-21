@@ -56,7 +56,7 @@ test(
 );
 
 test(
-  "fetchEngine with fetch passes promise and original request",
+  "fetchEngine with fetching passes promise and original request",
   (t: TestAssertions) => {
     t.plan(3);
     const mockReq = new MockRequest("/mock");
