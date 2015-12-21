@@ -67,7 +67,7 @@ const fetch = new FetchEngine({
     - side-effects, ignore return value
   - (internal-only) `fetch`
     - make the `Request` with an inner `fetch` implementation
-  - `fetch`
+  - `fetching`
     - allow plugins to `cancel`
   - `getResponse`
     - produce a (`Promise` for a) `Response`
@@ -114,9 +114,9 @@ Allows a plugin to react to a request being made, but not affect it.
 
 Return value would be ignored.
 
-#### `fetch`
+#### `fetching`
 
-Passed an object of the form `{ promise, cancel }`.
+Passed an object of the form `{ request, promise, cancel }`.
 
 Allows plugins to react to the completion of the `fetch` but not affect it, or `cancel` the request.
 
@@ -204,7 +204,7 @@ class TimeoutPlugin {
   constructor(time=1000) {
     this.time = time;
   }
-  fetch({ cancel }) {
+  fetching({ cancel }) {
     setTimeout(cancel, this.time);
   }
 }

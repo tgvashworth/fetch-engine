@@ -15,7 +15,7 @@ test("FetchGroup has default plugin implementations", (t: TestAssertions) => {
   const mockResponse = new MockResponse();
   t.true(group.shouldFetch(mockRequest));
   t.true(typeof group.willFetch === "function");
-  t.true(typeof group.fetch === "function");
+  t.true(typeof group.fetching === "function");
   t.true(typeof group.didFetch === "function");
   return Promise.resolve()
     .then(() => group.getRequest(mockRequest))
@@ -226,10 +226,10 @@ test(
   }
 );
 
-// fetch
+// fetching
 
 test(
-  "fetch is passed the input request and a promise for the response",
+  "fetching is passed the input request and a promise for the response",
   (t: TestAssertions) => {
     t.plan(2);
     const mockReq = new MockRequest("/mock");
@@ -237,14 +237,14 @@ test(
     const group = new FetchGroup({
       plugins: [
         new Mock({
-          fetch: (args: FetchArgs): void => {
+          fetching: (args: FetchFetchingArgs): void => {
             t.same(args.request, mockReq);
             t.same(args.promise, mockPromise);
           }
         })
       ]
     });
-    group.fetch({
+    group.fetching({
       promise: mockPromise,
       request: mockReq,
     });
@@ -253,7 +253,7 @@ test(
 );
 
 test(
-  "fetch is passed same input for multiple plugins",
+  "fetching is passed same input for multiple plugins",
   (t: TestAssertions) => {
     t.plan(4);
     const mockReq = new MockRequest("/mock");
@@ -261,20 +261,20 @@ test(
     const group = new FetchGroup({
       plugins: [
         new Mock({
-          fetch: (args: FetchArgs): void => {
+          fetching: (args: FetchFetchingArgs): void => {
             t.same(args.request, mockReq);
             t.same(args.promise, mockPromise);
           }
         }),
         new Mock({
-          fetch: (args: FetchArgs): void => {
+          fetching: (args: FetchFetchingArgs): void => {
             t.same(args.request, mockReq);
             t.same(args.promise, mockPromise);
           }
         })
       ]
     });
-    group.fetch({
+    group.fetching({
       promise: mockPromise,
       request: mockReq,
     });
@@ -503,13 +503,13 @@ test("testRequest prevents fetch being called", (t: TestAssertions) => {
     ],
     plugins: [
       new Mock({
-        fetch: (args: FetchArgs): void => {
+        fetching: (args: FetchFetchingArgs): void => {
           t.fail("fetch was called");
         }
       })
     ]
   });
-  group.fetch({
+  group.fetching({
     promise: mockPromise,
     request: mockReq,
   });

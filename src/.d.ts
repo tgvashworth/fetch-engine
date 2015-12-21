@@ -53,7 +53,7 @@ declare type FetchBodyInit = Blob|FormData|string;
 
 // fetch-engine types
 
-declare interface FetchArgs {
+declare interface FetchFetchingArgs {
   request: FetchRequest;
   promise: Promise<FetchResponse>;
   cancel?(): void;
@@ -65,7 +65,7 @@ declare interface FetchEnginePlugin {
   getRequest?: (req: FetchRequest) => Promise<FetchRequest>;
   willFetch?: (req: FetchRequest) => void;
   // fetch
-  fetch?: (args: FetchArgs) => void;
+  fetching?: (args: FetchFetchingArgs) => void;
   // post-fetch
   getResponse?: (req: FetchResponse) => Promise<FetchResponse>;
   didFetch?: (req: FetchResponse) => void;
