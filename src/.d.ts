@@ -53,6 +53,8 @@ declare type FetchBodyInit = Blob|FormData|string;
 
 // fetch-engine types
 
+declare type FetchNext = () => Promise<FetchResponse>;
+
 declare interface FetchFetchingArgs {
   request: FetchRequest;
   promise: Promise<FetchResponse>;

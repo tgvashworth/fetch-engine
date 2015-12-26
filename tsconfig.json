@@ -24,6 +24,8 @@
         "src/Headers.ts",
         "src/Request/index.test.ts",
         "src/Request/index.ts",
+        "src/utils/composeContinuation.test.ts",
+        "src/utils/composeContinuation.ts",
         "src/utils/composeEvery.test.ts",
         "src/utils/composeEvery.ts",
         "src/utils/composePromise.test.ts",
