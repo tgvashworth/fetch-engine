@@ -62,15 +62,15 @@ const fetch = new FetchEngine({
   - `shouldFetch`
     - if `false`, bail with CancelledError
   - `getRequest`
-    - produces a (`Promise` for a) `Request`
+    - produces a `Promise` for a `Request`
   - `willFetch`
     - side-effects, ignore return value
-  - (internal-only) `fetch`
-    - make the `Request` with an inner `fetch` implementation
+  - `fetch`
+    - make the `Request` with an inner `fetch` implementation, but allow plugins to intercept the request and return a Response early.
   - `fetching`
     - allow plugins to `cancel`
   - `getResponse`
-    - produce a (`Promise` for a) `Response`
+    - produce a `Promise` for a `Response`
   - `didFetch`
     - side-effects only, ignore return value
 
@@ -96,7 +96,7 @@ Passed the current `Request` object.
 
 Allows a plugin to prevent a request from being made.
 
-Return a (`Promise` for a) Boolean. If `false`, the request is `Cancelled`.
+Return a `Promise` for a Boolean. If `false`, the request is not made.
 
 #### `getRequest`
 
@@ -104,7 +104,7 @@ Passed the current `Request` object.
 
 Allows plugins to add data to `Request`, or produce an entirely new `Request`.
 
-Should return a (`Promise` for a) `Request`.
+Should return a `Promise` for a `Request`.
 
 #### `willFetch`
 
@@ -113,6 +113,14 @@ Passed the current `Request` object.
 Allows a plugin to react to a request being made, but not affect it.
 
 Return value would be ignored.
+
+#### `fetch`
+
+Takes two arguments: the input `request` and a `next` method that takes no arguments, but causes the request to be passed to the next plugin and eventually hit the network.
+
+The `fetch` method allows plugins to intercept the Request that's about to be made and return a `Response` without hitting the network.
+
+Should return a `Promise` for a `Response`.
 
 #### `fetching`
 
@@ -128,7 +136,7 @@ Passed the current `Response` object.
 
 Allows plugins to add data to `Response`, or produce an entirely new `Response`.
 
-Should return a (`Promise` for a) `Response`.
+Should return a `Promise` for a `Response`.
 
 #### `didFetch`
 
@@ -148,7 +156,7 @@ Passed the current `Request`.
 
 Run before `shouldFetch`, `getRequest`, `willFetch` and `fetch`, which will not be applied if `testRequest` resolves to `false`.
 
-Should return a (`Promise` for a) `Boolean`.
+Should return a `Promise` for a `Boolean`.
 
 #### `testResponse`
 
@@ -156,7 +164,7 @@ Passed the current `Response`.
 
 Run before `getResponse` and `didFetch`, which will not be applied if `testResponse` resolves to `false`.
 
-Should return a (`Promise` for a) `Boolean`.
+Should return a `Promise` for a `Boolean`.
 
 ## Example
 
@@ -218,8 +226,24 @@ class MetricsPlugin {
   }
 }
 
+class CachePlugin {
+  fetch(request, next) {
+    if (this.isCached(request)) {
+      return this.get(request);
+    }
+    return next();
+  }
+  isCached(request) {
+    // ...
+  }
+  get(request) {
+    // ...
+  }
+}
+
 let fetch = new FetchEngine({
   plugins: [
+    new CachePlugin(),
     new TimeoutPlugin(5000),
     new CORSAuthPlugin(),
     new FetchGroup({
