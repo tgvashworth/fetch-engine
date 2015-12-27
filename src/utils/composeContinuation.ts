@@ -4,6 +4,22 @@ export type BaseFn<T, U> = (v: T) => U;
 export type ComposedFn<T, U> = (v: T, base: BaseFn<T, U>) => U;
 export type InputFn<T, U> = (v: T, next: () => U) => U;
 
+/**
+ * Compose an array of functions that take two arguments: a value of type T,
+ * and a "next" function that passes control onto the next function in the
+ * chain, finally reaching a "base" function (supplied at call time).
+ *
+ * An example function:
+ *
+ *    var lessThanThree = (v, next) => {
+ *      return (v < 3 ? true : next());
+ *    };
+ *
+ * Example usage:
+ *
+ *    var f = composeContinuation([lessThanThree, greaterThanSeven]);
+ *    f(5, () => false);
+ */
 export default function composeContinuation<T, U>(
   fns: Array<InputFn<T, U>>
 ): ComposedFn<T, U> {
