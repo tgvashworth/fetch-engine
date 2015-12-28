@@ -3,6 +3,7 @@
 import composeEvery from "./utils/composeEvery";
 import composePromise from "./utils/composePromise";
 import composeVoid from "./utils/composeVoid";
+import composeContinuation from "./utils/composeContinuation";
 import getBoundImplementations from "./utils/getBoundImplementations";
 
 export default class FetchGroup implements FetchEnginePlugin {
@@ -13,6 +14,10 @@ export default class FetchGroup implements FetchEnginePlugin {
   private _shouldFetch: (req: FetchRequest) => boolean;
   private _getRequest: (req: FetchRequest) => Promise<FetchRequest>;
   private _willFetch: (req: FetchRequest) => void;
+  private _fetch: (
+    req: FetchRequest,
+    fetch: Fetch
+  ) => Promise<FetchResponse>;
   private _fetching: (args: FetchFetchingArgs) => void;
   private _getResponse: (req: FetchResponse) => Promise<FetchResponse>;
   private _didFetch: (req: FetchResponse) => void;
@@ -32,6 +37,10 @@ export default class FetchGroup implements FetchEnginePlugin {
       composePromise(getBoundImplementations("getRequest", plugins));
     this._willFetch =
       composeVoid(getBoundImplementations("willFetch", plugins));
+    this._fetch =
+      composeContinuation<FetchRequest, Promise<FetchResponse>>(
+        getBoundImplementations("fetch", plugins)
+      );
     this._fetching =
       composeVoid(getBoundImplementations("fetching", plugins));
     this._getResponse =
@@ -53,6 +62,9 @@ export default class FetchGroup implements FetchEnginePlugin {
     if (this._testRequest(req)) {
       return this._willFetch(req);
     }
+  }
+  fetch(request: FetchRequest, fetch: Fetch): Promise<FetchResponse> {
+    return this._fetch(request, fetch);
   }
   fetching(args: FetchFetchingArgs): void {
     const { request } = args;
