@@ -161,7 +161,7 @@ export class Headers implements FetchHeaders {
 
     let set = false;
 
-    for (var i = 0; i < this.headers.length; ++i) {
+    for (let i = 0; i < this.headers.length; ++i) {
       if (this.headers[i].name === name) {
         if (!set) {
           this.headers[i].value = value;
