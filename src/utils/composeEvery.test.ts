@@ -5,7 +5,6 @@ import composeEvery from "./composeEvery";
 
 test("composeEvery is requireable", (t: TestAssertions) => {
   t.ok(composeEvery);
-  t.end();
 });
 
 test(
@@ -15,7 +14,6 @@ test(
     const f = composeEvery([id, id]);
     t.is(f(true), true);
     t.is(f(false), false);
-    t.end();
   }
 );
 
@@ -32,6 +30,5 @@ test(
     t.is(composeEvery([no,  yes])(false), false);
     t.is(composeEvery([no,  no ])(true),  false);
     t.is(composeEvery([no,  no ])(false), false);
-    t.end();
   }
 );

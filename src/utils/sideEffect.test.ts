@@ -5,7 +5,6 @@ import sideEffect from "./sideEffect";
 
 test("sideEffect is requireable", (t: TestAssertions) => {
   t.ok(sideEffect);
-  t.end();
 });
 
 test(
@@ -16,7 +15,6 @@ test(
     const f = sideEffect(id);
     t.is(f(true), true);
     t.is(f(false), false);
-    t.end();
   }
 );
 
@@ -29,7 +27,6 @@ test(
       return false;
     };
     sideEffect(inner)(true);
-    t.end();
   }
 );
 
@@ -42,7 +39,6 @@ test(
       t.same(y, false);
     };
     sideEffect(inner)(true, false);
-    t.end();
   }
 );
 
@@ -52,6 +48,5 @@ test(
     t.plan(1);
     const result = sideEffect(_ => false)(true);
     t.same(result, true);
-    t.end();
   }
 );

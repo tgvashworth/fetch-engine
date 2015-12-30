@@ -5,7 +5,6 @@ import composeContinuation from "./composeContinuation";
 
 test("composeContinuation is requireable", (t: TestAssertions) => {
   t.ok(composeContinuation);
-  t.end();
 });
 
 test(
@@ -16,7 +15,6 @@ test(
     const f = composeContinuation([noop, noop]);
     t.is(f(true, id), true);
     t.is(f(false, id), false);
-    t.end();
   }
 );
 
@@ -29,6 +27,5 @@ test(
     const exit = () => o;
     const f = composeContinuation([noop, exit]);
     t.is(f(true, id), o);
-    t.end();
   }
 );
