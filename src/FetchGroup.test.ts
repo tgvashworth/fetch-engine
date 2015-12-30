@@ -6,7 +6,6 @@ import { Mock, MockRequest, MockResponse } from "./utils/mocks";
 
 test("FetchGroup is requireable", (t: TestAssertions) => {
   t.ok(FetchGroup);
-  t.end();
 });
 
 test("FetchGroup has default plugin implementations", (t: TestAssertions) => {
@@ -35,7 +34,6 @@ test("FetchGroup has default plugin implementations", (t: TestAssertions) => {
     })
     .then((res: FetchResponse) => {
       t.is(res, mockResponse);
-      t.end();
     });
 });
 
@@ -51,7 +49,6 @@ test("shouldFetch true value is respected", (t: TestAssertions) => {
     ]
   });
   t.same(group.shouldFetch(mockReq), true);
-  t.end();
 });
 
 test("shouldFetch false value is respected", (t: TestAssertions) => {
@@ -64,7 +61,6 @@ test("shouldFetch false value is respected", (t: TestAssertions) => {
     ]
   });
   t.same(group.shouldFetch(mockReq), false);
-  t.end();
 });
 
 test(
@@ -82,7 +78,6 @@ test(
       ]
     });
     t.same(group.shouldFetch(mockReq), true);
-    t.end();
   }
 );
 
@@ -101,7 +96,6 @@ test(
       ]
     });
     t.same(group.shouldFetch(mockReq), false);
-    t.end();
   }
 );
 
@@ -123,7 +117,6 @@ test("getRequest is passed the input request", (t: TestAssertions) => {
   return group.getRequest(mockReq)
     .then((req: FetchRequest) => {
       t.same(req, mockReq);
-      t.end();
     });
 });
 
@@ -143,7 +136,6 @@ test("getRequest output is passed back", (t: TestAssertions) => {
   return group.getRequest(mockReq)
     .then((req: FetchRequest) => {
       t.same(req, newReq);
-      t.end();
     });
 });
 
@@ -173,7 +165,6 @@ test(
     return group.getRequest(mockReq)
       .then((req: FetchRequest) => {
         t.same(req, thirdReq);
-        t.end();
       });
   }
 );
@@ -193,7 +184,6 @@ test("willFetch is passed the input request", (t: TestAssertions) => {
     ]
   });
   group.willFetch(mockReq);
-  t.end();
 });
 
 test("willFetch output is ignored", (t: TestAssertions) => {
@@ -210,7 +200,6 @@ test("willFetch output is ignored", (t: TestAssertions) => {
   });
   const result = group.willFetch(mockReq);
   t.same(result, undefined);
-  t.end();
 });
 
 test(
@@ -233,7 +222,6 @@ test(
       ]
     });
     group.willFetch(mockReq);
-    t.end();
   }
 );
 
@@ -268,7 +256,6 @@ test(
     return group.fetch(mockReq, mockFetch)
       .then((res: FetchResponse) => {
         t.is(res, mockResponse);
-        t.end();
       });
   }
 );
@@ -303,7 +290,6 @@ test(
     return group.fetch(mockReq, mockFetch)
       .then((res: FetchResponse) => {
         t.is(res, mockResponse);
-        t.end();
       });
   }
 );
@@ -330,7 +316,6 @@ test(
     return group.fetch(mockReq, mockFetch)
       .then((res: FetchResponse) => {
         t.is(res, mockResponse);
-        t.end();
       });
   }
 );
@@ -357,7 +342,6 @@ test(
       promise: mockPromise,
       request: mockReq,
     });
-    t.end();
   }
 );
 
@@ -387,7 +371,6 @@ test(
       promise: mockPromise,
       request: mockReq,
     });
-    t.end();
   }
 );
 
@@ -409,7 +392,6 @@ test("getResponse is passed the input response", (t: TestAssertions) => {
   return group.getResponse(mockRes)
     .then((res: FetchResponse) => {
       t.same(res, mockRes);
-      t.end();
     });
 });
 
@@ -429,7 +411,6 @@ test("getResponse output is passed back", (t: TestAssertions) => {
   return group.getResponse(mockRes)
     .then((res: FetchResponse) => {
       t.same(res, newRes);
-      t.end();
     });
 });
 
@@ -459,7 +440,6 @@ test(
     return group.getResponse(mockRes)
       .then((req: FetchResponse) => {
         t.same(req, thirdRes);
-        t.end();
       });
   }
 );
@@ -479,7 +459,6 @@ test("didFetch is passed the input response", (t: TestAssertions) => {
     ]
   });
   group.didFetch(mockRes);
-  t.end();
 });
 
 test("didFetch output is ignored", (t: TestAssertions) => {
@@ -496,7 +475,6 @@ test("didFetch output is ignored", (t: TestAssertions) => {
   });
   const result = group.didFetch(mockRes);
   t.same(result, undefined);
-  t.end();
 });
 
 test(
@@ -519,7 +497,6 @@ test(
       ]
     });
     group.didFetch(mockRes);
-    t.end();
   }
 );
 
@@ -546,7 +523,6 @@ test("testRequest prevents shouldFetch being called", (t: TestAssertions) => {
     ]
   });
   group.shouldFetch(mockReq);
-  t.end();
 });
 
 test("testRequest prevents getRequest being called", (t: TestAssertions) => {
@@ -570,7 +546,6 @@ test("testRequest prevents getRequest being called", (t: TestAssertions) => {
     ]
   });
   group.getRequest(mockReq);
-  t.end();
 });
 
 test("testRequest prevents willFetch being called", (t: TestAssertions) => {
@@ -594,7 +569,6 @@ test("testRequest prevents willFetch being called", (t: TestAssertions) => {
     ]
   });
   group.willFetch(mockReq);
-  t.end();
 });
 
 test("testRequest prevents fetch being called", (t: TestAssertions) => {
@@ -622,7 +596,6 @@ test("testRequest prevents fetch being called", (t: TestAssertions) => {
     promise: mockPromise,
     request: mockReq,
   });
-  t.end();
 });
 
 // testResponse
@@ -648,7 +621,6 @@ test("testResponse prevents getResponse being called", (t: TestAssertions) => {
     ]
   });
   group.getResponse(mockRes);
-  t.end();
 });
 
 test("testResponse prevents didFetch being called", (t: TestAssertions) => {
@@ -672,5 +644,4 @@ test("testResponse prevents didFetch being called", (t: TestAssertions) => {
     ]
   });
   group.didFetch(mockRes);
-  t.end();
 });

@@ -7,7 +7,6 @@ import { Mock, MockRequest, MockResponse } from "./utils/mocks";
 
 test("fetchEngine is requireable", (t: TestAssertions) => {
   t.ok(fetchEngine);
-  t.end();
 });
 
 test("fetchEngine with no args returns a response", (t: TestAssertions) => {

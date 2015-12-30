@@ -13,7 +13,6 @@ test(
   "Headers is requireable",
   (t: TestAssertions) => {
     t.ok(Headers);
-    t.end();
   }
 );
 
@@ -22,7 +21,6 @@ test(
   (t: TestAssertions) => {
     let headers = new Headers();
     t.ok(headers);
-    t.end();
   }
 );
 
@@ -35,7 +33,6 @@ test(
     });
     t.same(headers.get("Header-1"), "Value-1");
     t.same(headers.get("Header-2"), "Value-2");
-    t.end();
   }
 );
 
@@ -49,7 +46,6 @@ test(
     ]);
     t.same(headers.get("Header-1"), "Value-1");
     t.same(headers.get("Header-2"), "Value-2");
-    t.end();
   }
 );
 
@@ -63,7 +59,6 @@ test(
     let headers = new Headers(origHeaders);
     t.same(headers.get("Header-1"), "Value-1");
     t.same(headers.get("Header-2"), "Value-2");
-    t.end();
   }
 );
 
@@ -74,7 +69,6 @@ test(
     headers.append("Header-2", "Value-2");
     t.true(headers.has("Header-1"));
     t.true(headers.has("Header-2"));
-    t.end();
   }
 );
 
@@ -83,7 +77,6 @@ test(
   (t: TestAssertions) => {
     let headers = new ImmutableHeaders();
     t.throws(() => { headers.append("Header-2", "Value-2"); }, TypeError);
-    t.end();
   }
 );
 
@@ -95,7 +88,6 @@ test(
     headers.append("Accept-Charset", "Value-2");
     t.true(headers.has("Header-1"));
     t.false(headers.has("Accept-Charset"));
-    t.end();
   }
 );
 
@@ -107,7 +99,6 @@ test(
     headers.append("Content-Language", "Value-2");
     t.false(headers.has("Header-1"));
     t.same(headers.get("Content-Language"), "Value-2");
-    t.end();
   }
 );
 
@@ -120,7 +111,6 @@ test(
     headers.append("Content-Type", "multipart/form-data");
     t.false(headers.has("Header-1"));
     t.same(headers.getAll("Content-Type"), ["multipart/form-data"]);
-    t.end();
   }
 );
 
@@ -132,7 +122,6 @@ test(
     t.true(headers.has("Header-1"));
     headers.delete("Header-1");
     t.false(headers.has("Value-1"));
-    t.end();
   }
 );
 
@@ -142,7 +131,6 @@ test(
     let headers = new ImmutableHeaders({"Header-1": "Value-1"});
     t.true(headers.has("Header-1"));
     t.throws(() => { headers.delete("Header-1"); }, TypeError);
-    t.end();
   }
 );
 
@@ -152,7 +140,6 @@ test(
     let headers = new RequestHeaders({"Accept-Charset": "Value-1"});
     headers.delete("Accept-Charset");
     t.true(headers.has("Accept-Charset"));
-    t.end();
   }
 );
 
@@ -162,7 +149,6 @@ test(
     let headers = new RequestNoCorsHeaders({"Header-1": "Value-1"});
     headers.delete("Header-1");
     t.true(headers.has("Header-1"));
-    t.end();
   }
 );
 
@@ -172,7 +158,6 @@ test(
     let headers = new RequestNoCorsHeaders({"Accept": "Value-1"});
     headers.delete("Accept");
     t.false(headers.has("Header-1"));
-    t.end();
   }
 );
 
@@ -181,7 +166,6 @@ test(
   (t: TestAssertions) => {
     let headers = new ResponseHeaders({"Set-Cookie": "Value-1"});
     t.true(headers.has("Set-Cookie"));
-    t.end();
   }
 );
 
@@ -192,7 +176,6 @@ test(
     headers.append("Header-1", "Value-1");
     headers.append("Header-2", "Value-2");
     t.same(headers.get("Header-2"), "Value-2");
-    t.end();
   }
 );
 
@@ -204,7 +187,6 @@ test(
     headers.append("Header-2", "Value-2");
     headers.append("Header-2", "Value-3");
     t.same(headers.getAll("Header-2"), ["Value-2", "Value-3"]);
-    t.end();
   }
 );
 
@@ -214,7 +196,6 @@ test(
     let headers = new Headers();
     headers.append("Header-1", "Value-1");
     t.true(headers.has("Header-1"));
-    t.end();
   }
 );
 
@@ -224,7 +205,6 @@ test(
     let headers = new Headers();
     headers.append("Header-1", "Value-1");
     t.false(headers.has("Header-2"));
-    t.end();
   }
 );
 
@@ -236,7 +216,6 @@ test(
     t.same(headers.getAll("Header-1"), ["Value-1"]);
     headers.set("Header-1", "Value-2");
     t.same(headers.getAll("Header-1"), ["Value-2"]);
-    t.end();
   }
 );
 
@@ -249,7 +228,6 @@ test(
     t.same(headers.getAll("Header-1"), ["Value-1", "Value-2"]);
     headers.set("Header-1", "Value-2");
     t.same(headers.getAll("Header-1"), ["Value-2"]);
-    t.end();
   }
 );
 
@@ -259,7 +237,6 @@ test(
     let headers = new Headers();
     headers.set("Header-1", "Value-1");
     t.same(headers.getAll("Header-1"), ["Value-1"]);
-    t.end();
   }
 );
 
@@ -268,7 +245,6 @@ test(
   (t: TestAssertions) => {
     let headers = new ImmutableHeaders();
     t.throws(() => { headers.set("Header-2", "Value-2"); }, TypeError);
-    t.end();
   }
 );
 
@@ -281,6 +257,5 @@ test(
     };
     let headers = new Headers(h);
     t.same(headers.getHeaders(), h);
-    t.end();
   }
 );

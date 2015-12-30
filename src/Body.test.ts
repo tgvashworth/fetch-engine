@@ -7,7 +7,6 @@ test(
   "Body is requireable",
   (t: TestAssertions) => {
     t.ok(Body);
-    t.end();
   }
 );
 

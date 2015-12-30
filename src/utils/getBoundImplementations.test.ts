@@ -5,7 +5,6 @@ import getBoundImplementations from "./getBoundImplementations";
 
 test("getBoundImplementations is requireable", (t: TestAssertions) => {
   t.ok(getBoundImplementations);
-  t.end();
 });
 
 test(
@@ -32,6 +31,5 @@ test(
     impls.forEach(impl => {
       impl(true);
     });
-    t.end();
   }
 );

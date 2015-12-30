@@ -5,7 +5,6 @@ import composePromise from "./composePromise";
 
 test("composePromise is requireable", (t: TestAssertions) => {
   t.ok(composePromise);
-  t.end();
 });
 
 test(

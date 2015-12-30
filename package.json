@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/phuu/fetch-engine#readme",
   "devDependencies": {
-    "ava": "^0.6.1",
+    "ava": "^0.9.1",
     "tsd": "^0.6.5",
     "tslint": "^3.0.0",
     "typescript": "^1.6.2"

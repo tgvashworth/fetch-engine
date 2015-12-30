@@ -7,7 +7,6 @@ test(
   "Request is requireable",
   (t: TestAssertions) => {
     t.ok(Request);
-    t.end();
   }
 );
 
@@ -17,7 +16,6 @@ test(
     let request = new Request("brain.gif");
     t.ok(request.text);
     t.ok(request.json);
-    t.end();
   }
 );
 
@@ -26,7 +24,6 @@ test(
   (t: TestAssertions) => {
     let request = new Request("brain.gif");
     t.same(request.url, "brain.gif");
-    t.end();
   }
 );
 
@@ -43,7 +40,6 @@ test(
     t.same(newRequest.method, "GET");
     t.same(newRequest.mode, "no-cors");
     t.same(newRequest.cache, "default");
-    t.end();
   }
 );
 
@@ -153,7 +149,6 @@ test(
     /* tslint:disable:no-unused-expression */
     new Request(request);
     t.true(request.bodyUsed);
-    t.end();
   }
 );
 
@@ -166,7 +161,6 @@ test(
       },
       TypeError
     );
-    t.end();
   }
 );
 
@@ -177,6 +171,5 @@ test(
     let newRequest = request.clone();
     t.same(request.url, newRequest.url);
     t.not(request, newRequest);
-    t.end();
   }
 );

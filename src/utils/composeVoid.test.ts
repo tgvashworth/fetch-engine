@@ -5,7 +5,6 @@ import composeVoid from "./composeVoid";
 
 test("composeVoid is requireable", (t: TestAssertions) => {
   t.ok(composeVoid);
-  t.end();
 });
 
 test(
@@ -20,6 +19,5 @@ test(
     const f = composeVoid([testFn, testFn]);
     const result = f(testVal);
     t.same(result, undefined);
-    t.end();
   }
 );
