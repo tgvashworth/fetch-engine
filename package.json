@@ -11,6 +11,12 @@
     "lint": "find src -name '*.ts' | xargs tslint",
     "specs": "npm run build && ava dist/*.test.js dist/**/*.test.js "
   },
+  "config": {
+    "ghooks": {
+      "pre-commit": "npm run lint",
+      "pre-push": "npm test"
+    }
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/phuu/fetch-engine.git"
@@ -24,6 +30,7 @@
   "homepage": "https://github.com/phuu/fetch-engine#readme",
   "devDependencies": {
     "ava": "^0.9.1",
+    "ghooks": "^1.0.1",
     "tsd": "^0.6.5",
     "tslint": "^3.0.0",
     "typescript": "^1.6.2"
