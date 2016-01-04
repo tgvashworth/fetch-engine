@@ -101,13 +101,7 @@ export class Headers implements FetchHeaders {
   }
 
   get(name: string): string {
-    return this.headers
-      .filter((header) => {
-        return header.name === getNormalizedHeaderName(name);
-      })
-      .map((header) => {
-        return header.value;
-      })[0];
+    return this.getAll(name)[0];
   }
 
   getAll(name: string): Array<string> {

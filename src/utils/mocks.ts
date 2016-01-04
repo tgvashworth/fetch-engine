@@ -19,8 +19,36 @@ export class MockRequest implements FetchRequest {
   constructor(input: string) {
     this.url = input;
   }
+  clone(): MockRequest {
+    return new MockRequest(this.url);
+  }
 }
-export class MockResponse implements FetchResponse {}
+export class MockResponse implements FetchResponse {
+  bodyUsed: boolean = false;
+  arrayBuffer: any;
+  blob: any;
+  formData: any;
+  text: any;
+  json: any;
+  type: string;
+  url: string;
+  status: number;
+  ok: boolean;
+  statusText: string;
+  headers: FetchHeaders;
+  constructor() {
+    return this;
+  }
+  error(): MockResponse {
+    return new MockResponse();
+  }
+  redirect(url: string, status: number): MockResponse {
+    return new MockResponse();
+  }
+  clone(): MockResponse {
+    return new MockResponse();
+  }
+}
 export class Mock implements FetchEnginePlugin, FetchEngineFilter {
   constructor(args = {}) {
     Object.keys(args).forEach((method) => this.mock(method, args[method]));
