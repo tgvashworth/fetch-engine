@@ -9,7 +9,7 @@ export default function composePromise<T>(
       next: Fn,
       f: Fn
     ): Fn => (
-      (v: T): Promise<T> => f(v).then(next)
+      (v: T): Promise<T> => Promise.resolve(v).then(f).then(next)
     ),
     (v: T): Promise<T> => Promise.resolve(v)
   );

@@ -64,12 +64,12 @@ declare interface FetchFetchingArgs {
 declare interface FetchEnginePlugin {
   // pre-fetch
   shouldFetch?: (req: FetchRequest) => boolean;
-  getRequest?: (req: FetchRequest) => Promise<FetchRequest>;
+  getRequest?: (req: FetchRequest) => Promise<FetchRequest>|FetchRequest;
   willFetch?: (req: FetchRequest) => void;
   // fetch
   fetching?: (args: FetchFetchingArgs) => void;
   // post-fetch
-  getResponse?: (req: FetchResponse) => Promise<FetchResponse>;
+  getResponse?: (req: FetchResponse) => Promise<FetchResponse>|FetchResponse;
   didFetch?: (req: FetchResponse) => void;
 }
 
