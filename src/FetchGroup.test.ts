@@ -574,7 +574,8 @@ test("testRequest prevents willFetch being called", (t: TestAssertions) => {
 test("testRequest prevents fetch being called", (t: TestAssertions) => {
   t.plan(1);
   const mockReq = new MockRequest("/mock");
-  const mockPromise = Promise.resolve(mockReq);
+  const mockResp = new MockResponse();
+  const mockPromise = Promise.resolve(mockResp);
   const group = new FetchGroup({
     filters: [
       new Mock({
