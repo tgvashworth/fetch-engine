@@ -55,6 +55,29 @@ test(
 );
 
 test(
+  "fetchEngine with fetch passes request and next function",
+  (t: TestAssertions) => {
+    t.plan(2);
+    const mockReq = new MockRequest("/mock");
+    const fetch = fetchEngine(new FetchGroup({
+      plugins: [
+        new Mock({
+          fetch: (
+            req: FetchRequest,
+            next: () => Promise<FetchResponse>
+          ): Promise<FetchResponse> => {
+            t.same(req, mockReq);
+            t.same(typeof next, "function");
+            return next();
+          }
+        })
+      ]
+    }));
+    return fetch(mockReq);
+  }
+);
+
+test(
   "fetchEngine with fetching passes promise and original request",
   (t: TestAssertions) => {
     t.plan(3);
@@ -99,7 +122,7 @@ test(
 test(
   "fetchEngine flows through full stack in order",
   (t: TestAssertions) => {
-    t.plan(5);
+    t.plan(6);
     const firstMockReq = new MockRequest("/mock");
     const secondMockReq = new MockRequest("/mock");
     const firstMockRes = new MockResponse();
@@ -116,6 +139,13 @@ test(
           },
           willFetch: (req: FetchRequest): void => {
             t.same(req, secondMockReq);
+          },
+          fetch: (
+            req: FetchRequest,
+            next: () => Promise<FetchResponse>
+          ): Promise<FetchResponse> => {
+            t.same(req, secondMockReq);
+            return next();
           },
           fetching: (args: FetchFetchingArgs): void => {
             t.same(args.request, secondMockReq);
