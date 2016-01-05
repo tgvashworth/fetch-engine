@@ -83,7 +83,7 @@ test(
     const fetch = fetchEngine(new FetchGroup({
       plugins: [
         new Mock({
-          getResponse: (res: FetchResponse): FetchResponse => {
+          getResponse: (res: FetchResponse): Promise<FetchResponse> => {
             return Promise.resolve(mockRes);
           },
           didFetch: (res: FetchResponse): void => {
@@ -124,7 +124,7 @@ test(
             // TODO find a way to fake the retured response
             return Promise.resolve(firstMockRes);
           },
-          didFetch: (res: FetchRequest): void => {
+          didFetch: (res: FetchResponse): void => {
             t.same(res, firstMockRes);
           }
         })
