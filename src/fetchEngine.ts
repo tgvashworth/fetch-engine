@@ -17,14 +17,21 @@ export default function fetchEngine(
       .then(plugin.getRequest.bind(plugin))
       .then(sideEffect(plugin.willFetch.bind(plugin)))
       .then((request: FetchRequest): Promise<FetchResponse> => {
-        const pFetch = fetch(request);
-        // Side effects!
-        plugin.fetching({
-          promise: pFetch,
-          request: request,
-          // cancel: TODO
-        });
-        return pFetch;
+        return Promise.resolve(
+          plugin.fetch(
+            request,
+            () => {
+              const pFetch = fetch(request);
+              // Side effects!
+              plugin.fetching({
+                promise: pFetch,
+                request: request,
+                // cancel: TODO
+              });
+              return pFetch;
+            }
+          )
+        );
       })
       .then(plugin.getResponse.bind(plugin))
       .then(sideEffect(plugin.didFetch.bind(plugin)));

@@ -86,6 +86,7 @@ declare interface FetchEnginePlugin {
   getRequest?: (req: FetchRequest) => Promise<FetchRequest>|FetchRequest;
   willFetch?: (req: FetchRequest) => void;
   // fetch
+  fetch?: (req: FetchRequest, next: FetchNext) => Promise<FetchResponse>;
   fetching?: (args: FetchFetchingArgs) => void;
   // post-fetch
   getResponse?: (req: FetchResponse) => Promise<FetchResponse>|FetchResponse;
