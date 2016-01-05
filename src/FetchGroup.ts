@@ -63,7 +63,7 @@ export default class FetchGroup implements FetchEnginePlugin {
       return this._willFetch(req);
     }
   }
-  fetch(request: FetchRequest, fetch: Fetch): Promise<FetchResponse> {
+  fetch(request: FetchRequest, fetch: FetchNext): Promise<FetchResponse> {
     return this._fetch(request, fetch);
   }
   fetching(args: FetchFetchingArgs): void {
