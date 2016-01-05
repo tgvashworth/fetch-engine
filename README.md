@@ -47,17 +47,17 @@ This project aims to make it easy to build good-citizen JavaScript network clien
 
 Taken from #1.
 
-There'd be two main constructors that come with `fetch-engine`: `FetchEngine` and `FetchGroup`. What they'd do is documented below:
+The exported function `fetchEngine` will be used to create a `fetch` object. The contructor `FetchGroup` will be used to compose sets of plugins and filters together to act as a plugin to `fetchEngine`. `fetchEngine` should be passed either an instance of `FetchGroup` or an object that it can pass into `FetchGroup`.
 
-### `FetchEngine`
+### `fetchEngine`
 
 ```js
-const fetch = new FetchEngine({
+const fetch = fetchEngine({
   plugins: [ ... ]
 });
 ```
 
-- on creation, compose each plugin method into one method
+- on invocation, compose each plugin method into one method
 - on fetch(...), run methods in order:
   - `shouldFetch`
     - if `false`, bail with CancelledError
@@ -171,7 +171,7 @@ Should return a `Promise` for a `Boolean`.
 Here's an example without an implementation, just in case this is super unclear...
 
 ```js
-import { FetchEngine, FetchGroup } from 'fetch-engine';
+import { fetchEngine, FetchGroup } from 'fetch-engine';
 
 class PathPrefixFilter {
   constructor(prefix) {
@@ -241,7 +241,7 @@ class CachePlugin {
   }
 }
 
-let fetch = new FetchEngine({
+let fetch = fetchEngine({
   plugins: [
     new CachePlugin(),
     new TimeoutPlugin(5000),
@@ -256,7 +256,7 @@ let fetch = new FetchEngine({
 
 // The above could be a shorthand for the following:
 
-let fetch = new FetchEngine(new FetchGroup({
+let fetch = fetchEngine(new FetchGroup({
   plugins: [
     new TimeoutPlugin(5000),
     new CORSAuthPlugin(),
