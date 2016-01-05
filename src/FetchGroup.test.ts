@@ -9,14 +9,11 @@ test("FetchGroup is requireable", (t: TestAssertions) => {
 });
 
 test("FetchGroup has default plugin implementations", (t: TestAssertions) => {
-  t.plan(9);
+  t.plan(8);
   const group = new FetchGroup();
   const mockRequest = new MockRequest("/mock");
   const mockResponse = new MockResponse();
-  const mockFetch = (request: FetchRequest) => {
-    t.same(request, mockRequest);
-    return Promise.resolve(mockResponse);
-  };
+  const mockPromise = Promise.resolve(mockResponse);
   t.true(group.shouldFetch(mockRequest));
   t.true(typeof group.willFetch === "function");
   t.true(typeof group.fetch === "function");
@@ -27,7 +24,7 @@ test("FetchGroup has default plugin implementations", (t: TestAssertions) => {
     .then((req: FetchRequest) => {
       t.is(req, mockRequest);
     })
-    .then(() => group.fetch(mockRequest, mockFetch))
+    .then(() => group.fetch(mockRequest, () => mockPromise))
     .then((res: FetchResponse) => {
       t.is(res, mockResponse);
       return group.getResponse(res);
@@ -231,14 +228,10 @@ test(
   "fetch is passed the input request and a 'next' function which is " +
   "eventually called",
   (t: TestAssertions) => {
-    t.plan(4);
+    t.plan(3);
     const mockReq = new MockRequest("/mock");
     const mockResponse = new MockResponse();
     const mockPromise = Promise.resolve(mockResponse);
-    const mockFetch = (req: FetchRequest) => {
-      t.same(req, mockReq);
-      return mockPromise;
-    };
     const group = new FetchGroup({
       plugins: [
         new Mock({
@@ -253,7 +246,7 @@ test(
         })
       ]
     });
-    return group.fetch(mockReq, mockFetch)
+    return group.fetch(mockReq, () => mockPromise)
       .then((res: FetchResponse) => {
         t.is(res, mockResponse);
       });
@@ -263,14 +256,10 @@ test(
 test(
   "each fetch step is passed same request & can pass control to the next mock",
   (t: TestAssertions) => {
-    t.plan(4);
+    t.plan(3);
     const mockReq = new MockRequest("/mock");
     const mockResponse = new MockResponse();
     const mockPromise = Promise.resolve(mockResponse);
-    const mockFetch = (req: FetchRequest) => {
-      t.same(req, mockReq);
-      return mockPromise;
-    };
     const group = new FetchGroup({
       plugins: [
         new Mock({
@@ -287,7 +276,7 @@ test(
         })
       ]
     });
-    return group.fetch(mockReq, mockFetch)
+    return group.fetch(mockReq, () => mockPromise)
       .then((res: FetchResponse) => {
         t.is(res, mockResponse);
       });
@@ -300,10 +289,7 @@ test(
     t.plan(1);
     const mockReq = new MockRequest("/mock");
     const mockResponse = new MockResponse();
-    const mockFetch = (req: FetchRequest) => {
-      t.fail("mockFetch should not have been called");
-      return Promise.resolve(new MockResponse());
-    };
+    const mockPromise = Promise.resolve(mockResponse);
     const group = new FetchGroup({
       plugins: [
         new Mock({
@@ -313,7 +299,7 @@ test(
         })
       ]
     });
-    return group.fetch(mockReq, mockFetch)
+    return group.fetch(mockReq, () => mockPromise)
       .then((res: FetchResponse) => {
         t.is(res, mockResponse);
       });
