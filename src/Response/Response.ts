@@ -15,9 +15,9 @@ export default class Response extends Body implements FetchResponse {
 
   constructor(body = "", init: FetchResponseInit = {}) {
     this.type = "default";
-    this.status = init.status;
-    this.ok = init.status >= 200 && init.status < 300;
-    this.statusText = init.statusText;
+    this.status = init.status || 200;
+    this.statusText = init.statusText || "ok";
+    this.ok = this.status >= 200 && this.status < 300;
     this.headers = new ResponseHeaders(init.headers);
     this.url = init.url || "";
 
