@@ -6,20 +6,15 @@ export default class Body implements FetchBody {
   rawBody: string;
   private _bodyText: string;
 
-  constructor(body) {
+  constructor(body = null) {
     this.rawBody = body;
     if (typeof body === "string") {
       this._bodyText = body;
-    } else if (Blob.prototype.isPrototypeOf(body)) {
+    } else if (typeof Blob !== "undefined" && Blob.prototype.isPrototypeOf(body)) {
       throw new Error("Not implemented");
-    } else if (FormData.prototype.isPrototypeOf(body)) {
+    } else if (typeof FormData !== "undefined" && FormData.prototype.isPrototypeOf(body)) {
       throw new Error("Not implemented");
-    } else if (!body) {
-      this._bodyText = "";
-    } else {
-      throw new Error("unsupported BodyInit type");
     }
-
   }
 
   text(): Promise<string> {
