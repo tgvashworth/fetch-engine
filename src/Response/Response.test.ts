@@ -71,6 +71,18 @@ test(
 );
 
 test(
+  "defaults are set correctly",
+  (t: TestAssertions) => {
+    let response = new Response();
+    t.same(response.type, "default");
+    t.same(response.status, 200);
+    t.same(response.statusText, "ok");
+    t.same(response.url, "");
+    t.same(response.ok, true);
+  }
+);
+
+test(
   "Can clone an existing Response",
   (t: TestAssertions) => {
     let response = new Response("theBody");

@@ -29,3 +29,11 @@ test(
     });
   }
 );
+
+test(
+  "Body defaults to null",
+  (t: TestAssertions) => {
+    let body = new Body();
+    return t.same(body.rawBody, null);
+  }
+);
