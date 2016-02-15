@@ -1,13 +1,18 @@
 /// <reference path="./.d.ts"/>
 "use strict";
-import fetch from "./fetch";
+import innerFetch from "./fetch";
 import FetchGroup from "./FetchGroup";
 import sideEffect from "./utils/sideEffect";
+import Request from "./Request";
 
 export default function fetchEngine(
   plugin: FetchEnginePlugin = new FetchGroup()
 ): Fetch {
-  return function (originalRequest: FetchRequest): Promise<FetchResponse> {
+  return function fetch(
+    input: string | FetchRequest,
+    init: FetchRequestInit = {}
+  ): Promise<FetchResponse> {
+    const originalRequest = new Request(input, init);
     return Promise.resolve(originalRequest)
       .then(sideEffect((request: FetchRequest) => {
         if (!plugin.shouldFetch(request)) {
@@ -21,7 +26,7 @@ export default function fetchEngine(
           plugin.fetch(
             request,
             () => {
-              const pFetch = fetch(request);
+              const pFetch = innerFetch(request);
               // Side effects!
               plugin.fetching({
                 promise: pFetch,

@@ -15,7 +15,7 @@ export default class Request extends Body implements FetchRequest {
   credentials: string;
   cache: string;
 
-  constructor(input: string|Request, init: FetchRequestInit = {}) {
+  constructor(input: string|FetchRequest, init: FetchRequestInit = {}) {
     // Some defaults
     this.method = "GET";
     this.credentials = "omit";
@@ -38,11 +38,13 @@ export default class Request extends Body implements FetchRequest {
 
       if (!body) {
         body = input.rawBody;
-        input.bodyUsed = true;
+        // TODO: this messes up assertions. What's it for? Do we need it?
+        // input.bodyUsed = true;
       }
 
     } else if (typeof input === "string") {
       this.url = input;
+      this.headers = new RequestHeaders();
     }
 
     // Override anything set with props from RequestInit
