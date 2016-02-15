@@ -2,7 +2,9 @@
 "use strict";
 import test = require("ava");
 import FetchGroup from "./FetchGroup";
-import { Mock, MockRequest, MockResponse } from "./utils/mocks";
+import { Mock } from "./utils/mocks";
+import Request from "./Request";
+import Response from "./Response";
 
 test("FetchGroup is requireable", (t: TestAssertions) => {
   t.ok(FetchGroup);
@@ -11,8 +13,8 @@ test("FetchGroup is requireable", (t: TestAssertions) => {
 test("FetchGroup has default plugin implementations", (t: TestAssertions) => {
   t.plan(8);
   const group = new FetchGroup();
-  const mockRequest = new MockRequest("/mock");
-  const mockResponse = new MockResponse();
+  const mockRequest = new Request("/mock");
+  const mockResponse = new Response();
   const mockPromise = Promise.resolve(mockResponse);
   t.true(group.shouldFetch(mockRequest));
   t.true(typeof group.willFetch === "function");
@@ -37,7 +39,7 @@ test("FetchGroup has default plugin implementations", (t: TestAssertions) => {
 // shouldFetch
 
 test("shouldFetch true value is respected", (t: TestAssertions) => {
-  const mockReq = new MockRequest("/mock");
+  const mockReq = new Request("/mock");
   const group = new FetchGroup({
     plugins: [
       new Mock({
@@ -49,7 +51,7 @@ test("shouldFetch true value is respected", (t: TestAssertions) => {
 });
 
 test("shouldFetch false value is respected", (t: TestAssertions) => {
-  const mockReq = new MockRequest("/mock");
+  const mockReq = new Request("/mock");
   const group = new FetchGroup({
     plugins: [
       new Mock({
@@ -63,7 +65,7 @@ test("shouldFetch false value is respected", (t: TestAssertions) => {
 test(
   "shouldFetch true value is respected with multiple plugins",
   (t: TestAssertions) => {
-    const mockReq = new MockRequest("/mock");
+    const mockReq = new Request("/mock");
     const group = new FetchGroup({
       plugins: [
         new Mock({
@@ -81,7 +83,7 @@ test(
 test(
   "shouldFetch false value is respected with multiple plugins",
   (t: TestAssertions) => {
-    const mockReq = new MockRequest("/mock");
+    const mockReq = new Request("/mock");
     const group = new FetchGroup({
       plugins: [
         new Mock({
@@ -100,7 +102,7 @@ test(
 
 test("getRequest is passed the input request", (t: TestAssertions) => {
   t.plan(2);
-  const mockReq = new MockRequest("/mock");
+  const mockReq = new Request("/mock");
   const group = new FetchGroup({
     plugins: [
       new Mock({
@@ -119,8 +121,8 @@ test("getRequest is passed the input request", (t: TestAssertions) => {
 
 test("getRequest output is passed back", (t: TestAssertions) => {
   t.plan(1);
-  const mockReq = new MockRequest("/mock");
-  const newReq = new MockRequest("/another-mock");
+  const mockReq = new Request("/mock");
+  const newReq = new Request("/another-mock");
   const group = new FetchGroup({
     plugins: [
       new Mock({
@@ -140,9 +142,9 @@ test(
   "getRequest output is passed back with multiple plugins",
   (t: TestAssertions) => {
     t.plan(3);
-    const mockReq = new MockRequest("/mock");
-    const secondReq = new MockRequest("/another-mock");
-    const thirdReq = new MockRequest("/another-mock");
+    const mockReq = new Request("/mock");
+    const secondReq = new Request("/another-mock");
+    const thirdReq = new Request("/another-mock");
     const group = new FetchGroup({
       plugins: [
         new Mock({
@@ -170,7 +172,7 @@ test(
 
 test("willFetch is passed the input request", (t: TestAssertions) => {
   t.plan(1);
-  const mockReq = new MockRequest("/mock");
+  const mockReq = new Request("/mock");
   const group = new FetchGroup({
     plugins: [
       new Mock({
@@ -185,7 +187,7 @@ test("willFetch is passed the input request", (t: TestAssertions) => {
 
 test("willFetch output is ignored", (t: TestAssertions) => {
   t.plan(1);
-  const mockReq = new MockRequest("/mock");
+  const mockReq = new Request("/mock");
   const group = new FetchGroup({
     plugins: [
       new Mock({
@@ -203,7 +205,7 @@ test(
   "willFetch is passed the same request in multiple plugins",
   (t: TestAssertions) => {
     t.plan(2);
-    const mockReq = new MockRequest("/mock");
+    const mockReq = new Request("/mock");
     const group = new FetchGroup({
       plugins: [
         new Mock({
@@ -229,8 +231,8 @@ test(
   "eventually called",
   (t: TestAssertions) => {
     t.plan(3);
-    const mockReq = new MockRequest("/mock");
-    const mockResponse = new MockResponse();
+    const mockReq = new Request("/mock");
+    const mockResponse = new Response();
     const mockPromise = Promise.resolve(mockResponse);
     const group = new FetchGroup({
       plugins: [
@@ -257,8 +259,8 @@ test(
   "each fetch step is passed same request & can pass control to the next mock",
   (t: TestAssertions) => {
     t.plan(3);
-    const mockReq = new MockRequest("/mock");
-    const mockResponse = new MockResponse();
+    const mockReq = new Request("/mock");
+    const mockResponse = new Response();
     const mockPromise = Promise.resolve(mockResponse);
     const group = new FetchGroup({
       plugins: [
@@ -287,8 +289,8 @@ test(
   "a fetch step can return early",
   (t: TestAssertions) => {
     t.plan(1);
-    const mockReq = new MockRequest("/mock");
-    const mockResponse = new MockResponse();
+    const mockReq = new Request("/mock");
+    const mockResponse = new Response();
     const mockPromise = Promise.resolve(mockResponse);
     const group = new FetchGroup({
       plugins: [
@@ -312,8 +314,8 @@ test(
   "fetching is passed the input request and a promise for the response",
   (t: TestAssertions) => {
     t.plan(2);
-    const mockReq = new MockRequest("/mock");
-    const mockPromise = Promise.resolve(new MockResponse());
+    const mockReq = new Request("/mock");
+    const mockPromise = Promise.resolve(new Response());
     const group = new FetchGroup({
       plugins: [
         new Mock({
@@ -335,8 +337,8 @@ test(
   "fetching is passed same input for multiple plugins",
   (t: TestAssertions) => {
     t.plan(4);
-    const mockReq = new MockRequest("/mock");
-    const mockPromise = Promise.resolve(new MockResponse());
+    const mockReq = new Request("/mock");
+    const mockPromise = Promise.resolve(new Response());
     const group = new FetchGroup({
       plugins: [
         new Mock({
@@ -364,7 +366,7 @@ test(
 
 test("getResponse is passed the input response", (t: TestAssertions) => {
   t.plan(2);
-  const mockRes = new MockResponse();
+  const mockRes = new Response();
   const group = new FetchGroup({
     plugins: [
       new Mock({
@@ -383,8 +385,8 @@ test("getResponse is passed the input response", (t: TestAssertions) => {
 
 test("getResponse output is passed back", (t: TestAssertions) => {
   t.plan(1);
-  const mockRes = new MockResponse();
-  const newRes = new MockResponse();
+  const mockRes = new Response();
+  const newRes = new Response();
   const group = new FetchGroup({
     plugins: [
       new Mock({
@@ -404,9 +406,9 @@ test(
   "getResponse output is passed back with multiple plugins",
   (t: TestAssertions) => {
     t.plan(3);
-    const mockRes = new MockResponse();
-    const secondRes = new MockResponse();
-    const thirdRes = new MockResponse();
+    const mockRes = new Response();
+    const secondRes = new Response();
+    const thirdRes = new Response();
     const group = new FetchGroup({
       plugins: [
         new Mock({
@@ -434,7 +436,7 @@ test(
 
 test("didFetch is passed the input response", (t: TestAssertions) => {
   t.plan(1);
-  const mockRes = new MockResponse();
+  const mockRes = new Response();
   const group = new FetchGroup({
     plugins: [
       new Mock({
@@ -449,7 +451,7 @@ test("didFetch is passed the input response", (t: TestAssertions) => {
 
 test("didFetch output is ignored", (t: TestAssertions) => {
   t.plan(1);
-  const mockRes = new MockResponse();
+  const mockRes = new Response();
   const group = new FetchGroup({
     plugins: [
       new Mock({
@@ -467,7 +469,7 @@ test(
   "didFetch is passed the same response in multiple plugins",
   (t: TestAssertions) => {
     t.plan(2);
-    const mockRes = new MockResponse();
+    const mockRes = new Response();
     const group = new FetchGroup({
       plugins: [
         new Mock({
@@ -490,7 +492,7 @@ test(
 
 test("testRequest prevents shouldFetch being called", (t: TestAssertions) => {
   t.plan(1);
-  const mockReq = new MockRequest("/mock");
+  const mockReq = new Request("/mock");
   const group = new FetchGroup({
     filters: [
       new Mock({
@@ -513,7 +515,7 @@ test("testRequest prevents shouldFetch being called", (t: TestAssertions) => {
 
 test("testRequest prevents getRequest being called", (t: TestAssertions) => {
   t.plan(1);
-  const mockReq = new MockRequest("/mock");
+  const mockReq = new Request("/mock");
   const group = new FetchGroup({
     filters: [
       new Mock({
@@ -536,7 +538,7 @@ test("testRequest prevents getRequest being called", (t: TestAssertions) => {
 
 test("testRequest prevents willFetch being called", (t: TestAssertions) => {
   t.plan(1);
-  const mockReq = new MockRequest("/mock");
+  const mockReq = new Request("/mock");
   const group = new FetchGroup({
     filters: [
       new Mock({
@@ -559,8 +561,8 @@ test("testRequest prevents willFetch being called", (t: TestAssertions) => {
 
 test("testRequest prevents fetch being called", (t: TestAssertions) => {
   t.plan(1);
-  const mockReq = new MockRequest("/mock");
-  const mockResp = new MockResponse();
+  const mockReq = new Request("/mock");
+  const mockResp = new Response();
   const mockPromise = Promise.resolve(mockResp);
   const group = new FetchGroup({
     filters: [
@@ -589,7 +591,7 @@ test("testRequest prevents fetch being called", (t: TestAssertions) => {
 
 test("testResponse prevents getResponse being called", (t: TestAssertions) => {
   t.plan(1);
-  const mockRes = new MockResponse();
+  const mockRes = new Response();
   const group = new FetchGroup({
     filters: [
       new Mock({
@@ -612,7 +614,7 @@ test("testResponse prevents getResponse being called", (t: TestAssertions) => {
 
 test("testResponse prevents didFetch being called", (t: TestAssertions) => {
   t.plan(1);
-  const mockRes = new MockResponse();
+  const mockRes = new Response();
   const group = new FetchGroup({
     filters: [
       new Mock({
