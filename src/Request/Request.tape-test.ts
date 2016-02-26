@@ -1,18 +1,20 @@
 /// <reference path="../.d.test.ts" />
 "use strict";
-import test = require("ava");
+import test = require("tape");
 import Request from "./index";
 
 test(
   "Request is requireable",
-  (t: TestAssertions) => {
+  (t: TapeTestAssertions) => {
+    t.plan(1);
     t.ok(Request);
   }
 );
 
 test(
   "mixes in Body class",
-  (t: TestAssertions) => {
+  (t: TapeTestAssertions) => {
+    t.plan(2);
     let request = new Request("brain.gif");
     t.ok(request.text);
     t.ok(request.json);
@@ -21,31 +23,34 @@ test(
 
 test(
   "Can create new Request with url string",
-  (t: TestAssertions) => {
+  (t: TapeTestAssertions) => {
+    t.plan(1);
     let request = new Request("brain.gif");
-    t.same(request.url, "brain.gif");
+    t.equal(request.url, "brain.gif");
   }
 );
 
 test(
   "Correctly sets default properties",
-  (t: TestAssertions) => {
+  (t: TapeTestAssertions) => {
+    t.plan(8);
     let request = new Request("brain.gif");
-    t.same(request.url, "brain.gif");
-    t.same(request.method, "GET");
-    t.same(request.mode, "no-cors");
-    t.same(request.cache, "default");
+    t.equal(request.url, "brain.gif");
+    t.equal(request.method, "GET");
+    t.equal(request.mode, "no-cors");
+    t.equal(request.cache, "default");
     let newRequest = new Request(request);
-    t.same(newRequest.url, "brain.gif");
-    t.same(newRequest.method, "GET");
-    t.same(newRequest.mode, "no-cors");
-    t.same(newRequest.cache, "default");
+    t.equal(newRequest.url, "brain.gif");
+    t.equal(newRequest.method, "GET");
+    t.equal(newRequest.mode, "no-cors");
+    t.equal(newRequest.cache, "default");
   }
 );
 
 test(
   "Can create new Request from Request",
-  (t: TestAssertions) => {
+  (t: TapeTestAssertions) => {
+    t.plan(7);
     let request = new Request("mine.json", {
       method: "put",
       headers: {"A-Header": "A-Value"},
@@ -55,21 +60,22 @@ test(
       body: "The body"
     });
     let newRequest = new Request(request);
-    t.same(newRequest.url, "mine.json");
-    t.same(newRequest.method, "PUT");
-    t.same(newRequest.headers.getAll("A-Header"), ["A-Value"]);
-    t.same(newRequest.mode, "cors");
-    t.same(newRequest.credentials, "omit");
-    t.same(newRequest.cache, "default");
+    t.equal(newRequest.url, "mine.json");
+    t.equal(newRequest.method, "PUT");
+    t.deepEqual(newRequest.headers.getAll("A-Header"), ["A-Value"]);
+    t.equal(newRequest.mode, "cors");
+    t.equal(newRequest.credentials, "omit");
+    t.equal(newRequest.cache, "default");
     return newRequest.text().then((v) => {
-      t.same(v, "The body");
+      t.equal(v, "The body");
     });
   }
 );
 
 test(
   "Can create new Request with url string and full init",
-  (t: TestAssertions) => {
+  (t: TapeTestAssertions) => {
+    t.plan(7);
     let request = new Request("mine.json", {
       method: "put",
       headers: {"A-Header": "A-Value"},
@@ -78,21 +84,22 @@ test(
       cache: "default",
       body: "This is the body"
     });
-    t.same(request.url, "mine.json");
-    t.same(request.method, "PUT");
-    t.same(request.headers.getAll("A-Header"), ["A-Value"]);
-    t.same(request.mode, "cors");
-    t.same(request.credentials, "omit");
-    t.same(request.cache, "default");
+    t.equal(request.url, "mine.json");
+    t.equal(request.method, "PUT");
+    t.deepEqual(request.headers.getAll("A-Header"), ["A-Value"]);
+    t.equal(request.mode, "cors");
+    t.equal(request.credentials, "omit");
+    t.equal(request.cache, "default");
     return request.text().then((v) => {
-      t.same(v, "This is the body");
+      t.equal(v, "This is the body");
     });
   }
 );
 
 test(
   "Can create new Request with Request and full init",
-  (t: TestAssertions) => {
+  (t: TapeTestAssertions) => {
+    t.plan(7);
     let request = new Request("mine.json", {
       method: "delete"
     });
@@ -104,21 +111,22 @@ test(
       cache: "default",
       body: "This is the body"
     });
-    t.same(newRequest.url, "mine.json");
-    t.same(newRequest.method, "PUT");
-    t.same(newRequest.headers.getAll("A-Header"), ["A-Value"]);
-    t.same(newRequest.mode, "cors");
-    t.same(newRequest.credentials, "omit");
-    t.same(newRequest.cache, "default");
+    t.equal(newRequest.url, "mine.json");
+    t.equal(newRequest.method, "PUT");
+    t.deepEqual(newRequest.headers.getAll("A-Header"), ["A-Value"]);
+    t.equal(newRequest.mode, "cors");
+    t.equal(newRequest.credentials, "omit");
+    t.equal(newRequest.cache, "default");
     return newRequest.text().then((v) => {
-      t.same(v, "This is the body");
+      t.equal(v, "This is the body");
     });
   }
 );
 
 test(
   "Can create new Request with Request and some init",
-  (t: TestAssertions) => {
+  (t: TapeTestAssertions) => {
+    t.plan(7);
     let request = new Request("mine.json", {
       method: "delete",
       credentials: "omit",
@@ -129,14 +137,14 @@ test(
       cache: "default",
       body: "This is the body"
     });
-    t.same(newRequest.url, "mine.json");
-    t.same(newRequest.method, "DELETE");
-    t.same(newRequest.headers.getAll("A-Header"), ["A-Value"]);
-    t.same(newRequest.mode, "cors");
-    t.same(newRequest.credentials, "omit");
-    t.same(newRequest.cache, "default");
+    t.equal(newRequest.url, "mine.json");
+    t.equal(newRequest.method, "DELETE");
+    t.deepEqual(newRequest.headers.getAll("A-Header"), ["A-Value"]);
+    t.equal(newRequest.mode, "cors");
+    t.equal(newRequest.credentials, "omit");
+    t.equal(newRequest.cache, "default");
     return newRequest.text().then((v) => {
-      t.same(v, "This is the body");
+      t.equal(v, "This is the body");
     });
   }
 );
@@ -144,7 +152,7 @@ test(
 // TODO: this messes up tests and assertions. What to do?
 // test(
 //   "Should set original Request bodyUsed to true",
-//   (t: TestAssertions) => {
+//   (t: TapeTestAssertions) => {
 //     let request = new Request("brain.gif");
 //     t.false(request.bodyUsed);
 //     /* tslint:disable:no-unused-expression */
@@ -155,7 +163,8 @@ test(
 
 test(
   "Throws if creating a GET/HEAD with a body",
-  (t: TestAssertions) => {
+  (t: TapeTestAssertions) => {
+    t.plan(1);
     t.throws(
       () => {
         /* tslint:disable:no-unused-expression */
@@ -168,10 +177,11 @@ test(
 
 test(
   "Can clone an existing Request",
-  (t: TestAssertions) => {
+  (t: TapeTestAssertions) => {
+    t.plan(2);
     let request = new Request("mine.json");
     let newRequest = request.clone();
-    t.same(request.url, newRequest.url);
-    t.not(request, newRequest);
+    t.equal(request.url, newRequest.url);
+    t.notEqual(request, newRequest);
   }
 );
