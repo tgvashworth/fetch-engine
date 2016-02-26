@@ -26,7 +26,7 @@
         "src/Request/Request.tape-test.ts",
         "src/Request/Request.ts",
         "src/Response/index.ts",
-        "src/Response/Response.test.ts",
+        "src/Response/Response.tape-test.ts",
         "src/Response/Response.ts",
         "src/utils/composeContinuation.test.ts",
         "src/utils/composeContinuation.ts",
