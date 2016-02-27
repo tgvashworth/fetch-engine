@@ -13,10 +13,10 @@
         "!./node_modules/**/*.ts"
     ],
     "files": [
-        "src/Body.test.ts",
+        "src/Body.tape-test.ts",
         "src/Body.ts",
         "src/fetch.ts",
-        "src/fetchEngine.test.ts",
+        "src/fetchEngine.tape-test.ts",
         "src/fetchEngine.ts",
         "src/FetchGroup.test.ts",
         "src/FetchGroup.ts",

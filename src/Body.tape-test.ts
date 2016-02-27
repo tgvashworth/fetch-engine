@@ -1,39 +1,43 @@
 /// <reference path="./.d.test.ts" />
 "use strict";
-import test = require("ava");
+import test = require("tape");
 import Body from "./Body";
 
 test(
   "Body is requireable",
-  (t: TestAssertions) => {
+  (t: TapeTestAssertions) => {
+    t.plan(1);
     t.ok(Body);
   }
 );
 
 test(
   "Body takes and returns text string",
-  (t: TestAssertions) => {
+  (t: TapeTestAssertions) => {
+    t.plan(1);
     let body = new Body("hello");
     return body.text().then((v) => {
-      t.same(v, "hello");
+      t.equal(v, "hello");
     });
   }
 );
 
 test(
   "Body takes and returns json",
-  (t: TestAssertions) => {
+  (t: TapeTestAssertions) => {
+    t.plan(1);
     let body = new Body("{\"Europe\": \"big\", \"Asia\": \"massive\"}");
     return body.json().then((v) => {
-      t.same(v.Europe, "big");
+      t.equal(v.Europe, "big");
     });
   }
 );
 
 test(
   "Body defaults to null",
-  (t: TestAssertions) => {
+  (t: TapeTestAssertions) => {
+    t.plan(1);
     let body = new Body();
-    return t.same(body.rawBody, null);
+    return t.equal(body.rawBody, null);
   }
 );
