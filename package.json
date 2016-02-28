@@ -9,7 +9,9 @@
     "watch": "npm run clean && tsc --watch",
     "test": "npm run specs && npm run lint",
     "lint": "find src -name '*.ts' | xargs tslint",
-    "specs": "npm run build && tape dist/**/*.test.js | tap-min"
+    "specs-node": "tape dist/**/*.test.js | tap-min",
+    "specs-electron": "browserify dist/**/*.test.js | tape-run --browser electron | tap-min",
+    "specs": "npm run build && npm run specs-node && npm run specs-electron"
   },
   "config": {
     "ghooks": {
@@ -29,9 +31,11 @@
   },
   "homepage": "https://github.com/phuu/fetch-engine#readme",
   "devDependencies": {
+    "browserify": "^13.0.0",
     "ghooks": "^1.0.1",
     "tap-min": "^1.1.0",
     "tape": "^4.4.0",
+    "tape-run": "^2.1.3",
     "tsd": "^0.6.5",
     "tslint": "^3.0.0",
     "typescript": "^1.6.2"
