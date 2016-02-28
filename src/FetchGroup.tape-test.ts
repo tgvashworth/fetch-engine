@@ -1,44 +1,46 @@
 /// <reference path="./.d.test.ts" />
 "use strict";
-import test = require("ava");
+import test = require("tape");
 import FetchGroup from "./FetchGroup";
 import { Mock } from "./utils/mocks";
 import Request from "./Request";
 import Response from "./Response";
 
-test("FetchGroup is requireable", (t: TestAssertions) => {
+test("FetchGroup is requireable", (t: TapeTestAssertions) => {
+  t.plan(1);
   t.ok(FetchGroup);
 });
 
-test("FetchGroup has default plugin implementations", (t: TestAssertions) => {
+test("FetchGroup has default plugin implementations", (t: TapeTestAssertions) => {
   t.plan(8);
   const group = new FetchGroup();
   const mockRequest = new Request("/mock");
   const mockResponse = new Response();
   const mockPromise = Promise.resolve(mockResponse);
-  t.true(group.shouldFetch(mockRequest));
-  t.true(typeof group.willFetch === "function");
-  t.true(typeof group.fetch === "function");
-  t.true(typeof group.fetching === "function");
-  t.true(typeof group.didFetch === "function");
+  t.ok(group.shouldFetch(mockRequest));
+  t.ok(typeof group.willFetch === "function");
+  t.ok(typeof group.fetch === "function");
+  t.ok(typeof group.fetching === "function");
+  t.ok(typeof group.didFetch === "function");
   return Promise.resolve()
     .then(() => group.getRequest(mockRequest))
     .then((req: FetchRequest) => {
-      t.is(req, mockRequest);
+      t.equal(req, mockRequest);
     })
     .then(() => group.fetch(mockRequest, () => mockPromise))
     .then((res: FetchResponse) => {
-      t.is(res, mockResponse);
+      t.equal(res, mockResponse);
       return group.getResponse(res);
     })
     .then((res: FetchResponse) => {
-      t.is(res, mockResponse);
+      t.equal(res, mockResponse);
     });
 });
 
 // shouldFetch
 
-test("shouldFetch true value is respected", (t: TestAssertions) => {
+test("shouldFetch true value is respected", (t: TapeTestAssertions) => {
+  t.plan(1);
   const mockReq = new Request("/mock");
   const group = new FetchGroup({
     plugins: [
@@ -47,10 +49,11 @@ test("shouldFetch true value is respected", (t: TestAssertions) => {
       })
     ]
   });
-  t.same(group.shouldFetch(mockReq), true);
+  t.equal(group.shouldFetch(mockReq), true);
 });
 
-test("shouldFetch false value is respected", (t: TestAssertions) => {
+test("shouldFetch false value is respected", (t: TapeTestAssertions) => {
+  t.plan(1);
   const mockReq = new Request("/mock");
   const group = new FetchGroup({
     plugins: [
@@ -59,12 +62,13 @@ test("shouldFetch false value is respected", (t: TestAssertions) => {
       })
     ]
   });
-  t.same(group.shouldFetch(mockReq), false);
+  t.equal(group.shouldFetch(mockReq), false);
 });
 
 test(
   "shouldFetch true value is respected with multiple plugins",
-  (t: TestAssertions) => {
+  (t: TapeTestAssertions) => {
+    t.plan(1);
     const mockReq = new Request("/mock");
     const group = new FetchGroup({
       plugins: [
@@ -76,13 +80,14 @@ test(
         })
       ]
     });
-    t.same(group.shouldFetch(mockReq), true);
+    t.equal(group.shouldFetch(mockReq), true);
   }
 );
 
 test(
   "shouldFetch false value is respected with multiple plugins",
-  (t: TestAssertions) => {
+  (t: TapeTestAssertions) => {
+    t.plan(1);
     const mockReq = new Request("/mock");
     const group = new FetchGroup({
       plugins: [
@@ -94,20 +99,20 @@ test(
         })
       ]
     });
-    t.same(group.shouldFetch(mockReq), false);
+    t.equal(group.shouldFetch(mockReq), false);
   }
 );
 
 // getRequest
 
-test("getRequest is passed the input request", (t: TestAssertions) => {
+test("getRequest is passed the input request", (t: TapeTestAssertions) => {
   t.plan(2);
   const mockReq = new Request("/mock");
   const group = new FetchGroup({
     plugins: [
       new Mock({
         getRequest: (req: FetchRequest): Promise<FetchRequest> => {
-          t.same(req, mockReq);
+          t.deepEqual(req, mockReq);
           return Promise.resolve(req);
         }
       })
@@ -115,11 +120,11 @@ test("getRequest is passed the input request", (t: TestAssertions) => {
   });
   return group.getRequest(mockReq)
     .then((req: FetchRequest) => {
-      t.same(req, mockReq);
+      t.deepEqual(req, mockReq);
     });
 });
 
-test("getRequest output is passed back", (t: TestAssertions) => {
+test("getRequest output is passed back", (t: TapeTestAssertions) => {
   t.plan(1);
   const mockReq = new Request("/mock");
   const newReq = new Request("/another-mock");
@@ -134,13 +139,13 @@ test("getRequest output is passed back", (t: TestAssertions) => {
   });
   return group.getRequest(mockReq)
     .then((req: FetchRequest) => {
-      t.same(req, newReq);
+      t.deepEqual(req, newReq);
     });
 });
 
 test(
   "getRequest output is passed back with multiple plugins",
-  (t: TestAssertions) => {
+  (t: TapeTestAssertions) => {
     t.plan(3);
     const mockReq = new Request("/mock");
     const secondReq = new Request("/another-mock");
@@ -149,13 +154,13 @@ test(
       plugins: [
         new Mock({
           getRequest: (req: FetchRequest): Promise<FetchRequest> => {
-            t.same(req, mockReq);
+            t.deepEqual(req, mockReq);
             return Promise.resolve(secondReq);
           }
         }),
         new Mock({
           getRequest: (req: FetchRequest): Promise<FetchRequest> => {
-            t.same(req, secondReq);
+            t.deepEqual(req, secondReq);
             return Promise.resolve(thirdReq);
           }
         })
@@ -163,21 +168,21 @@ test(
     });
     return group.getRequest(mockReq)
       .then((req: FetchRequest) => {
-        t.same(req, thirdReq);
+        t.deepEqual(req, thirdReq);
       });
   }
 );
 
 // willFetch
 
-test("willFetch is passed the input request", (t: TestAssertions) => {
+test("willFetch is passed the input request", (t: TapeTestAssertions) => {
   t.plan(1);
   const mockReq = new Request("/mock");
   const group = new FetchGroup({
     plugins: [
       new Mock({
         willFetch: (req: FetchRequest): void => {
-          t.same(req, mockReq);
+          t.deepEqual(req, mockReq);
         }
       })
     ]
@@ -185,7 +190,7 @@ test("willFetch is passed the input request", (t: TestAssertions) => {
   group.willFetch(mockReq);
 });
 
-test("willFetch output is ignored", (t: TestAssertions) => {
+test("willFetch output is ignored", (t: TapeTestAssertions) => {
   t.plan(1);
   const mockReq = new Request("/mock");
   const group = new FetchGroup({
@@ -198,24 +203,24 @@ test("willFetch output is ignored", (t: TestAssertions) => {
     ]
   });
   const result = group.willFetch(mockReq);
-  t.same(result, undefined);
+  t.equal(result, undefined);
 });
 
 test(
   "willFetch is passed the same request in multiple plugins",
-  (t: TestAssertions) => {
+  (t: TapeTestAssertions) => {
     t.plan(2);
     const mockReq = new Request("/mock");
     const group = new FetchGroup({
       plugins: [
         new Mock({
           willFetch: (req: FetchRequest): void => {
-            t.same(req, mockReq);
+            t.deepEqual(req, mockReq);
           }
         }),
         new Mock({
           willFetch: (req: FetchRequest): void => {
-            t.same(req, mockReq);
+            t.deepEqual(req, mockReq);
           }
         })
       ]
@@ -229,7 +234,7 @@ test(
 test(
   "fetch is passed the input request and a 'next' function which is " +
   "eventually called",
-  (t: TestAssertions) => {
+  (t: TapeTestAssertions) => {
     t.plan(3);
     const mockReq = new Request("/mock");
     const mockResponse = new Response();
@@ -241,8 +246,8 @@ test(
             request: FetchRequest,
             next: FetchNext
           ): Promise<FetchResponse> => {
-            t.same(request, mockReq);
-            t.true(typeof next === "function");
+            t.deepEqual(request, mockReq);
+            t.ok(typeof next === "function");
             return next();
           }
         })
@@ -250,14 +255,14 @@ test(
     });
     return group.fetch(mockReq, () => mockPromise)
       .then((res: FetchResponse) => {
-        t.is(res, mockResponse);
+        t.equal(res, mockResponse);
       });
   }
 );
 
 test(
   "each fetch step is passed same request & can pass control to the next mock",
-  (t: TestAssertions) => {
+  (t: TapeTestAssertions) => {
     t.plan(3);
     const mockReq = new Request("/mock");
     const mockResponse = new Response();
@@ -266,13 +271,13 @@ test(
       plugins: [
         new Mock({
           fetch: (request, next): Promise<FetchResponse> => {
-            t.same(request, mockReq);
+            t.deepEqual(request, mockReq);
             return next();
           }
         }),
         new Mock({
           fetch: (request, next): Promise<FetchResponse> => {
-            t.same(request, mockReq);
+            t.deepEqual(request, mockReq);
             return next();
           }
         })
@@ -280,14 +285,14 @@ test(
     });
     return group.fetch(mockReq, () => mockPromise)
       .then((res: FetchResponse) => {
-        t.is(res, mockResponse);
+        t.equal(res, mockResponse);
       });
   }
 );
 
 test(
   "a fetch step can return early",
-  (t: TestAssertions) => {
+  (t: TapeTestAssertions) => {
     t.plan(1);
     const mockReq = new Request("/mock");
     const mockResponse = new Response();
@@ -303,7 +308,7 @@ test(
     });
     return group.fetch(mockReq, () => mockPromise)
       .then((res: FetchResponse) => {
-        t.is(res, mockResponse);
+        t.equal(res, mockResponse);
       });
   }
 );
@@ -312,7 +317,7 @@ test(
 
 test(
   "fetching is passed the input request and a promise for the response",
-  (t: TestAssertions) => {
+  (t: TapeTestAssertions) => {
     t.plan(2);
     const mockReq = new Request("/mock");
     const mockPromise = Promise.resolve(new Response());
@@ -320,8 +325,8 @@ test(
       plugins: [
         new Mock({
           fetching: (args: FetchFetchingArgs): void => {
-            t.same(args.request, mockReq);
-            t.same(args.promise, mockPromise);
+            t.deepEqual(args.request, mockReq);
+            t.deepEqual(args.promise, mockPromise);
           }
         })
       ]
@@ -335,7 +340,7 @@ test(
 
 test(
   "fetching is passed same input for multiple plugins",
-  (t: TestAssertions) => {
+  (t: TapeTestAssertions) => {
     t.plan(4);
     const mockReq = new Request("/mock");
     const mockPromise = Promise.resolve(new Response());
@@ -343,14 +348,14 @@ test(
       plugins: [
         new Mock({
           fetching: (args: FetchFetchingArgs): void => {
-            t.same(args.request, mockReq);
-            t.same(args.promise, mockPromise);
+            t.deepEqual(args.request, mockReq);
+            t.deepEqual(args.promise, mockPromise);
           }
         }),
         new Mock({
           fetching: (args: FetchFetchingArgs): void => {
-            t.same(args.request, mockReq);
-            t.same(args.promise, mockPromise);
+            t.deepEqual(args.request, mockReq);
+            t.deepEqual(args.promise, mockPromise);
           }
         })
       ]
@@ -364,14 +369,14 @@ test(
 
 // getResponse
 
-test("getResponse is passed the input response", (t: TestAssertions) => {
+test("getResponse is passed the input response", (t: TapeTestAssertions) => {
   t.plan(2);
   const mockRes = new Response();
   const group = new FetchGroup({
     plugins: [
       new Mock({
         getResponse: (res: FetchResponse): Promise<FetchResponse> => {
-          t.same(res, mockRes);
+          t.deepEqual(res, mockRes);
           return Promise.resolve(res);
         }
       })
@@ -379,11 +384,11 @@ test("getResponse is passed the input response", (t: TestAssertions) => {
   });
   return group.getResponse(mockRes)
     .then((res: FetchResponse) => {
-      t.same(res, mockRes);
+      t.deepEqual(res, mockRes);
     });
 });
 
-test("getResponse output is passed back", (t: TestAssertions) => {
+test("getResponse output is passed back", (t: TapeTestAssertions) => {
   t.plan(1);
   const mockRes = new Response();
   const newRes = new Response();
@@ -398,13 +403,13 @@ test("getResponse output is passed back", (t: TestAssertions) => {
   });
   return group.getResponse(mockRes)
     .then((res: FetchResponse) => {
-      t.same(res, newRes);
+      t.deepEqual(res, newRes);
     });
 });
 
 test(
   "getResponse output is passed back with multiple plugins",
-  (t: TestAssertions) => {
+  (t: TapeTestAssertions) => {
     t.plan(3);
     const mockRes = new Response();
     const secondRes = new Response();
@@ -413,13 +418,13 @@ test(
       plugins: [
         new Mock({
           getResponse: (req: FetchResponse): Promise<FetchResponse> => {
-            t.same(req, mockRes);
+            t.deepEqual(req, mockRes);
             return Promise.resolve(secondRes);
           }
         }),
         new Mock({
           getResponse: (req: FetchResponse): Promise<FetchResponse> => {
-            t.same(req, secondRes);
+            t.deepEqual(req, secondRes);
             return Promise.resolve(thirdRes);
           }
         })
@@ -427,21 +432,21 @@ test(
     });
     return group.getResponse(mockRes)
       .then((req: FetchResponse) => {
-        t.same(req, thirdRes);
+        t.deepEqual(req, thirdRes);
       });
   }
 );
 
 // didFetch
 
-test("didFetch is passed the input response", (t: TestAssertions) => {
+test("didFetch is passed the input response", (t: TapeTestAssertions) => {
   t.plan(1);
   const mockRes = new Response();
   const group = new FetchGroup({
     plugins: [
       new Mock({
         didFetch: (req: FetchResponse): void => {
-          t.same(req, mockRes);
+          t.deepEqual(req, mockRes);
         }
       })
     ]
@@ -449,7 +454,7 @@ test("didFetch is passed the input response", (t: TestAssertions) => {
   group.didFetch(mockRes);
 });
 
-test("didFetch output is ignored", (t: TestAssertions) => {
+test("didFetch output is ignored", (t: TapeTestAssertions) => {
   t.plan(1);
   const mockRes = new Response();
   const group = new FetchGroup({
@@ -462,24 +467,24 @@ test("didFetch output is ignored", (t: TestAssertions) => {
     ]
   });
   const result = group.didFetch(mockRes);
-  t.same(result, undefined);
+  t.equal(result, undefined);
 });
 
 test(
   "didFetch is passed the same response in multiple plugins",
-  (t: TestAssertions) => {
+  (t: TapeTestAssertions) => {
     t.plan(2);
     const mockRes = new Response();
     const group = new FetchGroup({
       plugins: [
         new Mock({
           didFetch: (req: FetchResponse): void => {
-            t.same(req, mockRes);
+            t.deepEqual(req, mockRes);
           }
         }),
         new Mock({
           didFetch: (req: FetchResponse): void => {
-            t.same(req, mockRes);
+            t.deepEqual(req, mockRes);
           }
         })
       ]
@@ -490,14 +495,14 @@ test(
 
 // testRequest
 
-test("testRequest prevents shouldFetch being called", (t: TestAssertions) => {
+test("testRequest prevents shouldFetch being called", (t: TapeTestAssertions) => {
   t.plan(1);
   const mockReq = new Request("/mock");
   const group = new FetchGroup({
     filters: [
       new Mock({
         testRequest: (req: FetchRequest): boolean => {
-          t.same(req, mockReq);
+          t.deepEqual(req, mockReq);
           return false;
         }
       })
@@ -513,14 +518,14 @@ test("testRequest prevents shouldFetch being called", (t: TestAssertions) => {
   group.shouldFetch(mockReq);
 });
 
-test("testRequest prevents getRequest being called", (t: TestAssertions) => {
+test("testRequest prevents getRequest being called", (t: TapeTestAssertions) => {
   t.plan(1);
   const mockReq = new Request("/mock");
   const group = new FetchGroup({
     filters: [
       new Mock({
         testRequest: (req: FetchRequest): boolean => {
-          t.same(req, mockReq);
+          t.deepEqual(req, mockReq);
           return false;
         }
       })
@@ -536,14 +541,14 @@ test("testRequest prevents getRequest being called", (t: TestAssertions) => {
   group.getRequest(mockReq);
 });
 
-test("testRequest prevents willFetch being called", (t: TestAssertions) => {
+test("testRequest prevents willFetch being called", (t: TapeTestAssertions) => {
   t.plan(1);
   const mockReq = new Request("/mock");
   const group = new FetchGroup({
     filters: [
       new Mock({
         testRequest: (req: FetchRequest): boolean => {
-          t.same(req, mockReq);
+          t.deepEqual(req, mockReq);
           return false;
         }
       })
@@ -559,7 +564,7 @@ test("testRequest prevents willFetch being called", (t: TestAssertions) => {
   group.willFetch(mockReq);
 });
 
-test("testRequest prevents fetch being called", (t: TestAssertions) => {
+test("testRequest prevents fetch being called", (t: TapeTestAssertions) => {
   t.plan(1);
   const mockReq = new Request("/mock");
   const mockResp = new Response();
@@ -568,7 +573,7 @@ test("testRequest prevents fetch being called", (t: TestAssertions) => {
     filters: [
       new Mock({
         testRequest: (req: FetchRequest): boolean => {
-          t.same(req, mockReq);
+          t.deepEqual(req, mockReq);
           return false;
         }
       })
@@ -589,14 +594,14 @@ test("testRequest prevents fetch being called", (t: TestAssertions) => {
 
 // testResponse
 
-test("testResponse prevents getResponse being called", (t: TestAssertions) => {
+test("testResponse prevents getResponse being called", (t: TapeTestAssertions) => {
   t.plan(1);
   const mockRes = new Response();
   const group = new FetchGroup({
     filters: [
       new Mock({
         testResponse: (res: FetchResponse): boolean => {
-          t.same(res, mockRes);
+          t.deepEqual(res, mockRes);
           return false;
         }
       })
@@ -612,14 +617,14 @@ test("testResponse prevents getResponse being called", (t: TestAssertions) => {
   group.getResponse(mockRes);
 });
 
-test("testResponse prevents didFetch being called", (t: TestAssertions) => {
+test("testResponse prevents didFetch being called", (t: TapeTestAssertions) => {
   t.plan(1);
   const mockRes = new Response();
   const group = new FetchGroup({
     filters: [
       new Mock({
         testResponse: (res: FetchResponse): boolean => {
-          t.same(res, mockRes);
+          t.deepEqual(res, mockRes);
           return false;
         }
       })

@@ -9,7 +9,7 @@
     "watch": "npm run clean && tsc --watch",
     "test": "npm run specs && npm run lint",
     "lint": "find src -name '*.ts' | xargs tslint",
-    "specs": "npm run build && ava dist/*.test.js dist/**/*.test.js && tape dist/**/*.tape-test.js | tap-min"
+    "specs": "npm run build && tape dist/**/*.tape-test.js | tap-min"
   },
   "config": {
     "ghooks": {
@@ -29,7 +29,6 @@
   },
   "homepage": "https://github.com/phuu/fetch-engine#readme",
   "devDependencies": {
-    "ava": "^0.9.1",
     "ghooks": "^1.0.1",
     "tap-min": "^1.1.0",
     "tape": "^4.4.0",

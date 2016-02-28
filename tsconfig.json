@@ -18,7 +18,7 @@
         "src/fetch.ts",
         "src/fetchEngine.tape-test.ts",
         "src/fetchEngine.ts",
-        "src/FetchGroup.test.ts",
+        "src/FetchGroup.tape-test.ts",
         "src/FetchGroup.ts",
         "src/Headers.tape-test.ts",
         "src/Headers.ts",
