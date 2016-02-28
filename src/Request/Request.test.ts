@@ -1,6 +1,7 @@
 /// <reference path="../.d.test.ts" />
 "use strict";
 import test = require("tape");
+import wrap from "../utils/wrapPromiseTest";
 import Request from "./index";
 
 test(
@@ -49,7 +50,7 @@ test(
 
 test(
   "Can create new Request from Request",
-  (t: TapeTestAssertions) => {
+  wrap((t: TapeTestAssertions) => {
     t.plan(7);
     let request = new Request("mine.json", {
       method: "put",
@@ -69,12 +70,12 @@ test(
     return newRequest.text().then((v) => {
       t.equal(v, "The body");
     });
-  }
+  })
 );
 
 test(
   "Can create new Request with url string and full init",
-  (t: TapeTestAssertions) => {
+  wrap((t: TapeTestAssertions) => {
     t.plan(7);
     let request = new Request("mine.json", {
       method: "put",
@@ -93,12 +94,12 @@ test(
     return request.text().then((v) => {
       t.equal(v, "This is the body");
     });
-  }
+  })
 );
 
 test(
   "Can create new Request with Request and full init",
-  (t: TapeTestAssertions) => {
+  wrap((t: TapeTestAssertions) => {
     t.plan(7);
     let request = new Request("mine.json", {
       method: "delete"
@@ -120,12 +121,12 @@ test(
     return newRequest.text().then((v) => {
       t.equal(v, "This is the body");
     });
-  }
+  })
 );
 
 test(
   "Can create new Request with Request and some init",
-  (t: TapeTestAssertions) => {
+  wrap((t: TapeTestAssertions) => {
     t.plan(7);
     let request = new Request("mine.json", {
       method: "delete",
@@ -146,7 +147,7 @@ test(
     return newRequest.text().then((v) => {
       t.equal(v, "This is the body");
     });
-  }
+  })
 );
 
 // TODO: this messes up tests and assertions. What to do?

@@ -1,6 +1,7 @@
 /// <reference path="../.d.test.ts" />
 "use strict";
 import test = require("tape");
+import wrap from "../utils/wrapPromiseTest";
 import Response from "./index";
 import { ResponseHeaders } from "../Headers";
 
@@ -14,14 +15,14 @@ test(
 
 test(
   "mixes in Body class",
-  (t: TapeTestAssertions) => {
+  wrap((t: TapeTestAssertions) => {
     t.plan(2);
     let response = new Response("string");
     t.ok(response.json);
     return response.text().then((v) => {
       t.equal(v, "string");
     });
-  }
+  })
 );
 
 test(
