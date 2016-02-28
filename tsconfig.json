@@ -43,7 +43,8 @@
         "src/utils/http.ts",
         "src/utils/mocks.ts",
         "src/utils/sideEffect.test.ts",
-        "src/utils/sideEffect.ts"
+        "src/utils/sideEffect.ts",
+        "src/utils/wrapPromiseTest.ts"
     ],
     "atom": {
         "rewriteTsconfig": true
