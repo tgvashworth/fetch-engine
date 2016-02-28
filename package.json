@@ -9,7 +9,7 @@
     "watch": "npm run clean && tsc --watch",
     "test": "npm run specs && npm run lint",
     "lint": "find src -name '*.ts' | xargs tslint",
-    "specs": "npm run build && tape dist/**/*.tape-test.js | tap-min"
+    "specs": "npm run build && tape dist/**/*.test.js | tap-min"
   },
   "config": {
     "ghooks": {
