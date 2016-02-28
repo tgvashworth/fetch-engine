@@ -1,23 +1,24 @@
 /// <reference path="../.d.test.ts" />
 "use strict";
-import test = require("ava");
+import test = require("tape");
 import composeVoid from "./composeVoid";
 
-test("composeVoid is requireable", (t: TestAssertions) => {
+test("composeVoid is requireable", (t: TapeTestAssertions) => {
+  t.plan(1);
   t.ok(composeVoid);
 });
 
 test(
   "it passes value to each function and ignores return values",
-  (t: TestAssertions) => {
+  (t: TapeTestAssertions) => {
     t.plan(3);
     const testVal = {};
     const testFn = x => {
-      t.same(x, testVal);
+      t.equal(x, testVal);
       return {};
     };
     const f = composeVoid([testFn, testFn]);
     const result = f(testVal);
-    t.same(result, undefined);
+    t.equal(result, undefined);
   }
 );

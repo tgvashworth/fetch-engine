@@ -1,29 +1,30 @@
 /// <reference path="../.d.test.ts" />
 "use strict";
-import test = require("ava");
+import test = require("tape");
 import sideEffect from "./sideEffect";
 
-test("sideEffect is requireable", (t: TestAssertions) => {
+test("sideEffect is requireable", (t: TapeTestAssertions) => {
+  t.plan(1);
   t.ok(sideEffect);
 });
 
 test(
   "it returns passed in value",
-  (t: TestAssertions) => {
+  (t: TapeTestAssertions) => {
     t.plan(2);
     const id = x => x;
     const f = sideEffect(id);
-    t.is(f(true), true);
-    t.is(f(false), false);
+    t.equal(f(true), true);
+    t.equal(f(false), false);
   }
 );
 
 test(
   "calls supplied function",
-  (t: TestAssertions) => {
+  (t: TapeTestAssertions) => {
     t.plan(1);
     const inner = x => {
-      t.same(x, true);
+      t.equal(x, true);
       return false;
     };
     sideEffect(inner)(true);
@@ -32,11 +33,11 @@ test(
 
 test(
   "passes many arguments to supplied function",
-  (t: TestAssertions) => {
+  (t: TapeTestAssertions) => {
     t.plan(2);
     const inner = (x, y) => {
-      t.same(x, true);
-      t.same(y, false);
+      t.equal(x, true);
+      t.equal(y, false);
     };
     sideEffect(inner)(true, false);
   }
@@ -44,9 +45,9 @@ test(
 
 test(
   "ignored function's return value",
-  (t: TestAssertions) => {
+  (t: TapeTestAssertions) => {
     t.plan(1);
     const result = sideEffect(_ => false)(true);
-    t.same(result, true);
+    t.equal(result, true);
   }
 );
