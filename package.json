@@ -11,7 +11,7 @@
     "lint": "find src -name '*.ts' | xargs tslint",
     "specs-bundle": "browserify -r ./dist/test-globals.js dist/**/*.test.js -o dist/test-bundle.js",
     "specs-node": "tape dist/**/*.test.js | tap-min",
-    "specs-electron": "browserify -r ./dist/test-globals.js dist/**/*.test.js | tape-run --browser electron | tap-min",
+    "specs-electron": "browserify -r ./dist/test-globals.js -r es5-shim dist/**/*.test.js | tape-run --browser electron | tap-min",
     "specs-testem": "testem ci -P 10 --skip opera | tap-min",
     "specs": "npm run build && npm run specs-node && npm run specs-electron && npm run specs-testem"
   },
@@ -34,6 +34,7 @@
   "homepage": "https://github.com/phuu/fetch-engine#readme",
   "devDependencies": {
     "browserify": "^13.0.0",
+    "es5-shim": "^4.5.7",
     "es6-promise": "^3.1.2",
     "ghooks": "^1.0.1",
     "tap-min": "^1.1.0",
