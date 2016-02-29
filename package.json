@@ -2,7 +2,7 @@
   "name": "fetch-engine",
   "version": "1.0.0",
   "description": "A smart request-making library that makes sure your Javascript client is a good citizen of your distributed system.",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "clean": "rm -rf ./dist",
     "build": "npm run clean && tsc",

@@ -22,6 +22,7 @@
         "src/FetchGroup.ts",
         "src/Headers.test.ts",
         "src/Headers.ts",
+        "src/index.ts",
         "src/Request/index.ts",
         "src/Request/Request.test.ts",
         "src/Request/Request.ts",
