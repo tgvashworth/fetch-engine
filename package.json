@@ -39,5 +39,8 @@
     "tsd": "^0.6.5",
     "tslint": "^3.0.0",
     "typescript": "^1.6.2"
+  },
+  "dependencies": {
+    "isomorphic-fetch": "^2.2.1"
   }
 }
