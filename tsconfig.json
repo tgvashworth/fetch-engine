@@ -29,6 +29,7 @@
         "src/Response/index.ts",
         "src/Response/Response.test.ts",
         "src/Response/Response.ts",
+        "src/test-globals.ts",
         "src/utils/composeContinuation.test.ts",
         "src/utils/composeContinuation.ts",
         "src/utils/composeEvery.test.ts",

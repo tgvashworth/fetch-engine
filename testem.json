@@ -1,0 +1,17 @@
+{
+  "launchers": {
+    "Node": {
+      "command": "tape dist/**/*.test.js",
+      "protocol": "tap"
+    }
+  },
+  "framework": "tap",
+  "src_files": [
+    "dist/**/*.js"
+  ],
+  "serve_files": [
+    "dist/test-bundle.js"
+  ],
+  "before_tests": "npm run specs-bundle",
+  "launch_in_dev": ["Node", "PhantomJS"]
+}
