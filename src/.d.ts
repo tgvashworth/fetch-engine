@@ -102,10 +102,3 @@ declare interface FetchGroupOptions {
   plugins?: Array<FetchEnginePlugin>;
   filters?: Array<FetchEngineFilter>;
 }
-
-// External deps
-
-declare module "isomorphic-fetch"  {
-  const fetch: (url: string, init?: FetchRequest) => Promise<FetchResponse>;
-  export = fetch;
-}

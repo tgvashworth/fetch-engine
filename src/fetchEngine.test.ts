@@ -2,22 +2,22 @@
 "use strict";
 import test = require("tape");
 import wrap from "./utils/wrapPromiseTest";
-import fetchEngine from "./fetchEngine";
+import makeFetchEngine from "./fetchEngine";
 import FetchGroup from "./FetchGroup";
-import { Mock } from "./utils/mocks";
+import { Mock, mockFetch } from "./utils/mocks";
 import Request from "./Request";
 import Response from "./Response";
 
-test("fetchEngine is requireable", (t: TapeTestAssertions) => {
+test("makeFetchEngine is requireable", (t: TapeTestAssertions) => {
   t.plan(1);
-  t.ok(fetchEngine);
+  t.ok(makeFetchEngine);
 });
 
 test(
   "fetchEngine with no args returns a response",
   wrap((t: TapeTestAssertions) => {
     t.plan(1);
-    const fetch = fetchEngine();
+    const fetch = makeFetchEngine(mockFetch)();
     return fetch(new Request("/mock"))
       .then((res: FetchResponse) => {
         t.ok(res);
@@ -29,7 +29,7 @@ test(
   "fetchEngine with shouldFetch false throws",
   wrap((t: TapeTestAssertions) => {
     t.plan(1);
-    const fetch = fetchEngine(new FetchGroup({
+    const fetch = makeFetchEngine(mockFetch)(new FetchGroup({
       plugins: [
         new Mock({
           shouldFetch: (): boolean => false
@@ -49,7 +49,7 @@ test(
     t.plan(2);
     const firstMockReq = new Request("/mock");
     const secondMockReq = new Request("/mock/other");
-    const fetch = fetchEngine(new FetchGroup({
+    const fetch = makeFetchEngine(mockFetch)(new FetchGroup({
       plugins: [
         new Mock({
           getRequest: (req: FetchRequest): Promise<FetchRequest> => {
@@ -71,7 +71,7 @@ test(
   wrap((t: TapeTestAssertions) => {
     t.plan(2);
     const mockReq = new Request("/mock");
-    const fetch = fetchEngine(new FetchGroup({
+    const fetch = makeFetchEngine(mockFetch)(new FetchGroup({
       plugins: [
         new Mock({
           fetch: (
@@ -94,7 +94,7 @@ test(
   wrap((t: TapeTestAssertions) => {
     t.plan(3);
     const mockReq = new Request("/mock");
-    const fetch = fetchEngine(new FetchGroup({
+    const fetch = makeFetchEngine(mockFetch)(new FetchGroup({
       plugins: [
         new Mock({
           fetching: (args: FetchFetchingArgs): void => {
@@ -115,7 +115,7 @@ test(
     t.plan(1);
     const mockReq = new Request("/mock");
     const mockRes = new Response();
-    const fetch = fetchEngine(new FetchGroup({
+    const fetch = makeFetchEngine(mockFetch)(new FetchGroup({
       plugins: [
         new Mock({
           getResponse: (res: FetchResponse): Promise<FetchResponse> => {
@@ -138,7 +138,7 @@ test(
     const firstMockReq = new Request("/mock");
     const secondMockReq = new Request("/mock");
     const firstMockRes = new Response();
-    const fetch = fetchEngine(new FetchGroup({
+    const fetch = makeFetchEngine(mockFetch)(new FetchGroup({
       plugins: [
         new Mock({
           shouldFetch: (req: FetchRequest): boolean => {
