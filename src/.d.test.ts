@@ -1,5 +1,13 @@
 /// <reference path="../typings/node/node.d.ts" />
 
+// General
+
+interface Callback<T> {
+  (error: Error, v?: T): any;
+}
+
+// Tape
+
 declare interface TapeTestAssertions {
   plan: (n: number) => void;
   end: () => void;
@@ -35,4 +43,82 @@ declare interface Tape {
 declare module "tape"  {
   const test: Tape;
   export = test;
+}
+
+// browser-run
+
+declare module "browser-run" {
+  import * as stream from "stream";
+
+  namespace run {
+    interface BrowserRun {
+      (opts: Options): Browser;
+    }
+
+    type Browser = stream.Duplex;
+
+    interface Options {
+      port: any;
+    }
+  }
+
+  const run: run.BrowserRun;
+  export = run;
+}
+
+// browserstacktunnel-wrapper
+
+declare module "browserstacktunnel-wrapper" {
+  class BrowserStackTunnel {
+    constructor(opts?: Options);
+    start: (cb: Callback<void>) => any;
+    stop: (cb: Callback<void>) => any;
+  }
+
+  interface Options {
+    key: string;
+  }
+
+  export = BrowserStackTunnel;
+}
+
+// leadfoot
+
+declare namespace leadfoot {
+  export interface Capabilities {
+    "browserstack.user": string;
+    "browserstack.key": string;
+    os: string;
+    os_version: string;
+    browser: string;
+    browser_version: string;
+    device?: string;
+    timeout?: string;
+    name?: string;
+    build?: string;
+    project?: string;
+    "browserstack.video"?: boolean;
+    "browserstack.local"?: boolean;
+  }
+
+  export class Server {
+    constructor(url: string);
+    createSession(
+      desiredCapabilities: Capabilities,
+      requiredCapabilities?: Capabilities
+    ): Promise<Session>;
+  }
+
+  export class Session {
+    get(url: string): Promise<void>;
+    quit(): Promise<void>;
+  }
+}
+
+declare module "leadfoot/Server" {
+  export = leadfoot.Server;
+}
+
+declare module "leadfoot/Session" {
+  export = leadfoot.Session;
 }

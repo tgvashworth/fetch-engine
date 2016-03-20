@@ -559,7 +559,7 @@ declare module "http" {
 		maxFreeSockets?: number;
 	}
 
-    export class Agent {
+  export class Agent {
 		maxSockets: number;
 		sockets: any;
 		requests: any;
