@@ -5,11 +5,14 @@ cache:
     - node_modules
 notifications:
   email: false
-node_js:
-  - stable
+node_js: stable
 before_install:
-  - npm i -g npm@^3.0.0
-before_script:
-  - npm prune
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
+  - sleep 2
+before_script:
+  - npm prune
+  - npm run build
+script:
+  - npm test
+  - npm run specs-browserstack
