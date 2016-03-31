@@ -1,20 +1,17 @@
-var path = require('path')
+import path = require("path");
 
 module.exports = {
 
-  basePath: '../',
+  basePath: "../",
 
-  browsers: ['Electron'],
+  browsers: ["Electron"],
 
   coverageReporter: {
-
-    dir: 'coverage',
-
+    dir: "coverage",
     reporters: [
-      { type: 'text' },
-      { type: 'lcov', subdir: 'report-lcov' }
+      { type: "text" },
+      { type: "lcov", subdir: "report-lcov" }
     ],
-
     check: {
       global: {
         statements: 10,
@@ -23,18 +20,17 @@ module.exports = {
         lines: 10
       }
     }
-
   },
 
-  frameworks: ['tap'],
+  frameworks: ["tap"],
 
-  files: ['dist/*.test.js'],
+  files: ["dist/*.test.js"],
 
   preprocessors: {
-    'dist/*.test.js': ['webpack']
+    "dist/*.test.js": ["webpack"]
   },
 
-  reporters: ['progress', 'coverage'],
+  reporters: ["progress", "coverage"],
 
   singleRun: true,
 
@@ -44,19 +40,17 @@ module.exports = {
         // instrument only testing sources with Istanbul
         {
           test: /\.js$/,
-          include: path.resolve('dist/*.js'),
-          exclude: path.resolve('dist/*.test.js'),
-          loader: 'istanbul-instrumenter'
+          include: path.resolve("dist/*.js"),
+          exclude: path.resolve("dist/*.test.js"),
+          loader: "istanbul-instrumenter"
         }
       ]
     },
     node: {
-      'fs': 'empty'
+      fs: "empty"
     }
   },
-
   webpackMiddleware: {
     noInfo: true
   }
-
-}
+};

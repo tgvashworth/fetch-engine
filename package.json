@@ -4,14 +4,34 @@
   "description": "A smart request-making library that makes sure your Javascript client is a good citizen of your distributed system.",
   "main": "dist/index.js",
   "scripts": {
-    "clean": "rm -rf ./dist && rm -rf coverage",
+    "//": "Typescript Compilation",
+
+    "//": "`./testing` files are in typescript for linting.",
+    "//": "in `build-conf` they are compiled for running",
+    "//": "with karma, and after tests finish the .js files",
+    "//": "are deleted. the `|| true` is so that typescript",
+    "//": "doesn't fail the build because of its type checking",
+
     "build": "npm run clean && tsc || true",
+    "build-conf": "tsc testing/*.ts || true",
+    "build-all": "npm run build && npm run build-conf",
+    "clean": "rm -rf ./dist && rm -rf coverage",
+    "clean-tests": "rm -rf testing/*.js",
     "watch": "npm run clean && tsc --watch",
-    "test": "npm run lint && npm run specs-node && npm run specs",
-    "lint": "tslint src/**/*.ts",
-    "specs": "karma start testing/karma.conf.js",
+
+    "//": "Test Running",
+
+    "specs": "npm run specs-node && npm run specs-browser && npm run specs-browserstack",
+    "specs-browser": "karma start testing/karma.conf.js",
     "specs-browserstack": "karma start testing/karma.browserstack.conf.js",
-    "specs-node": "tape dist/**/*.test.js | tap-min"
+    "specs-node": "tape dist/**/*.test.js | tap-min",
+    "lint": "tslint src/**/*.ts && tslint testing/**/*.ts",
+
+    "//": "compiles `./testing` files, linting, compiling src files, testing, cleaning",
+    "//": "the `||` in the end is for cleaning the `./testing` .js files if test fails",
+    "//": "and -1 fails the the process so that it's recognised by Travis as a failure",
+
+    "test": "npm run build-all && npm run lint && npm run specs && npm run clean-tests || (npm run clean-tests && -1)"
   },
   "config": {
     "ghooks": {

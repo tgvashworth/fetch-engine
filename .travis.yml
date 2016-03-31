@@ -12,7 +12,5 @@ before_install:
   - sleep 2
 before_script:
   - npm prune
-  - npm run build
 script:
   - npm test
-  - npm run specs-browserstack
