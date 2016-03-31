@@ -13,7 +13,7 @@
     "//": "doesn't fail the build because of its type checking",
 
     "build": "npm run clean && tsc || true",
-    "build-conf": "tsc testing/*.ts || true",
+    "build-conf": "tsc testing/*.ts --outDir testing/js/ || true",
     "build-all": "npm run build && npm run build-conf",
     "clean": "rm -rf ./dist && rm -rf coverage",
     "clean-tests": "rm -rf testing/*.js",
@@ -22,16 +22,11 @@
     "//": "Test Running",
 
     "specs": "npm run specs-node && npm run specs-browser && npm run specs-browserstack",
-    "specs-browser": "karma start testing/karma.conf.js",
-    "specs-browserstack": "karma start testing/karma.browserstack.conf.js",
+    "specs-browser": "karma start testing/js/karma.conf.js",
+    "specs-browserstack": "karma start testing/js/karma.browserstack.conf.js",
     "specs-node": "tape dist/**/*.test.js | tap-min",
     "lint": "tslint src/**/*.ts && tslint testing/**/*.ts",
-
-    "//": "compiles `./testing` files, linting, compiling src files, testing, cleaning",
-    "//": "the `||` in the end is for cleaning the `./testing` .js files if test fails",
-    "//": "and -1 fails the the process so that it's recognised by Travis as a failure",
-
-    "test": "npm run build-all && npm run lint && npm run specs && npm run clean-tests || (npm run clean-tests && -1)"
+    "test": "npm run build-all && npm run lint && npm run specs"
   },
   "config": {
     "ghooks": {

@@ -2,7 +2,9 @@ import path = require("path");
 
 module.exports = {
 
-  basePath: "../",
+  // this will be compiled to `js/` folder
+  // that's why the 2 folder retreat
+  basePath: "../../",
 
   browsers: ["Electron"],
 
