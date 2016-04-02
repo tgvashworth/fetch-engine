@@ -1,2 +1,11 @@
+# TypeScript Build
 dist/
+
+# Dependency directory
 node_modules/
+
+# Istanbul coverage report
+coverage/
+
+# Logs
+npm-debug.log
