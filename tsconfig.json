@@ -10,6 +10,7 @@
     },
     "filesGlob": [
         "src/**/*.ts",
+        "!./testing/**/*.ts",
         "!./node_modules/**/*.ts"
     ],
     "files": [
