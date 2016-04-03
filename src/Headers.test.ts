@@ -120,7 +120,7 @@ test(
     headers.append("Content-Type", "allowed");
     headers.append("Content-Type", "multipart/form-data");
     t.notOk(headers.has("Header-1"));
-    t.equal(headers.getAll("Content-Type"), ["multipart/form-data"]);
+    t.deepEqual(headers.getAll("Content-Type"), ["multipart/form-data"]);
   }
 );
 
@@ -204,7 +204,7 @@ test(
     headers.append("Header-1", "Value-1");
     headers.append("Header-2", "Value-2");
     headers.append("Header-2", "Value-3");
-    t.equal(headers.getAll("Header-2"), ["Value-2", "Value-3"]);
+    t.deepEqual(headers.getAll("Header-2"), ["Value-2", "Value-3"]);
   }
 );
 
@@ -234,9 +234,9 @@ test(
     t.plan(2);
     let headers = new Headers();
     headers.append("Header-1", "Value-1");
-    t.equal(headers.getAll("Header-1"), ["Value-1"]);
+    t.deepEqual(headers.getAll("Header-1"), ["Value-1"]);
     headers.set("Header-1", "Value-2");
-    t.equal(headers.getAll("Header-1"), ["Value-2"]);
+    t.deepEqual(headers.getAll("Header-1"), ["Value-2"]);
   }
 );
 
@@ -247,9 +247,9 @@ test(
     let headers = new Headers();
     headers.append("Header-1", "Value-1");
     headers.append("Header-1", "Value-2");
-    t.equal(headers.getAll("Header-1"), ["Value-1", "Value-2"]);
+    t.deepEqual(headers.getAll("Header-1"), ["Value-1", "Value-2"]);
     headers.set("Header-1", "Value-2");
-    t.equal(headers.getAll("Header-1"), ["Value-2"]);
+    t.deepEqual(headers.getAll("Header-1"), ["Value-2"]);
   }
 );
 
@@ -259,7 +259,7 @@ test(
     t.plan(1);
     let headers = new Headers();
     headers.set("Header-1", "Value-1");
-    t.equal(headers.getAll("Header-1"), ["Value-1"]);
+    t.deepEqual(headers.getAll("Header-1"), ["Value-1"]);
   }
 );
 
@@ -281,6 +281,6 @@ test(
       "header-2": "value-2",
     };
     let headers = new Headers(h);
-    t.equal(headers.getHeaders(), h);
+    t.deepEqual(headers.getHeaders(), h);
   }
 );
