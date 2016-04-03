@@ -14,15 +14,15 @@ export default class Response extends Body implements FetchResponse {
   headers: ResponseHeaders;
 
   constructor(body = "", init: FetchResponseInit = {}) {
+    // Request inherits from Body
+    super(body);
+
     this.type = "default";
     this.status = init.status || 200;
     this.statusText = init.statusText || "ok";
     this.ok = this.status >= 200 && this.status < 300;
     this.headers = new ResponseHeaders(init.headers);
     this.url = init.url || "";
-
-    // Call super to set Body or an empty string
-    super(body);
   }
 
   error(): Response {

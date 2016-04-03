@@ -16,6 +16,9 @@ export default class Request extends Body implements FetchRequest {
   cache: string;
 
   constructor(input: string|FetchRequest, init: FetchRequestInit = {}) {
+    // Request inherits from Body
+    super();
+
     // Some defaults
     this.method = "GET";
     this.credentials = "omit";
@@ -59,8 +62,8 @@ export default class Request extends Body implements FetchRequest {
 
     this.referrer = null;
 
-    // Call super to set Body to an empty string
-    super(body || "");
+    // Update the body with whatever we've got now
+    this._setBody(body);
   }
 
   clone(): Request {

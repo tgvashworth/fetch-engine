@@ -7,6 +7,10 @@ export default class Body implements FetchBody {
   private _bodyText: string;
 
   constructor(body = null) {
+    this._setBody(body);
+  }
+
+  protected _setBody(body = null): void {
     this.rawBody = body;
     if (typeof body === "string") {
       this._bodyText = body;
