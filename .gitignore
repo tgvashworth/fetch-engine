@@ -9,3 +9,6 @@ coverage/
 
 # Logs
 npm-debug.log
+
+# Editors
+.idea

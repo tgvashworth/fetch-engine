@@ -10,7 +10,7 @@
     "specs-browser": "karma start dist/testing/karma.conf.js",
     "specs-browserstack": "karma start dist/testing/karma.browserstack.conf.js",
     "specs-node": "tape dist/**/*.test.js | tap-min",
-    "specs": "npm run specs-node && npm run specs-browser",
+    "specs": "npm run specs-node && npm run specs-browser && npm run specs-browserstack",
     "test": "npm run build && npm run lint && npm run specs",
     "watch": "npm run clean && tsc --watch"
   },
@@ -32,6 +32,7 @@
   "homepage": "https://github.com/phuu/fetch-engine#readme",
   "devDependencies": {
     "electron-prebuilt": "^0.37.3",
+    "es6-promise": "^3.1.2",
     "ghooks": "^1.0.1",
     "istanbul-instrumenter-loader": "^0.2.0",
     "karma": "^0.13.22",
