@@ -5,28 +5,15 @@
   "main": "dist/fetch-engine-node.js",
   "browser": "dist/fetch-engine-browser.js",
   "scripts": {
-    "//": "Typescript Compilation",
-
-    "//": "`./testing` files are in typescript for linting, ",
-    "//": "`build-conf`: compiles them for running with karma.",
-
-    "//": "the `|| true` is so that typescript doesn't",
-    "//": "fail the build because of its type checking",
-
-    "build": "npm run clean && tsc || true",
-    "build-conf": "tsc testing/*.ts --outDir testing/js/ || true",
-    "build-all": "npm run build && npm run build-conf",
-    "clean": "rm -rf ./dist && rm -rf coverage",
-    "watch": "npm run clean && tsc --watch",
-
-    "//": "Test Running",
-
-    "specs": "npm run specs-node && npm run specs-browser && npm run specs-browserstack",
-    "specs-browser": "karma start testing/js/karma.conf.js",
-    "specs-browserstack": "karma start testing/js/karma.browserstack.conf.js",
+    "build": "npm run clean && tsc",
+    "clean": "rm -rf ./dist",
+    "lint": "tslint src/**/*.ts",
+    "specs-browser": "karma start dist/testing/karma.conf.js",
+    "specs-browserstack": "karma start dist/testing/karma.browserstack.conf.js",
     "specs-node": "tape dist/**/*.test.js | tap-min",
-    "lint": "tslint src/**/*.ts && tslint testing/**/*.ts",
-    "test": "npm run build-all && npm run lint && npm run specs"
+    "specs": "npm run specs-node && npm run specs-browser",
+    "test": "npm run build && npm run lint && npm run specs",
+    "watch": "npm run clean && tsc --watch"
   },
   "config": {
     "ghooks": {
