@@ -1,13 +1,13 @@
-import baseconf = require("./karma.base.conf");
+/// <reference path="../.d.test.ts"/>
 
-module.exports = function (config) : any {
+import baseconf from "./karma.base.conf";
+
+module.exports = function (config): void {
   config.set(Object.assign({}, baseconf, {
-
     browserStack: {
       username: process.env.BROWSERSTACK_USERNAME,
       accessKey: process.env.BROWSERSTACK_KEY
     },
-
     customLaunchers: {
       bs_edge_win: {
         base: "BrowserStack",
@@ -24,8 +24,6 @@ module.exports = function (config) : any {
       //   os_version: "El Capitan"
       // }
     },
-
     browsers: ["bs_edge_win"] // , "bs_safari_mac"]
-
   }));
 };
