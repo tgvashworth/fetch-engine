@@ -9,21 +9,42 @@ module.exports = function (config): void {
       accessKey: process.env.BROWSERSTACK_KEY
     },
     customLaunchers: {
-      bs_edge_win: {
+      _ie: {
         base: "BrowserStack",
-        browser: "edge",
-        browser_version: "13",
+        browser: "ie",
+        browser_version: "10",
         os: "Windows",
-        os_version: "10"
+        os_version: "7"
+      },
+      _firefox: {
+        base: "BrowserStack",
+        browser: "firefox",
+        browser_version: "latest",
+        os: "Windows",
+        os_version: "7"
+      },
+      _chrome: {
+        base: "BrowserStack",
+        browser: "chrome",
+        browser_version: "latest",
+        os: "Windows",
+        os_version: "7"
+      },
+      _opera: {
+        base: "BrowserStack",
+        browser: "opera",
+        browser_version: "latest",
+        os: "Windows",
+        os_version: "7"
+      },
+      _safari: {
+        base: "BrowserStack",
+        browser: "safari",
+        browser_version: "6",
+        os: "OS X",
+        os_version: "Lion"
       }
-      // bs_safari_mac: {
-      //   base: "BrowserStack",
-      //   browser: "safari",
-      //   browser_version: "9",
-      //   os: "OS X",
-      //   os_version: "El Capitan"
-      // }
     },
-    browsers: ["bs_edge_win"] // , "bs_safari_mac"]
+    browsers: ["_ie", "_firefox", "_chrome", "_opera", "_safari"]
   }));
 };
