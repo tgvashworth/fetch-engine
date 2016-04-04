@@ -17,6 +17,7 @@
         "src/Body.ts",
         "src/fetch-engine-browser.ts",
         "src/fetch-engine-node.ts",
+        "src/fetch/fetch-browser.test.ts",
         "src/fetch/fetch-browser.ts",
         "src/fetch/fetch-node.test.ts",
         "src/fetch/fetch-node.ts",
