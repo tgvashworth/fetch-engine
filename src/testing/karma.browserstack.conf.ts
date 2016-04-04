@@ -2,6 +2,13 @@
 
 import baseconf from "./karma.base.conf";
 
+if (
+  !process.env.BROWSERSTACK_USERNAME ||
+  !process.env.BROWSERSTACK_KEY
+) {
+  throw new Error("BrowserStack info missing. Use BROWSERSTACK_USERNAME and BROWSERSTACK_KEY");
+}
+
 module.exports = function (config): void {
   config.set(Object.assign({}, baseconf, {
     browserStack: {
