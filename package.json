@@ -5,19 +5,19 @@
   "main": "dist/fetch-engine-node.js",
   "browser": "dist/fetch-engine-browser.js",
   "scripts": {
-    "clean": "rm -rf ./dist",
     "build": "npm run clean && tsc",
-    "watch": "npm run clean && tsc --watch",
-    "test": "npm run specs && npm run lint",
-    "lint": "find src -name '*.ts' | xargs tslint",
+    "clean": "rm -rf ./dist",
+    "lint": "tslint src/**/*.ts",
+    "specs-browser": "karma start dist/testing/karma.conf.js",
+    "specs-browserstack": "karma start dist/testing/karma.browserstack.conf.js",
     "specs-node": "tape dist/**/*.test.js | tap-min",
-    "specs-electron": "browserify dist/**/*.test.js | tape-run --browser electron | tap-min",
-    "specs": "npm run build && npm run specs-node && npm run specs-electron"
+    "specs": "npm run specs-node && npm run specs-browser",
+    "test": "npm run build && npm run lint && npm run specs",
+    "watch": "npm run clean && tsc --watch"
   },
   "config": {
     "ghooks": {
-      "pre-commit": "npm run lint",
-      "pre-push": "npm test"
+      "pre-commit": "npm run lint"
     }
   },
   "repository": {
@@ -32,14 +32,22 @@
   },
   "homepage": "https://github.com/phuu/fetch-engine#readme",
   "devDependencies": {
-    "browserify": "^13.0.0",
+    "electron-prebuilt": "^0.37.3",
+    "es6-promise": "^3.1.2",
     "ghooks": "^1.0.1",
+    "istanbul-instrumenter-loader": "^0.2.0",
+    "karma": "^0.13.22",
+    "karma-browserstack-launcher": "^0.1.10",
+    "karma-coverage": "^0.5.5",
+    "karma-electron-launcher": "^0.1.0",
+    "karma-tap": "^1.0.4",
+    "karma-webpack": "^1.7.0",
     "tap-min": "^1.1.0",
     "tape": "^4.4.0",
-    "tape-run": "^2.1.3",
     "tsd": "^0.6.5",
     "tslint": "^3.6.0",
-    "typescript": "^1.8.9"
+    "typescript": "^1.8.9",
+    "webpack": "^1.12.14"
   },
   "dependencies": {}
 }

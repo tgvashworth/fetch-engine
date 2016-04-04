@@ -10,6 +10,7 @@
     },
     "filesGlob": [
         "src/**/*.ts",
+        "!./testing/**/*.ts",
         "!./node_modules/**/*.ts"
     ],
     "files": [
@@ -32,6 +33,9 @@
         "src/Response/index.ts",
         "src/Response/Response.test.ts",
         "src/Response/Response.ts",
+        "src/testing/karma.base.conf.ts",
+        "src/testing/karma.browserstack.conf.ts",
+        "src/testing/karma.conf.ts",
         "src/utils/composeContinuation.test.ts",
         "src/utils/composeContinuation.ts",
         "src/utils/composeEvery.test.ts",

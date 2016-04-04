@@ -36,3 +36,8 @@ declare module "tape"  {
   const test: Tape;
   export = test;
 }
+
+// Extend Object to support assign
+interface ObjectConstructor {
+  assign(target: any, ...sources: any[]): any;
+}
