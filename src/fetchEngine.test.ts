@@ -36,10 +36,16 @@ test(
         })
       ]
     }));
-    return t.throws(
-      fetch(new Request("/mock")),
-      Error
-    );
+    return fetch(new Request("/mock"))
+      .then(
+        () => t.fail(),
+        (err) => {
+          t.equal(
+            err.message,
+            "shouldFetch prevented the request from being made"
+          );
+        }
+      );
   })
 );
 
