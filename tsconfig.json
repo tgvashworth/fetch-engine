@@ -1,7 +1,6 @@
 {
     "compilerOptions": {
         "target": "es5",
-        "declaration": true,
         "module": "commonjs",
         "moduleResolution": "node",
         "preserveConstEnums": true,
@@ -33,6 +32,7 @@
         "src/Response/index.ts",
         "src/Response/Response.test.ts",
         "src/Response/Response.ts",
+        "src/test-browser.ts",
         "src/utils/composeContinuation.test.ts",
         "src/utils/composeContinuation.ts",
         "src/utils/composeEvery.test.ts",

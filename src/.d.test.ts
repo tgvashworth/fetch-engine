@@ -36,3 +36,7 @@ declare module "tape"  {
   const test: Tape;
   export = test;
 }
+
+type RequireGlobifyOpts = {
+  mode: string;
+}
