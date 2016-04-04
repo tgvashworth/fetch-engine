@@ -12,6 +12,7 @@
     "lint": "find src -name '*.ts' | xargs tslint",
     "specs-node": "tape 'dist/**/*!(browser).test.js' | tap-min",
     "specs-electron": "browserify -t require-globify dist/test-browser.js | tape-run --browser electron | tap-min",
+    "specs-browserstack": "browserify -t require-globify dist/test-browser.js | node dist/test-server/server.js | tap-min",
     "specs": "npm run build && npm run specs-node && npm run specs-electron"
   },
   "config": {
