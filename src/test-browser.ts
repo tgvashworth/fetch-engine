@@ -1,6 +1,10 @@
 /* tslint:disable */
 /// <reference path="./.d.test.ts" />
 
+type RequireGlobifyOpts = {
+  mode: string;
+}
+
 interface NodeRequire {
   (id: string, opts: RequireGlobifyOpts): void;
 }
