@@ -5,4 +5,5 @@ interface NodeRequire {
   (id: string, opts: RequireGlobifyOpts): void;
 }
 
+require("./test-globals");
 require("./**/*!(node).test.js", { mode: "expand" });
