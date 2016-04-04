@@ -11,7 +11,7 @@
     "specs-browser": "karma start dist/testing/karma.conf.js",
     "specs-browserstack": "karma start dist/testing/karma.browserstack.conf.js",
     "specs-node": "tape dist/**/*.test.js | tap-min",
-    "specs": "npm run specs-node && npm run specs-browser && npm run specs-browserstack",
+    "specs": "npm run specs-node && npm run specs-browser",
     "test": "npm run build && npm run lint && npm run specs",
     "watch": "npm run clean && tsc --watch"
   },
