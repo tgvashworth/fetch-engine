@@ -10,8 +10,8 @@
     "watch": "npm run clean && tsc --watch",
     "test": "npm run specs && npm run lint",
     "lint": "find src -name '*.ts' | xargs tslint",
-    "specs-node": "tape dist/**/*.test.js | tap-min",
-    "specs-electron": "browserify dist/**/*.test.js | tape-run --browser electron | tap-min",
+    "specs-node": "set -o pipefail && tape dist/**/*.test.js | tap-min",
+    "specs-electron": "set -o pipefail && browserify dist/**/*.test.js | tape-run --browser electron | tap-min",
     "specs": "npm run build && npm run specs-node && npm run specs-electron"
   },
   "config": {
