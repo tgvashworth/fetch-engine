@@ -12,7 +12,8 @@
     "lint": "find src -name '*.ts' | xargs tslint",
     "specs-node": "tape 'dist/**/*!(browser).test.js' | tap-min",
     "specs-zuul": "npm run build && zuul -- dist/test-browser.js",
-    "specs": "npm run build && npm run specs-node && npm run specs-zuul"
+    "specs": "npm run build && npm run specs-node && npm run specs-zuul",
+    "zuul": "zuul --local 8080 -- dist/test-browser.js"
   },
   "config": {
     "ghooks": {

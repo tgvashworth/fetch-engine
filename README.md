@@ -276,6 +276,24 @@ Fetch Engine uses [TypeScript](https://www.typescriptlang.org/). To help you wri
 
 Every commit should pass `npm test`. We use [ghooks](https://github.com/gtramontina/ghooks) to enforce this.
 
+### Compiling & running tests locally
+
+There is a `tsc` watch task you can run to build files as they change:
+
+```
+$ npm run watch
+```
+
+Your editor may do this for you.
+
+To run browser tests locally, run:
+
+```
+$ npm run zuul
+```
+
+Follow the instructions it gives you.
+
 [tweetdeck]: https://teetdeck.twitter.com
 [finagle]: http://twitter.github.io/finagle
 [finagle-timeouts]: http://twitter.github.io/finagle/guide/Clients.html#timeouts-expiration
