@@ -1,5 +1,3 @@
-/// <reference path="../typings/tsd.d.ts"/>
-
 // fetch-spec
 
 declare class FetchBody {

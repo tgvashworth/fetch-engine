@@ -7,8 +7,14 @@
         "suppressImplicitAnyIndexErrors": true,
         "outDir": "dist"
     },
+    "exclude": [
+        "typings/node.d.ts",
+        "typings/node",
+        "node_modules"
+    ],
     "filesGlob": [
         "src/**/*.ts",
+        "typings/main.d.ts",
         "!./node_modules/**/*.ts"
     ],
     "files": [
@@ -50,7 +56,8 @@
         "src/utils/mocks.ts",
         "src/utils/sideEffect.test.ts",
         "src/utils/sideEffect.ts",
-        "src/utils/wrapPromiseTest.ts"
+        "src/utils/wrapPromiseTest.ts",
+        "typings/main.d.ts"
     ],
     "atom": {
         "rewriteTsconfig": true

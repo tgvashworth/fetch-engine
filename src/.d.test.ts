@@ -1,5 +1,3 @@
-/// <reference path="../typings/node/node.d.ts" />
-
 declare interface TapeTestAssertions {
   plan: (n: number) => void;
   end: () => void;
