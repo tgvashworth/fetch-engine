@@ -8,6 +8,16 @@ import collector from "./collector";
 import { browsers } from "./config";
 import { Result, Complete, Incomplete } from "./Result";
 
+// Test code static file host
+
+const staticServer = run({
+  port: 5000
+});
+
+process.stdin
+  .pipe(staticServer)
+  .pipe(process.stdout);
+
 // BrowserStack sessions
 
 const browserstack = new Browserstack(
@@ -25,7 +35,8 @@ const browserstack = new Browserstack(
 // BrowserStack tunnel
 
 const tunnel = new Tunnel({
-  key: process.env.BROWSERSTACK_KEY
+  key: process.env.BROWSERSTACK_KEY,
+  v: true
 });
 
 const idToSession = {};
@@ -40,7 +51,7 @@ function runBrowser(browser, id): Promise<Result> {
         };
         setTimeout(
           () => resolve(new Incomplete(id, new Error("Timeout"))),
-          1000 * 60 * 2
+          1000 * 60 * 3
         );
       });
       return session.get(`http://localhost:5000/#${id}`)
@@ -49,6 +60,13 @@ function runBrowser(browser, id): Promise<Result> {
 }
 
 tunnel.start()
+  .then(
+    () => console.log("Tunnel started"),
+    err => {
+      console.error("Tunnel error:", err.message);
+      exit(1);
+    }
+  )
   .then(() => Promise.all(browsers.map(runBrowser)))
   .then(
     (results: Result[]) => {
@@ -63,12 +81,19 @@ tunnel.start()
 process.on("SIGINT", () => exit(1));
 
 function exit(code: number = 0): Promise<void> {
-  console.error("Tunnel: stopping");
+  console.error(`Exit ${code}`);
+  staticServer.stop();
   return tunnel.stop()
-    .then(() => {
-      console.error("Tunnel: stopped");
-      process.exit(code);
-    });
+    .then(
+      () => {
+        console.error("Tunnel: stopped");
+        process.exit(code);
+      },
+      err => {
+        console.error("Tunnel error:", err.message);
+        process.exit(1);
+      }
+    );
 }
 
 // Collector
@@ -80,13 +105,3 @@ collector({ port: 5001 }, function (id: number): void {
     });
   }
 });
-
-// Test code static file host
-
-const browser = run({
-  port: 5000
-});
-
-process.stdin
-  .pipe(browser)
-  .pipe(process.stdout);

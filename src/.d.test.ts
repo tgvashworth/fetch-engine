@@ -55,7 +55,9 @@ declare module "browser-run" {
       (opts: Options): Browser;
     }
 
-    type Browser = stream.Duplex;
+    interface Browser extends stream.Duplex {
+      stop(): void;
+    }
 
     interface Options {
       port: any;

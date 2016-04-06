@@ -12,7 +12,7 @@
     "lint": "find src -name '*.ts' | xargs tslint",
     "specs-node": "tape 'dist/**/*!(browser).test.js' | tap-min",
     "specs-electron": "browserify -t require-globify dist/test-browser.js | tape-run --browser electron | tap-min",
-    "specs-browserstack": "browserify -t require-globify dist/test-browser.js | node dist/test-server/server.js | tap-min",
+    "specs-browserstack": "browserify -t require-globify dist/test-browser.js | node dist/test-server/server.js",
     "specs": "npm run build && npm run specs-node && npm run specs-electron"
   },
   "config": {
@@ -34,9 +34,9 @@
   "homepage": "https://github.com/phuu/fetch-engine#readme",
   "devDependencies": {
     "browser-run": "^3.1.0",
+    "browserify": "^13.0.0",
     "browserstack": "^1.4.0",
     "browserstacktunnel-wrapper": "^1.4.2",
-    "browserify": "^13.0.0",
     "es6-promise": "^3.1.2",
     "ghooks": "^1.0.1",
     "leadfoot": "^1.6.5",

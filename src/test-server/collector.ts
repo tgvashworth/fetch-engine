@@ -9,7 +9,9 @@ export default function collector(
   collect: (id: number) => void
 ): void {
   http.createServer((req, res) => {
-    res.setHeader("Access-Control-Allow-Origin", "*");
+    const url = urllib.parse(req.url, true);
+    console.log(`req from ${url.query.id}:`, req.method, req.url);
+    res.setHeader("Access-Control-Allow-Origin", req.headers.origin);
     if (req.method === "OPTIONS") {
       res.writeHead(200, {
         "Access-Control-Allow-Headers": req.headers["access-control-request-headers"],
@@ -19,9 +21,8 @@ export default function collector(
       return;
     }
 
-    const url = urllib.parse(req.url, true);
-    collect(url.query.id);
     res.writeHead(204);
     res.end();
+    collect(url.query.id);
   }).listen(opts.port);
 }
