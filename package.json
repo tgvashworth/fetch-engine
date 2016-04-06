@@ -39,6 +39,7 @@
     "tap-min": "^1.1.0",
     "tape": "^4.4.0",
     "tape-run": "^2.1.3",
+    "travis-encrypt": "^2.1.1",
     "tsd": "^0.6.5",
     "tslint": "^3.6.0",
     "typescript": "^1.8.9",
