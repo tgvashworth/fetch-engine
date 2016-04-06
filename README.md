@@ -265,9 +265,16 @@ let fetch = fetchEngine(new FetchGroup({
 }));
 ```
 
-## Notes
+## Developing Fetch Engine
 
-- To support some of these use cases, there needs to be a place to add metadata to the request (for example, to record when the request was initiated).
+- Clone the repo: `git clone https://github.com/phuu/fetch-engine.git`
+- `cd fetch-engine && npm install`
+- To run the tests, you need a [Sauce Labs](https://saucelabs.com) account. Follow the [zuul documentation](https://github.com/defunctzombie/zuul/wiki/Cloud-testing) instructions.
+- `npm run test` to check it's all working
+
+Fetch Engine uses [TypeScript](https://www.typescriptlang.org/). To help you write great code, I'd recommend that you get a plugin for your editor or use an IDE like [VS Code](https://code.visualstudio.com/).
+
+Every commit should pass `npm test`. We use [ghooks](https://github.com/gtramontina/ghooks) to enforce this.
 
 [tweetdeck]: https://teetdeck.twitter.com
 [finagle]: http://twitter.github.io/finagle
