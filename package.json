@@ -11,8 +11,8 @@
     "test": "npm run specs && npm run lint",
     "lint": "find src -name '*.ts' | xargs tslint",
     "specs-node": "tape 'dist/**/*!(browser).test.js' | tap-min",
-    "specs-electron": "browserify -t require-globify dist/test-browser.js | tape-run --browser electron | tap-min",
-    "specs": "npm run build && npm run specs-node && npm run specs-electron"
+    "specs-zuul": "npm run build && zuul -- dist/test-browser.js",
+    "specs": "npm run build && npm run specs-node && npm run specs-zuul"
   },
   "config": {
     "ghooks": {
