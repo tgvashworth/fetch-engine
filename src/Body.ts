@@ -21,7 +21,7 @@ export default class Body implements FetchBody {
     }
   }
 
-  text(): Promise<string> {
+  text(): Promise<string | void> {
     if (this.bodyUsed) {
       return Promise.reject(new TypeError("Already read"));
     }
