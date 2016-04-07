@@ -10,7 +10,7 @@
     "watch": "npm run clean && tsc --watch",
     "test": "npm run specs && npm run lint",
     "lint": "find src -name '*.ts' | xargs tslint",
-    "specs-node": "tape 'dist/**/*!(browser).test.js' | tap-min",
+    "specs-node": "tape $(find ./dist -name '*.test.js' | grep -v browser) | tap-min",
     "specs-zuul": "npm run build && zuul -- dist/test-browser.js",
     "specs": "npm run build && npm run specs-node && npm run specs-zuul",
     "zuul": "zuul --local 9998 -- dist/test-browser.js"

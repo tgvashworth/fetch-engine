@@ -125,6 +125,12 @@ export class Headers implements FetchHeaders {
     );
   }
 
+  forEach(f, ctx?): void {
+    this.headers.forEach(header => {
+      f.call(ctx, header.value, header.name);
+    });
+  }
+
   has(name: string): boolean {
     return this.headers.some((header) => {
       return header.name === getNormalizedHeaderName(name);

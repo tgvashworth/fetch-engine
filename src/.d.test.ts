@@ -1,3 +1,5 @@
+"use strict";
+
 declare interface TapeTestAssertions {
   plan: (n: number) => void;
   end: () => void;
@@ -38,3 +40,11 @@ declare module "tape"  {
 type RequireGlobifyOpts = {
   mode: string;
 }
+
+/* tslint:disable */
+namespace NodeJS {
+  export interface Global {
+    ZUUL: { port: number };
+  }
+}
+/* tslint:enable */
