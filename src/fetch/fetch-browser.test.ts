@@ -58,12 +58,7 @@ test("fetch-browser can POST a string body", wrap(t => {
 test("fetch-browser can send cookies to same-origin", wrap(t => {
   t.plan(1);
   document.cookie = `example-cookie=example`;
-  const req = new Request(
-    "/echo/cookie/example-cookie",
-    {
-      credentials: "same-origin"
-    }
-  );
+  const req = new Request("/echo/cookie/example-cookie");
   return fetchBrowser(req)
     .then(res => res.text())
     .then(text => {
