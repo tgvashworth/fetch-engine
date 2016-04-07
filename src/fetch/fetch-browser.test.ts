@@ -55,6 +55,26 @@ test("fetch-browser can POST a string body", wrap(t => {
     });
 }));
 
+test("fetch-browser can POST a JSON body", wrap(t => {
+  t.plan(1);
+  const body = JSON.stringify({ a: 10 });
+  const req = new Request(
+    `/echo/body`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body
+    }
+  );
+  return fetchBrowser(req)
+    .then(res => res.text())
+    .then(text => {
+      t.equal(text, body);
+    });
+}));
+
 test("fetch-browser can send cookies to same-origin", wrap(t => {
   t.plan(1);
   document.cookie = `example-cookie=example`;

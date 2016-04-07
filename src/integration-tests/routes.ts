@@ -19,7 +19,13 @@ export const routes: IRouteConfiguration[] = [
     method: "POST",
     path: "/echo/body",
     handler: function (request, reply): void {
-      reply(request.payload);
+      const response = reply(request.payload);
+      response.header("Content-Type", request.headers["content-type"]);
+    },
+    config: {
+      payload: {
+        parse: true
+      }
     }
   },
   {
