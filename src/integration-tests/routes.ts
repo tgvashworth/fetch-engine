@@ -21,5 +21,22 @@ export const routes: IRouteConfiguration[] = [
     handler: function (request, reply): void {
       reply(request.payload);
     }
+  },
+  {
+    method: "GET",
+    path: "/echo/cookie/{key}",
+    handler: function (request, reply): void {
+      reply(request.state[(<any>request.params).key]);
+    }
+  }
+];
+
+export const states = [
+  {
+    name: "example-cookie",
+    config: {
+      path: "/",
+      ttl: 0
+    }
   }
 ];

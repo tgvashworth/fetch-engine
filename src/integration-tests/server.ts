@@ -1,6 +1,6 @@
 import { Server } from "hapi";
 import Yargs = require("yargs");
-import { routes } from "./routes";
+import { routes, states } from "./routes";
 
 interface Args extends Yargs.Argv {
   port: string;
@@ -17,6 +17,7 @@ server.connection({
 });
 
 server.route(routes);
+states.forEach(state => server.state(state.name, state.config));
 
 server.start(err => {
   if (err) {
