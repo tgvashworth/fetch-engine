@@ -13,7 +13,9 @@ test("fetch-browser is requirable", t => {
 
 test("fetch-browser can make a request to the test server", wrap(t => {
   t.plan(2);
-  const req = new Request("/fetch-browser/basic");
+  const req = new Request(
+    `/echo/text/${encodeURIComponent("Hello fetch-browser")}`
+  );
   return fetchBrowser(req)
     .then(res => {
       t.ok(res);
@@ -21,5 +23,18 @@ test("fetch-browser can make a request to the test server", wrap(t => {
     })
     .then(text => {
       t.equal(text, "Hello fetch-browser");
+    });
+}));
+
+test("fetch-browser can set headers", wrap(t => {
+  t.plan(1);
+  const req = new Request(
+    "/echo/header/x-example",
+    { headers: { "X-Example": "example" } }
+  );
+  return fetchBrowser(req)
+    .then(res => res.text())
+    .then(text => {
+      t.equal(text, "example");
     });
 }));

@@ -2,11 +2,16 @@
 "use strict";
 
 import Response from "../Response";
+import { Headers } from "../Headers";
 
 export default function fetch(request: FetchRequest): Promise<FetchResponse> {
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
     xhr.open(request.method, request.url, true);
+
+    // Set request headers
+    (<Headers>request.headers).forEach((v, k) => xhr.setRequestHeader(k, v));
+
     xhr.onload = () => {
       resolve(new Response(xhr.responseText, {
         status: xhr.status,
