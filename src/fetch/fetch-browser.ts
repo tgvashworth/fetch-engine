@@ -22,6 +22,15 @@ export default function fetch(request: FetchRequest): Promise<FetchResponse> {
       // TODO: handle errors
       reject(new Error(`Request failed: ${xhr.status} ${xhr.statusText}`));
     };
-    xhr.send();
+
+    if (request.method === "POST") {
+      if (!request.headers.get("Content-Type")) {
+        xhr.setRequestHeader("Content-Type", "text/plain");
+      }
+      request.text()
+        .then(body => xhr.send(body));
+    } else {
+      xhr.send();
+    }
   });
 }

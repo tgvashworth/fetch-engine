@@ -38,3 +38,19 @@ test("fetch-browser can set headers", wrap(t => {
       t.equal(text, "example");
     });
 }));
+
+test("fetch-browser can POST a string body", wrap(t => {
+  t.plan(1);
+  const req = new Request(
+    "/echo/body",
+    {
+      method: "POST",
+      body: "example"
+    }
+  );
+  return fetchBrowser(req)
+    .then(res => res.text())
+    .then(text => {
+      t.equal(text, "example");
+    });
+}));

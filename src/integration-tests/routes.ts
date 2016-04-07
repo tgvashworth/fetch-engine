@@ -14,5 +14,12 @@ export const routes: IRouteConfiguration[] = [
     handler: function (request, reply): void {
       reply(request.headers[(<any>request.params).key]);
     }
+  },
+  {
+    method: "POST",
+    path: "/echo/body",
+    handler: function (request, reply): void {
+      reply(request.payload);
+    }
   }
 ];
