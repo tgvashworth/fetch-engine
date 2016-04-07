@@ -3,9 +3,9 @@ import { IRouteConfiguration } from "hapi";
 export const routes: IRouteConfiguration[] = [
   {
     method: "GET",
-    path: "/",
+    path: "/fetch-browser/basic",
     handler: function (request, reply): void {
-      reply("Hello, world!");
+      reply("Hello fetch-browser");
     },
     config: {
       cors: true
