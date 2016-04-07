@@ -33,6 +33,7 @@
   },
   "homepage": "https://github.com/phuu/fetch-engine#readme",
   "devDependencies": {
+    "boom": "^3.1.2",
     "browserify": "^13.0.0",
     "es6-promise": "^3.1.2",
     "ghooks": "^1.0.1",

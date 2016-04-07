@@ -1,26 +1,27 @@
-import { IRouteConfiguration } from "hapi";
+import { IRouteConfiguration, Response } from "hapi";
+import Boom = require("boom");
 
 export const routes: IRouteConfiguration[] = [
   {
     method: "GET",
     path: "/echo/text/{text}",
-    handler: function (request, reply): void {
-      reply(decodeURIComponent((<any>request.params).text));
+    handler: function (request, reply): Response {
+      return reply(decodeURIComponent((<any>request.params).text));
     }
   },
   {
     method: "GET",
     path: "/echo/header/{key}",
-    handler: function (request, reply): void {
-      reply(request.headers[(<any>request.params).key]);
+    handler: function (request, reply): Response {
+      return reply(request.headers[(<any>request.params).key]);
     }
   },
   {
     method: "POST",
     path: "/echo/body",
-    handler: function (request, reply): void {
-      const response = reply(request.payload);
-      response.header("Content-Type", request.headers["content-type"]);
+    handler: function (request, reply): Response {
+      return reply(request.payload)
+        .header("Content-Type", request.headers["content-type"]);
     },
     config: {
       payload: {
@@ -31,8 +32,15 @@ export const routes: IRouteConfiguration[] = [
   {
     method: "GET",
     path: "/echo/cookie/{key}",
-    handler: function (request, reply): void {
-      reply(request.state[(<any>request.params).key]);
+    handler: function (request, reply): Response {
+      return reply(request.state[(<any>request.params).key]);
+    }
+  },
+  {
+    method: "GET",
+    path: "/error/{code}",
+    handler: function (request, reply): Response {
+      return reply(Boom.create(500));
     }
   }
 ];
