@@ -18,3 +18,4 @@ browsers:
     version: latest
 browserify:
   - transform: require-globify
+server: "node dist/integration-tests/server.js --port $ZUUL_PORT"
