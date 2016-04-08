@@ -20,6 +20,7 @@
     "files": [
         "src/Body.test.ts",
         "src/Body.ts",
+        "src/fetch-engine-browser.test.ts",
         "src/fetch-engine-browser.ts",
         "src/fetch-engine-node.ts",
         "src/fetch/fetch-browser.test.ts",
