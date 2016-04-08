@@ -3,4 +3,5 @@
 
 import makeFetchEngine from "./fetchEngine";
 import fetch from "./fetch/fetch-browser";
-module.exports = makeFetchEngine(fetch);
+const fetchEngine = makeFetchEngine(fetch);
+export = fetchEngine;
