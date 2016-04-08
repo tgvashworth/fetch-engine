@@ -1,6 +1,5 @@
 {
   "name": "fetch-engine",
-  "version": "1.0.0",
   "description": "A smart request-making library that makes sure your Javascript client is a good citizen of your distributed system.",
   "main": "dist/fetch-engine-node.js",
   "browser": "dist/fetch-engine-browser.js",
