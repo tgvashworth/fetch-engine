@@ -3,7 +3,7 @@
 import test = require("tape");
 import wrap from "./utils/wrapPromiseTest";
 import Request from "./Request";
-import fetchEngine = require("./fetch-engine-browser");
+import fetchEngine from "./fetch-engine-browser";
 
 test("browser fetchEngine is requireable", t => {
   t.plan(1);

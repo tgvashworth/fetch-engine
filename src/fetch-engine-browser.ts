@@ -3,5 +3,10 @@
 
 import makeFetchEngine from "./fetchEngine";
 import fetch from "./fetch/fetch-browser";
+import FetchGroup from "./FetchGroup";
+import Request from "./Request";
+import Response from "./Response";
+
 const fetchEngine = makeFetchEngine(fetch);
-export = fetchEngine;
+export default fetchEngine;
+export { FetchGroup, Request, Response };
