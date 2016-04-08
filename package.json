@@ -12,7 +12,8 @@
     "specs-node": "tape $(find ./dist -name '*.test.js' | grep -v browser) | tap-min",
     "specs-zuul": "npm run build && zuul -- dist/test-browser.js",
     "specs": "npm run build && npm run specs-node && npm run specs-zuul",
-    "zuul": "zuul --local 9998 -- dist/test-browser.js"
+    "zuul": "zuul --local 9998 -- dist/test-browser.js",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "config": {
     "ghooks": {
@@ -22,7 +23,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/phuu/fetch-engine.git"
+    "url": "https://github.com/phuu/fetch-engine.git"
   },
   "keywords": [],
   "author": "",
@@ -38,6 +39,7 @@
     "ghooks": "^1.0.1",
     "hapi": "^13.3.0",
     "require-globify": "^1.3.0",
+    "semantic-release": "^4.3.5",
     "tap-min": "^1.1.0",
     "tape": "^4.4.0",
     "tape-run": "^2.1.3",
