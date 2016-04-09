@@ -270,7 +270,7 @@ let fetch = fetchEngine(new FetchGroup({
 - Clone the repo: `git clone https://github.com/phuu/fetch-engine.git`
 - `cd fetch-engine && npm install`
 - To run the tests, you need a [Sauce Labs](https://saucelabs.com) account. Follow the [zuul documentation](https://github.com/defunctzombie/zuul/wiki/Cloud-testing) instructions.
-- `npm run test` to check it's all working
+- `npm test` to check it's all working
 
 Fetch Engine uses [TypeScript](https://www.typescriptlang.org/). To help you write great code, I'd recommend that you get a plugin for your editor or use an IDE like [VS Code](https://code.visualstudio.com/).
 
