@@ -164,3 +164,18 @@ test("supports POST", wrap(t => {
       t.equal(json.payload, "a=10");
     });
 }));
+
+test("supports PUT", wrap(t => {
+  t.plan(2);
+  const req = new Request("/echo", {
+    method: "put",
+    body: "a=10"
+  });
+
+  return fetchBrowser(req)
+    .then(res => res.json())
+    .then(json => {
+      t.equal(json.method, "put");
+      t.equal(json.payload, "a=10");
+    });
+}));

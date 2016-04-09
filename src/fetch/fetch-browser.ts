@@ -26,7 +26,7 @@ export default function fetch(request: FetchRequest): Promise<FetchResponse> {
       reject(new Error(`Request failed: ${xhr.status} ${xhr.statusText}`));
     };
 
-    if (request.method === "POST") {
+    if (["put", "post"].indexOf(request.method.toLowerCase()) > -1) {
       if (!request.headers.get("Content-Type")) {
         xhr.setRequestHeader("Content-Type", "text/plain");
       }
