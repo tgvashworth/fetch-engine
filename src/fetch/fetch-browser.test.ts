@@ -114,3 +114,82 @@ test("fetch-browser handles an error", wrap(t => {
       t.equal(res.status, 500);
     });
 }));
+
+// Tests matching github/fetch
+
+test("fetch request", wrap(t => {
+  t.plan(2);
+  const req = new Request("/echo", {
+    headers: {
+      "Accept": "application/json",
+      "X-Test": "42"
+    }
+  });
+
+  return fetchBrowser(req)
+    .then(res => res.json())
+    .then(json => {
+      t.equal(json.headers.accept, "application/json");
+      t.equal(json.headers["x-test"], "42");
+    });
+}));
+
+test("populates response", wrap(t => {
+  t.plan(4);
+  const req = new Request("/echo/text/hello");
+
+  return fetchBrowser(req)
+    .then(res => {
+      t.equal(res.status, 200);
+      t.equal(res.ok, true);
+      t.equal(res.headers.get("Content-Type"), "text/html; charset=utf-8");
+      return res.text();
+    })
+    .then(text => {
+      t.equal(text, "hello");
+    });
+}));
+
+test("supports POST", wrap(t => {
+  t.plan(2);
+  const req = new Request("/echo", {
+    method: "post",
+    body: "a=10"
+  });
+
+  return fetchBrowser(req)
+    .then(res => res.json())
+    .then(json => {
+      t.equal(json.method, "post");
+      t.equal(json.payload, "a=10");
+    });
+}));
+
+test("supports PUT", wrap(t => {
+  t.plan(2);
+  const req = new Request("/echo", {
+    method: "put",
+    body: "a=10"
+  });
+
+  return fetchBrowser(req)
+    .then(res => res.json())
+    .then(json => {
+      t.equal(json.method, "put");
+      t.equal(json.payload, "a=10");
+    });
+}));
+
+test("supports DELETE", wrap(t => {
+  t.plan(2);
+  const req = new Request("/echo", {
+    method: "delete"
+  });
+
+  return fetchBrowser(req)
+    .then(res => res.json())
+    .then(json => {
+      t.equal(json.method, "delete");
+      t.equal(json.payload, null);
+    });
+}));

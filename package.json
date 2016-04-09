@@ -12,7 +12,7 @@
     "specs-node": "tape $(find ./dist -name '*.test.js' | grep -v browser) | tap-min",
     "specs-zuul": "npm run build && zuul -- dist/test-browser.js",
     "specs": "npm run build && npm run specs-node && npm run specs-zuul",
-    "zuul": "zuul --local 9998 -- dist/test-browser.js",
+    "zuul": "zuul --no-coverage --local 9998 -- dist/test-browser.js",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "config": {
@@ -51,6 +51,7 @@
     "zuul": "^3.10.1"
   },
   "dependencies": {
-    "es6-promise": "^3.1.2"
+    "es6-promise": "^3.1.2",
+    "parse-headers": "^2.0.1"
   }
 }
