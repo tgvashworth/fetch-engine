@@ -57,7 +57,7 @@ declare class FetchResponse extends FetchBody {
 interface FetchResponseInit {
   status?: number;
   statusText?: string;
-  headers?: FetchHeaderInit|{ [index: string]: string };
+  headers?: FetchHeaderInit | { [index: string]: string | string[] };
   url?: string;
 }
 
@@ -65,8 +65,8 @@ declare interface Fetch {
   (request: FetchRequest): Promise<FetchResponse>;
 }
 
-declare type FetchHeaderInit = FetchHeaders|Array<string>;
-declare type FetchBodyInit = Blob|FormData|string;
+declare type FetchHeaderInit = FetchHeaders | string[];
+declare type FetchBodyInit = Blob | FormData | string;
 
 // fetch-engine types
 
@@ -99,4 +99,11 @@ declare interface FetchEngineFilter {
 declare interface FetchGroupOptions {
   plugins?: Array<FetchEnginePlugin>;
   filters?: Array<FetchEngineFilter>;
+}
+
+// "parse-headers"
+
+declare module "parse-headers" {
+  const parse: (headers: string) => { [key: string]: string | string[] };
+  export = parse;
 }

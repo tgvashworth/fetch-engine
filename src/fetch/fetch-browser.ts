@@ -1,6 +1,8 @@
 /// <reference path="../.d.ts"/>
 "use strict";
 
+import parseHeaders = require("parse-headers");
+
 import Response from "../Response";
 import { Headers } from "../Headers";
 
@@ -15,7 +17,8 @@ export default function fetch(request: FetchRequest): Promise<FetchResponse> {
     xhr.onload = () => {
       resolve(new Response(xhr.responseText, {
         status: xhr.status,
-        statusText: xhr.statusText
+        statusText: xhr.statusText,
+        headers: parseHeaders(xhr.getAllResponseHeaders())
       }));
     };
     xhr.onerror = () => {

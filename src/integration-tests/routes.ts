@@ -3,6 +3,17 @@ import Boom = require("boom");
 
 export const routes: IRouteConfiguration[] = [
   {
+    method: ["GET", "PUT", "POST", "DELETE"],
+    path: "/echo",
+    handler: function (request, reply): Response {
+      return reply({
+        method: request.method,
+        headers: request.headers,
+        payload: request.payload
+      });
+    }
+  },
+  {
     method: "GET",
     path: "/echo/text/{text}",
     handler: function (request, reply): Response {

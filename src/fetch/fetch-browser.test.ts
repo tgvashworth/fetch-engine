@@ -114,3 +114,38 @@ test("fetch-browser handles an error", wrap(t => {
       t.equal(res.status, 500);
     });
 }));
+
+// Tests matching github/fetch
+
+test("fetch request", wrap(t => {
+  t.plan(2);
+  const req = new Request("/echo", {
+    headers: {
+      "Accept": "application/json",
+      "X-Test": "42"
+    }
+  });
+
+  return fetchBrowser(req)
+    .then(res => res.json())
+    .then(json => {
+      t.equal(json.headers.accept, "application/json");
+      t.equal(json.headers["x-test"], "42");
+    });
+}));
+
+test("populates response", wrap(t => {
+  t.plan(4);
+  const req = new Request("/echo/text/hello");
+
+  return fetchBrowser(req)
+    .then(res => {
+      t.equal(res.status, 200);
+      t.equal(res.ok, true);
+      t.equal(res.headers.get("Content-Type"), "text/html; charset=utf-8");
+      return res.text();
+    })
+    .then(text => {
+      t.equal(text, "hello");
+    });
+}));
