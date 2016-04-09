@@ -179,3 +179,17 @@ test("supports PUT", wrap(t => {
       t.equal(json.payload, "a=10");
     });
 }));
+
+test("supports DELETE", wrap(t => {
+  t.plan(2);
+  const req = new Request("/echo", {
+    method: "delete"
+  });
+
+  return fetchBrowser(req)
+    .then(res => res.json())
+    .then(json => {
+      t.equal(json.method, "delete");
+      t.equal(json.payload, null);
+    });
+}));
