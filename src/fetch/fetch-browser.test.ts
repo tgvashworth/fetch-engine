@@ -149,3 +149,18 @@ test("populates response", wrap(t => {
       t.equal(text, "hello");
     });
 }));
+
+test("supports POST", wrap(t => {
+  t.plan(2);
+  const req = new Request("/echo", {
+    method: "post",
+    body: "a=10"
+  });
+
+  return fetchBrowser(req)
+    .then(res => res.json())
+    .then(json => {
+      t.equal(json.method, "post");
+      t.equal(json.payload, "a=10");
+    });
+}));
