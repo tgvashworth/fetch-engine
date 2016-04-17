@@ -107,11 +107,12 @@ test("fetch-browser can send cookies to same-origin", wrap(t => {
 }));
 
 test("fetch-browser handles an error", wrap(t => {
-  t.plan(1);
+  t.plan(2);
   const req = new Request("/error/500");
   return fetchBrowser(req)
     .then(res => {
       t.equal(res.status, 500);
+      t.equal(res.ok, false);
     });
 }));
 
