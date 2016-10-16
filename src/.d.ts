@@ -11,7 +11,6 @@ declare class FetchBody {
 }
 
 declare class FetchRequest extends FetchBody {
-  constructor(input: string|FetchRequest, init?: FetchRequestInit);
   method: string;
   url: string;
   headers: FetchHeaders;
@@ -20,6 +19,7 @@ declare class FetchRequest extends FetchBody {
   mode: string;
   credentials: string;
   cache: string;
+  constructor(input: string|FetchRequest, init?: FetchRequestInit);
   clone(): FetchRequest;
 }
 
@@ -42,7 +42,6 @@ declare class FetchHeaders {
 }
 
 declare class FetchResponse extends FetchBody {
-  constructor(body?: FetchBodyInit, init?: FetchResponseInit);
   type: string;
   url: string;
   status: number;
@@ -52,6 +51,7 @@ declare class FetchResponse extends FetchBody {
   error(): FetchResponse;
   redirect(url: string, status: number): FetchResponse;
   clone(): FetchResponse;
+  constructor(body?: FetchBodyInit, init?: FetchResponseInit);
 }
 
 interface FetchResponseInit {
