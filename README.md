@@ -50,13 +50,43 @@ const fetch = fetchEngine({
 });
 ```
 
-## Lifecycle
+## Using `fetch-engine`
 
-Every request and response can be modified, replaced or prevented from occuring using a plugin or a filter.
+`fetch-engine` allows you to combine plugins in groups or sequences to add behaviour to the [Fetch API][fetch-api]. The basic building block is the plugin.
 
-<!-- TODO add links to plugin and filter documentation -->
+### Plugins
 
-The lifecycle methods that a plugin can attach behaviour to are as follows.
+Plugins can intercept and modify HTTP requests and responses. They're simple objects, so this is a valid plugin:
+
+```js
+const logger = {
+  willFetch(request) {
+    console.log(request.method, request.url);
+  }
+};
+```
+
+But to be able to store state in the plugins, or to give them a proper name for debugging, you can create a simple class and use `new`:
+
+```js
+class Logger {
+  willFetch(request) {
+    console.log(request.method, request.url);
+  }
+}
+```
+
+That `willFetch` method is one of many `lifecyle` methods you can attach behaviour to.
+
+The full list, in the order they run:
+
+- `shouldFetch`
+- `getRequest`
+- `willFetch`
+- `fetch`
+- `fetching`
+- `getResponse`
+- `didFetch`
 
 #### `shouldFetch`
 
@@ -156,7 +186,7 @@ Allows plugins to add data to `Response`, or produce an entirely new `Response`.
 It's passed the current `Response` object and should return a `Promise` for a `Response`.
 
 ```js
-class Context {
+class SuperResponseWrapperPlugin {
   getResponse(response) {
     return new SuperResponse(response);
   }
@@ -176,6 +206,58 @@ class ResponseMetricsPlugin {
   }
 }
 ```
+
+### Groups
+
+Groups of plugins can be created using something called a `FetchGroup`. A group lets you pull together functionality in a way that can be reused as plugin:
+
+```js
+import  { FetchGroup, fetchEngine } from 'fetch-engine';
+
+const combinedMetricsGroup = new FetchGroup({
+  plugins: [
+    new RequestMetricsPlugin(),
+    new ResponseMetricsPlugin()
+  ]
+});
+```
+
+`FetchGroup` instances are plugins too, so you can pass them to `fetchEngine` like any other plugin:
+
+```js
+const fetch = fetchEngine({
+  plugins: [
+    combinedMetricsGroup
+  ]
+});
+```
+
+<!-- TODO make fetchGroup({ ... }) factory -->
+
+### Filters
+
+Filters are used to decide whether to apply a set of plugins. They combine with plugins as part of a `FetchGroup`, deciding whether the plugins will run. If the filter says no, the request is passed to the next plugin for processing.
+
+In the example below, the `RateLimitPlugin` will only be applied to requests that match the `testRequest` method of the `PathPrefixFilter`.
+
+```js
+class PathPrefixFilter {
+  constructor(prefix) {
+    this.prefix = prefix;
+  }
+  testRequest(request) {
+    const url = new URL(request.url);
+    return url.pathname.startsWith(this.prefix);
+  }
+}
+
+const rateLimitGroup = new FetchGroup({
+  filters: [ new PathPrefixFilter('/1.1/') ],
+  plugins: [ new RateLimitPlugin() ]
+});
+```
+
+Filters can intercept requests and responses, to decide which portion of the plugin methods run. Filters can implement `testRequest` and `testResponse`. They should return `true`, `false` or a promise for `true` or `false`.
 
 ## Rationale
 
@@ -197,149 +279,9 @@ However, these behaviours can require some manual work. Not all are used for all
 
 In many places on the server-side, this is assumed behaviour and done automatically. For example, [Twitter's Finagle][finagle] comes with [timeouts][finagle-timeouts], [retries][finagle-retries] and other features out-of-the-box.
 
-This project aims to make it easy to build good-citizen JavaScript network clients.
-
-## Goals
-
-- Highly configurable
-- Do nothing by default
-- Support plug-ins to add functionality
-- Provide useful plugins to solve common problems:
-  - respect common HTTP error codes (eg. 503 retry with exponential backoff to a limit)
-  - throttle requests to a rate-limited API endpoint
-  - deduplicate identical in-flight requests
-  - retry on network-failure
-- Instrumentable for performance and behaviour monitoring
-- Work in IE9+ (stretch-goal, IE6+)
-- Node-compatible
-- Drop-in replacement for `fetch`
-
-## API Design
-
-Taken from #1.
-
-The exported function `fetchEngine` will be used to create a `fetch` object. The contructor `FetchGroup` will be used to compose sets of plugins and filters together to act as a plugin to `fetchEngine`. `fetchEngine` should be passed either an instance of `FetchGroup` or an object that it can pass into `FetchGroup`.
-
-### `fetchEngine`
-
-```js
-const fetch = fetchEngine({
-  plugins: [ ... ]
-});
-```
-
-- on invocation, compose each plugin method into one method
-- on fetch(...), run methods in order:
-  - `shouldFetch`
-    - if `false`, bail with CancelledError
-  - `getRequest`
-    - produces a `Promise` for a `Request`
-  - `willFetch`
-    - side-effects, ignore return value
-  - `fetch`
-    - make the `Request` with an inner `fetch` implementation, but allow plugins to intercept the request and return a Response early.
-  - `fetching`
-    - allow plugins to `cancel`
-  - `getResponse`
-    - produce a `Promise` for a `Response`
-  - `didFetch`
-    - side-effects only, ignore return value
-
-### `FetchGroup`
-
-```js
-const preset = new FetchGroup({
-  filters: [ ... ],
-  plugins: [ ... ]
-});
-```
-
-- compose filter + plugin methods into functions, then act like a plugin
-- gates each method based on filter responses
-
-## Plugins
-
-The plugin API would be as below. They're just simple objects with methods. All are optional.
-
-#### `shouldFetch`
-
-Passed the current `Request` object.
-
-Allows a plugin to prevent a request from being made.
-
-Return a `Promise` for a Boolean. If `false`, the request is not made.
-
-#### `getRequest`
-
-Passed the current `Request` object.
-
-Allows plugins to add data to `Request`, or produce an entirely new `Request`.
-
-Should return a `Promise` for a `Request`.
-
-#### `willFetch`
-
-Passed the current `Request` object.
-
-Allows a plugin to react to a request being made, but not affect it.
-
-Return value would be ignored.
-
-#### `fetch`
-
-Takes two arguments: the input `request` and a `next` method that takes no arguments, but causes the request to be passed to the next plugin and eventually hit the network.
-
-The `fetch` method allows plugins to intercept the Request that's about to be made and return a `Response` without hitting the network.
-
-Should return a `Promise` for a `Response`.
-
-#### `fetching`
-
-Passed an object of the form `{ request, promise, cancel }`.
-
-Allows plugins to react to the completion of the `fetch` but not affect it, or `cancel` the request.
-
-Return value is ignored.
-
-####  `getResponse`
-
-Passed the current `Response` object.
-
-Allows plugins to add data to `Response`, or produce an entirely new `Response`.
-
-Should return a `Promise` for a `Response`.
-
-#### `didFetch`
-
-Passed the current `Response` object.
-
-Allows a plugin to react to a response arriving being made, but not affect it.
-
-Return value would be ignored.
-
-## Filters
-
-The filter API would be as below. Filters are used to gate the application of plugins within a `FetchGroup`. They're just simple objects with methods. All are optional.
-
-#### `testRequest`
-
-Passed the current `Request`.
-
-Run before `shouldFetch`, `getRequest`, `willFetch` and `fetch`, which will not be applied if `testRequest` resolves to `false`.
-
-Should return a `Promise` for a `Boolean`.
-
-#### `testResponse`
-
-Passed the current `Response`.
-
-Run before `getResponse` and `didFetch`, which will not be applied if `testResponse` resolves to `false`.
-
-Should return a `Promise` for a `Boolean`.
+This project aims to make it easy to build JavaScript clients that are good citizens of distributed systems.
 
 ## Example
-
-Here's an example without an implementation, just in case this is super unclear...
 
 ```js
 import { fetchEngine, FetchGroup } from 'fetch-engine';
@@ -412,7 +354,7 @@ class CachePlugin {
   }
 }
 
-let fetch = fetchEngine({
+const fetch = fetchEngine({
   plugins: [
     new CachePlugin(),
     new TimeoutPlugin(5000),
@@ -424,16 +366,6 @@ let fetch = fetchEngine({
     new MetricsPlugin()
   ]
 });
-
-// The above could be a shorthand for the following:
-
-let fetch = fetchEngine(new FetchGroup({
-  plugins: [
-    new TimeoutPlugin(5000),
-    new CORSAuthPlugin(),
-    // ...
-  ]
-}));
 ```
 
 ## Developing Fetch Engine
@@ -464,6 +396,23 @@ $ npm run zuul
 ```
 
 Follow the instructions it gives you.
+
+## Goals of the project
+
+These were the original goals of the project:
+
+- Highly configurable
+- Do nothing by default
+- Support plug-ins to add functionality
+- Provide useful plugins to solve common problems:
+  - respect common HTTP error codes (eg. 503 retry with exponential backoff to a limit)
+  - throttle requests to a rate-limited API endpoint
+  - deduplicate identical in-flight requests
+  - retry on network-failure
+- Instrumentable for performance and behaviour monitoring
+- Work in IE9+ (stretch-goal, IE6+)
+- Node-compatible
+- Drop-in replacement for `fetch`
 
 [tweetdeck]: https://teetdeck.twitter.com
 [finagle]: http://twitter.github.io/finagle
