@@ -4,7 +4,178 @@
 
 A smart request-making library that makes sure your Javascript client is a good citizen of your distributed system.
 
-Current status: _Implementation_ (not ready for use, but please contribute)
+## install
+
+To get `fetch-engine`, install it with npm:
+
+```
+npm install --save fetch-engine
+```
+
+## Getting started
+
+`fetch-engine` is designed for use in a web browser, and you'll need a build tool like `webpack` or `browerify` to include it in your project:
+
+```js
+import fetchEngine from 'fetch-engine';
+```
+
+The default export, `fetchEngine`, is a function. When called, it returns an implementation of the [fetch API][fetch-api] — a request-making function that you might call `fetch`:
+
+```js
+const fetch = fetchEngine();
+```
+
+The magic of `fetch-engine` is that you can pass plugins and filters that augment the network requests to do things like:
+
+- retry on network-failure
+- log request time per URL
+- throttle requests to a rate-limited API endpoint
+- respect common HTTP error codes (eg. 503 retry with exponential backoff to a limit)
+- deduplicate identical in-flight requests
+
+Here's a simple example that logs every request using the `willFetch` lifecycle method:
+
+```js
+class LoggerPlugin {
+  willFetch(request) {
+    console.log(request.method, request.url);
+  }
+}
+
+const fetch = fetchEngine({
+  plugins: [
+    new LoggerPlugin()
+  ]
+});
+```
+
+## Lifecycle
+
+Every request and response can be modified, replaced or prevented from occuring using a plugin or a filter.
+
+<!-- TODO add links to plugin and filter documentation -->
+
+The lifecycle methods that a plugin can attach behaviour to are as follows.
+
+#### `shouldFetch`
+
+`shouldFetch` allows plugins to prevent or allow a request by returning a boolean, or a `Promise` for a boolean. It's passed the candidate `Request` object.
+
+```js
+class RateLimitPlugin {
+  isRateLimited(request) {
+    /* ... */
+    return false;
+  }
+  shouldFetch(request) {
+    return !this.isRateLimited(request);
+  }
+}
+```
+
+#### `getRequest`
+
+`getRequest` allows plugins to add data to `Request`, or produce an entirely new `Request`. After this method has run, the subsequent lifecycle methods will use the new or changed `Request`. `getRequest` should return a `Request` or a `Promise` for one.
+
+```js
+class CORSAuthPlugin {
+  constructor(csrfToken) {
+    this.csrfToken = csrfToken;
+  }
+  getRequest(request) {
+    return new Request(request, {
+      mode: 'cors',
+      credentials: 'include',
+      headers: Object.assign(request.headers, {
+        'X-Csrf-Token': this.csrfToken
+      })
+    });
+  }
+}
+```
+
+#### `willFetch`
+
+`willFetch` allows a plugin to react to a `Request` just before it is made, but not affect it, becuase the return value is be ignored.
+
+```js
+class RequestMetricsPlugin {
+  willFetch(request) {
+    trackRequest(request);
+  }
+}
+```
+
+#### `fetch`
+
+`fetch` takes two arguments: the input `request` and a `next` method that takes no arguments, but causes the request to be passed to the next plugin and eventually hit the network.
+
+The `fetch` method allows plugins to intercept the Request that's about to be made and return a `Response` without hitting the network.
+
+It should return (a `Promise` for) a `Response`.
+
+```js
+class CachePlugin {
+  fetch(request, next) {
+    if (this.isCached(request)) {
+      return this.getFromCache(request);
+    }
+    return next();
+  }
+  isCached(request) {
+    // ...
+  }
+  getFromCache(request) {
+    // ...
+  }
+}
+```
+
+#### `fetching`
+
+Allows plugins to react to the completion of the `fetch` but not affect it, or `cancel` the request.
+
+It's passed an object of the form `{ request, promise, cancel }` and the return value is ignored.
+
+```js
+class TimeoutPlugin {
+  constructor(time=1000) {
+    this.time = time;
+  }
+  fetching({ cancel }) {
+    setTimeout(cancel, this.time);
+  }
+}
+```
+
+####  `getResponse`
+
+Allows plugins to add data to `Response`, or produce an entirely new `Response`.
+
+It's passed the current `Response` object and should return a `Promise` for a `Response`.
+
+```js
+class Context {
+  getResponse(response) {
+    return new SuperResponse(response);
+  }
+}
+```
+
+#### `didFetch`
+
+Allows a plugin to react to a response arriving, without affecting it.
+
+Passed the current `Response` object. Return value would be ignored.
+
+```js
+class ResponseMetricsPlugin {
+  didFetch(response) {
+    trackResponse(response);
+  }
+}
+```
 
 ## Rationale
 
@@ -298,3 +469,4 @@ Follow the instructions it gives you.
 [finagle]: http://twitter.github.io/finagle
 [finagle-timeouts]: http://twitter.github.io/finagle/guide/Clients.html#timeouts-expiration
 [finagle-retries]: http://twitter.github.io/finagle/guide/Clients.html#retries
+[fetch-api]: https://developer.mozilla.org/en/docs/Web/API/Fetch_API
