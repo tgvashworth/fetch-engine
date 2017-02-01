@@ -15,6 +15,9 @@
     "zuul": "zuul --no-coverage --local 9998 -- dist/test-browser.js",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
+  "files": [
+    "dist"
+  ],
   "config": {
     "ghooks": {
       "pre-commit": "npm run lint",
@@ -51,7 +54,6 @@
     "zuul": "^3.10.1"
   },
   "dependencies": {
-    "es6-promise": "^3.1.2",
     "parse-headers": "^2.0.1"
   }
 }
