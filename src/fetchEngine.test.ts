@@ -181,3 +181,60 @@ test(
     return fetch(firstMockReq);
   })
 );
+
+test(
+  "fetchEngine with opts creates FetchGroup and flows through full stack in order",
+  wrap((t: TapeTestAssertions) => {
+    t.plan(12);
+    const firstMockReq = new Request("/mock");
+    const secondMockReq = new Request("/mock");
+    const firstMockRes = new Response();
+    const fetch = makeFetchEngine(mockFetch)({
+      filters: [
+        new Mock({
+          testRequest: (req: FetchRequest): boolean => {
+            t.deepEqual(req, firstMockReq);
+            return true;
+          },
+          testResponse: (res: FetchResponse): boolean => {
+            t.deepEqual(res, firstMockRes);
+            return true;
+          }
+        })
+      ],
+      plugins: [
+        new Mock({
+          shouldFetch: (req: FetchRequest): boolean => {
+            t.deepEqual(req, firstMockReq);
+            return true;
+          },
+          getRequest: (req: FetchRequest): Promise<FetchRequest> => {
+            t.deepEqual(req, firstMockReq);
+            return Promise.resolve(secondMockReq);
+          },
+          willFetch: (req: FetchRequest): void => {
+            t.deepEqual(req, secondMockReq);
+          },
+          fetch: (
+            req: FetchRequest,
+            next: () => Promise<FetchResponse>
+          ): Promise<FetchResponse> => {
+            t.deepEqual(req, secondMockReq);
+            return next();
+          },
+          fetching: (args: FetchFetchingArgs): void => {
+            t.deepEqual(args.request, secondMockReq);
+          },
+          getResponse: (res: FetchResponse): Promise<FetchResponse> => {
+            // TODO find a way to fake the retured response
+            return Promise.resolve(firstMockRes);
+          },
+          didFetch: (res: FetchResponse): void => {
+            t.deepEqual(res, firstMockRes);
+          }
+        })
+      ]
+    });
+    return fetch(firstMockReq);
+  })
+);
