@@ -8,12 +8,20 @@ import Request from "./Request";
 // versions of the library for node and the browser.
 export default function makeFetchEngine(
   innerFetch: Fetch
-): (plugin?: FetchEnginePlugin) => Fetch {
+): (plugin?: FetchEnginePlugin | FetchGroupOptions) => Fetch {
   // Here is the actual implementation of the fetch-engine, where we've
   // closed over the 'inner' fetch implementation.
   return function fetchEngine(
-    plugin: FetchEnginePlugin = new FetchGroup()
+    pluginOrOpts: FetchEnginePlugin | FetchGroupOptions = new FetchGroup()
   ): Fetch {
+    // Marshal the input to make sure it's a valid plugin that implements all the methods
+    // that we assume to be in place below
+    const plugin = (
+      isPlugin(pluginOrOpts) ?
+        pluginOrOpts :
+        new FetchGroup(pluginOrOpts)
+    );
+
     return function fetch(
       input: string | FetchRequest,
       init: FetchRequestInit = {}
@@ -50,4 +58,12 @@ export default function makeFetchEngine(
         .then(sideEffect(plugin.didFetch.bind(plugin)));
     };
   };
+}
+
+function isPlugin(o: FetchEnginePlugin | FetchGroupOptions = {}): o is FetchEnginePlugin {
+  return [
+    "shouldFetch", "getRequest", "willFetch",
+    "fetch", "fetching",
+    "getResponse", "didFetch"
+  ].every(k => typeof o[k] === "function");
 }
