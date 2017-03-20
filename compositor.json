@@ -1,0 +1,142 @@
+{
+  "name": "phuu/fetch-engine",
+  "version": "0.1.4",
+  "libraries": {
+    "xv": "^1.1.25"
+  },
+  "title": "FetchEngine",
+  "branch": "",
+  "style": {
+    "name": "Default",
+    "componentSet": {
+      "nav": "nav/BasicNav",
+      "header": "header/BannerHeader",
+      "article": "article/BasicArticle",
+      "footer": "footer/BasicFooter"
+    },
+    "fontFamily": "-apple-system, BlinkMacSystemFont, sans-serif",
+    "fontWeight": 400,
+    "bold": 600,
+    "lineHeight": 1.5,
+    "typeScale": [
+      72,
+      48,
+      24,
+      20,
+      16,
+      14,
+      12
+    ],
+    "monospace": "Menlo, monospace",
+    "heading": {
+      "fontFamily": null,
+      "fontStyle": null,
+      "fontWeight": 600,
+      "lineHeight": 1.25,
+      "textTransform": null,
+      "letterSpacing": null
+    },
+    "h0": {},
+    "h1": {},
+    "h2": {},
+    "h3": {},
+    "h4": {},
+    "h5": {},
+    "h6": {},
+    "alternativeText": {},
+    "space": [
+      0,
+      8,
+      16,
+      32,
+      48,
+      64,
+      96
+    ],
+    "layout": {
+      "maxWidth": 1024,
+      "centered": false
+    },
+    "colors": {
+      "text": "#111",
+      "background": "#fff",
+      "primary": "#08e",
+      "secondary": "#059",
+      "highlight": "#e08",
+      "border": "#ddd",
+      "muted": "#eee"
+    },
+    "border": {
+      "width": 1,
+      "radius": 2
+    },
+    "link": {},
+    "button": {
+      "hover": {
+        "boxShadow": "inset 0 0 0 999px rgba(0, 0, 0, .125)"
+      }
+    },
+    "input": {},
+    "body": {
+      "margin": 0
+    },
+    "breakpoints": {
+      "xs": "@media screen and (max-width:40em)",
+      "sm": "@media screen and (min-width:40em)",
+      "md": "@media screen and (min-width:52em)",
+      "lg": "@media screen and (min-width:64em)"
+    }
+  },
+  "content": [
+    {
+      "component": "nav",
+      "links": [
+        {
+          "href": "https://github.com/phuu/fetch-engine",
+          "text": "GitHub"
+        },
+        {
+          "href": "https://npmjs.com/package/fetch-engine",
+          "text": "npm"
+        }
+      ]
+    },
+    {
+      "component": "header",
+      "heading": "fetch-engine",
+      "subhead": "A smart request-making library",
+      "children": [
+        {
+          "component": "ui/TweetButton",
+          "text": "fetch-engine: A smart request-making library",
+          "url": ""
+        },
+        {
+          "component": "ui/GithubButton",
+          "user": "phuu",
+          "repo": "fetch-engine"
+        }
+      ]
+    },
+    {
+      "component": "article",
+      "metadata": {
+        "source": "github.readme"
+      },
+      "html": "\n<p><a href=\"https://travis-ci.org/phuu/fetch-engine\"><img src=\"https://travis-ci.org/phuu/fetch-engine.svg?branch=master\"></a> <a href=\"http://waffle.io/phuu/fetch-engine\"><img src=\"https://badge.waffle.io/phuu/fetch-engine.svg?label=ready&amp;title=Ready\"></a></p>\n<p>A smart request-making library that makes sure your Javascript client is a good citizen of your distributed system.</p>\n<h2>install</h2>\n<p>To get <code>fetch-engine</code>, install it with npm:</p>\n<pre>npm <span class=\"hljs-keyword\">install</span> <span class=\"hljs-comment\">--save fetch-engine</span></pre><h2>Getting started</h2>\n<p><code>fetch-engine</code> is designed for use in a web browser, and you&apos;ll need a build tool like <code>webpack</code> or <code>browerify</code> to include it in your project:</p>\n<pre><span class=\"hljs-keyword\">import</span> fetchEngine <span class=\"hljs-keyword\">from</span> <span class=\"hljs-string\">&apos;fetch-engine&apos;</span>;</pre><p>The default export, <code>fetchEngine</code>, is a function. When called, it returns an implementation of the <a href=\"https://developer.mozilla.org/en/docs/Web/API/Fetch_API\">fetch API</a> &#x2014; a request-making function that you might call <code>fetch</code>:</p>\n<pre><span class=\"hljs-keyword\">const</span> fetch = fetchEngine();</pre><p>The magic of <code>fetch-engine</code> is that you can pass plugins and filters that augment the network requests to do things like:</p>\n<ul>\n<li>retry on network-failure</li>\n<li>log request time per URL</li>\n<li>throttle requests to a rate-limited API endpoint</li>\n<li>respect common HTTP error codes (eg. 503 retry with exponential backoff to a limit)</li>\n<li>deduplicate identical in-flight requests</li>\n</ul>\n<p>Here&apos;s a simple example that logs every request using the <code>willFetch</code> lifecycle method:</p>\n<pre><span class=\"hljs-class\"><span class=\"hljs-keyword\">class</span> <span class=\"hljs-title\">LoggerPlugin</span> </span>{\n  willFetch(request) {\n    <span class=\"hljs-built_in\">console</span>.log(request.method, request.url);\n  }\n}\n\n<span class=\"hljs-keyword\">const</span> fetch = fetchEngine({\n  <span class=\"hljs-attr\">plugins</span>: [\n    <span class=\"hljs-keyword\">new</span> LoggerPlugin()\n  ]\n});</pre><h2>Using <code>fetch-engine</code></h2>\n<p><code>fetch-engine</code> allows you to combine plugins in groups or sequences to add behaviour to the <a href=\"https://developer.mozilla.org/en/docs/Web/API/Fetch_API\">Fetch API</a>. The basic building block is the plugin.</p>\n<h3>Plugins</h3>\n<p>Plugins can intercept and modify HTTP requests and responses. They&apos;re simple objects, so this is a valid plugin:</p>\n<pre><span class=\"hljs-keyword\">const</span> logger = {\n  willFetch(request) {\n    <span class=\"hljs-built_in\">console</span>.log(request.method, request.url);\n  }\n};</pre><p>But to be able to store state in the plugins, or to give them a proper name for debugging, you can create a simple class and use <code>new</code>:</p>\n<pre><span class=\"hljs-class\"><span class=\"hljs-keyword\">class</span> <span class=\"hljs-title\">Logger</span> </span>{\n  willFetch(request) {\n    <span class=\"hljs-built_in\">console</span>.log(request.method, request.url);\n  }\n}</pre><p>That <code>willFetch</code> method is one of many <code>lifecyle</code> methods you can attach behaviour to.</p>\n<p>The full list, in the order they run:</p>\n<ul>\n<li><code>shouldFetch</code></li>\n<li><code>getRequest</code></li>\n<li><code>willFetch</code></li>\n<li><code>fetch</code></li>\n<li><code>fetching</code></li>\n<li><code>getResponse</code></li>\n<li><code>didFetch</code></li>\n</ul>\n<h4><code>shouldFetch</code></h4>\n<p><code>shouldFetch</code> allows plugins to prevent or allow a request by returning a boolean, or a <code>Promise</code> for a boolean. It&apos;s passed the candidate <code>Request</code> object.</p>\n<pre><span class=\"hljs-class\"><span class=\"hljs-keyword\">class</span> <span class=\"hljs-title\">RateLimitPlugin</span> </span>{\n  isRateLimited(request) {\n    <span class=\"hljs-comment\">/* ... */</span>\n    <span class=\"hljs-keyword\">return</span> <span class=\"hljs-literal\">false</span>;\n  }\n  shouldFetch(request) {\n    <span class=\"hljs-keyword\">return</span> !<span class=\"hljs-keyword\">this</span>.isRateLimited(request);\n  }\n}</pre><h4><code>getRequest</code></h4>\n<p><code>getRequest</code> allows plugins to add data to <code>Request</code>, or produce an entirely new <code>Request</code>. After this method has run, the subsequent lifecycle methods will use the new or changed <code>Request</code>. <code>getRequest</code> should return a <code>Request</code> or a <code>Promise</code> for one.</p>\n<pre><span class=\"hljs-class\"><span class=\"hljs-keyword\">class</span> <span class=\"hljs-title\">CORSAuthPlugin</span> </span>{\n  <span class=\"hljs-keyword\">constructor</span>(csrfToken) {\n    <span class=\"hljs-keyword\">this</span>.csrfToken = csrfToken;\n  }\n  getRequest(request) {\n    <span class=\"hljs-keyword\">return</span> <span class=\"hljs-keyword\">new</span> Request(request, {\n      <span class=\"hljs-attr\">mode</span>: <span class=\"hljs-string\">&apos;cors&apos;</span>,\n      <span class=\"hljs-attr\">credentials</span>: <span class=\"hljs-string\">&apos;include&apos;</span>,\n      <span class=\"hljs-attr\">headers</span>: <span class=\"hljs-built_in\">Object</span>.assign(request.headers, {\n        <span class=\"hljs-string\">&apos;X-Csrf-Token&apos;</span>: <span class=\"hljs-keyword\">this</span>.csrfToken\n      })\n    });\n  }\n}</pre><h4><code>willFetch</code></h4>\n<p><code>willFetch</code> allows a plugin to react to a <code>Request</code> just before it is made, but not affect it, becuase the return value is be ignored.</p>\n<pre><span class=\"hljs-class\"><span class=\"hljs-keyword\">class</span> <span class=\"hljs-title\">RequestMetricsPlugin</span> </span>{\n  willFetch(request) {\n    trackRequest(request);\n  }\n}</pre><h4><code>fetch</code></h4>\n<p><code>fetch</code> takes two arguments: the input <code>request</code> and a <code>next</code> method that takes no arguments, but causes the request to be passed to the next plugin and eventually hit the network.</p>\n<p>The <code>fetch</code> method allows plugins to intercept the Request that&apos;s about to be made and return a <code>Response</code> without hitting the network.</p>\n<p>It should return (a <code>Promise</code> for) a <code>Response</code>.</p>\n<pre><span class=\"hljs-class\"><span class=\"hljs-keyword\">class</span> <span class=\"hljs-title\">CachePlugin</span> </span>{\n  fetch(request, next) {\n    <span class=\"hljs-keyword\">if</span> (<span class=\"hljs-keyword\">this</span>.isCached(request)) {\n      <span class=\"hljs-keyword\">return</span> <span class=\"hljs-keyword\">this</span>.getFromCache(request);\n    }\n    <span class=\"hljs-keyword\">return</span> next();\n  }\n  isCached(request) {\n    <span class=\"hljs-comment\">// ...</span>\n  }\n  getFromCache(request) {\n    <span class=\"hljs-comment\">// ...</span>\n  }\n}</pre><h4><code>fetching</code></h4>\n<p>Allows plugins to react to the completion of the <code>fetch</code> but not affect it, or <code>cancel</code> the request.</p>\n<p>It&apos;s passed an object of the form <code>{ request, promise, cancel }</code> and the return value is ignored.</p>\n<pre><span class=\"hljs-class\"><span class=\"hljs-keyword\">class</span> <span class=\"hljs-title\">TimeoutPlugin</span> </span>{\n  <span class=\"hljs-keyword\">constructor</span>(time=1000) {\n    <span class=\"hljs-keyword\">this</span>.time = time;\n  }\n  fetching({ cancel }) {\n    setTimeout(cancel, <span class=\"hljs-keyword\">this</span>.time);\n  }\n}</pre><h4><code>getResponse</code></h4>\n<p>Allows plugins to add data to <code>Response</code>, or produce an entirely new <code>Response</code>.</p>\n<p>It&apos;s passed the current <code>Response</code> object and should return a <code>Promise</code> for a <code>Response</code>.</p>\n<pre><span class=\"hljs-class\"><span class=\"hljs-keyword\">class</span> <span class=\"hljs-title\">SuperResponseWrapperPlugin</span> </span>{\n  getResponse(response) {\n    <span class=\"hljs-keyword\">return</span> <span class=\"hljs-keyword\">new</span> SuperResponse(response);\n  }\n}</pre><h4><code>didFetch</code></h4>\n<p>Allows a plugin to react to a response arriving, without affecting it.</p>\n<p>Passed the current <code>Response</code> object. Return value would be ignored.</p>\n<pre><span class=\"hljs-class\"><span class=\"hljs-keyword\">class</span> <span class=\"hljs-title\">ResponseMetricsPlugin</span> </span>{\n  didFetch(response) {\n    trackResponse(response);\n  }\n}</pre><h3>Groups</h3>\n<p>Groups of plugins can be created using something called a <code>FetchGroup</code>. A group lets you pull together functionality in a way that can be reused as plugin:</p>\n<pre><span class=\"hljs-keyword\">import</span>  { FetchGroup, fetchEngine } <span class=\"hljs-keyword\">from</span> <span class=\"hljs-string\">&apos;fetch-engine&apos;</span>;\n\n<span class=\"hljs-keyword\">const</span> combinedMetricsGroup = <span class=\"hljs-keyword\">new</span> FetchGroup({\n  <span class=\"hljs-attr\">plugins</span>: [\n    <span class=\"hljs-keyword\">new</span> RequestMetricsPlugin(),\n    <span class=\"hljs-keyword\">new</span> ResponseMetricsPlugin()\n  ]\n});</pre><p><code>FetchGroup</code> instances are plugins too, so you can pass them to <code>fetchEngine</code> like any other plugin:</p>\n<pre><span class=\"hljs-keyword\">const</span> fetch = fetchEngine({\n  <span class=\"hljs-attr\">plugins</span>: [\n    combinedMetricsGroup\n  ]\n});</pre>\n<h3>Filters</h3>\n<p>Filters are used to decide whether to apply a set of plugins. They combine with plugins as part of a <code>FetchGroup</code>, deciding whether the plugins will run. If the filter says no, the request is passed to the next plugin for processing.</p>\n<p>In the example below, the <code>RateLimitPlugin</code> will only be applied to requests that match the <code>testRequest</code> method of the <code>PathPrefixFilter</code>.</p>\n<pre><span class=\"hljs-class\"><span class=\"hljs-keyword\">class</span> <span class=\"hljs-title\">PathPrefixFilter</span> </span>{\n  <span class=\"hljs-keyword\">constructor</span>(prefix) {\n    <span class=\"hljs-keyword\">this</span>.prefix = prefix;\n  }\n  testRequest(request) {\n    <span class=\"hljs-keyword\">const</span> url = <span class=\"hljs-keyword\">new</span> URL(request.url);\n    <span class=\"hljs-keyword\">return</span> url.pathname.startsWith(<span class=\"hljs-keyword\">this</span>.prefix);\n  }\n}\n\n<span class=\"hljs-keyword\">const</span> rateLimitGroup = <span class=\"hljs-keyword\">new</span> FetchGroup({\n  <span class=\"hljs-attr\">filters</span>: [ <span class=\"hljs-keyword\">new</span> PathPrefixFilter(<span class=\"hljs-string\">&apos;/1.1/&apos;</span>) ],\n  <span class=\"hljs-attr\">plugins</span>: [ <span class=\"hljs-keyword\">new</span> RateLimitPlugin() ]\n});</pre><p>Filters can intercept requests and responses, to decide which portion of the plugin methods run. Filters can implement <code>testRequest</code> and <code>testResponse</code>. They should return <code>true</code>, <code>false</code> or a promise for <code>true</code> or <code>false</code>.</p>\n<h2>Rationale</h2>\n<p>The idea for this project comes from <a href=\"https://teetdeck.twitter.com\">TweetDeck</a>, a very &apos;chatty&apos; native web app. The client-side is an oft-forgetten but important component of a distributed system, capable of bringing down servers with large amounts of traffic.</p>\n<p>To mitigate the risk that TweetDeck contributes to a system failure we have developed a fairly complex networking layer. In various places, often ad-hoc, we do some of the following:</p>\n<ul>\n<li>use a OAuth1-signing server to authenticate to our requests</li>\n<li>de-duplicate in-flight requests</li>\n<li>poll rate-limited API endpoints as fast as the limits allow</li>\n<li>retry requests if they fail due to lack of network connection</li>\n<li>retry, with exponential back-off, requests that return an error from the server</li>\n<li>add authentication data in different ways based on app-configuration</li>\n<li>track network request performance</li>\n<li>timeout requests</li>\n<li>fall-back from a stream connection to polling</li>\n</ul>\n<p>However, these behaviours can require some manual work. Not all are used for all network requests, even if they should be. In particular, retry + exponential backoff with timeouts are a general good practice that we don&apos;t always apply. They can prevent cascading failures, or compounding of issues as they arise.</p>\n<p>In many places on the server-side, this is assumed behaviour and done automatically. For example, <a href=\"http://twitter.github.io/finagle\">Twitter&apos;s Finagle</a> comes with <a href=\"http://twitter.github.io/finagle/guide/Clients.html#timeouts-expiration\">timeouts</a>, <a href=\"http://twitter.github.io/finagle/guide/Clients.html#retries\">retries</a> and other features out-of-the-box.</p>\n<p>This project aims to make it easy to build JavaScript clients that are good citizens of distributed systems.</p>\n<h2>Example</h2>\n<pre><span class=\"hljs-keyword\">import</span> { fetchEngine, FetchGroup } <span class=\"hljs-keyword\">from</span> <span class=\"hljs-string\">&apos;fetch-engine&apos;</span>;\n\n<span class=\"hljs-class\"><span class=\"hljs-keyword\">class</span> <span class=\"hljs-title\">PathPrefixFilter</span> </span>{\n  <span class=\"hljs-keyword\">constructor</span>(prefix) {\n    <span class=\"hljs-keyword\">this</span>.prefix = prefix;\n  }\n  testRequest(request) {\n    <span class=\"hljs-keyword\">const</span> url = <span class=\"hljs-keyword\">new</span> URL(request.url);\n    <span class=\"hljs-keyword\">return</span> url.pathname.startsWith(<span class=\"hljs-keyword\">this</span>.prefix);\n  }\n}\n\n<span class=\"hljs-class\"><span class=\"hljs-keyword\">class</span> <span class=\"hljs-title\">CORSAuthPlugin</span> </span>{\n  <span class=\"hljs-keyword\">constructor</span>(csrfToken) {\n    <span class=\"hljs-keyword\">this</span>.csrfToken = csrfToken;\n  }\n  getRequest(request) {\n    <span class=\"hljs-keyword\">return</span> <span class=\"hljs-keyword\">new</span> Request(request, {\n      <span class=\"hljs-attr\">mode</span>: <span class=\"hljs-string\">&apos;cors&apos;</span>,\n      <span class=\"hljs-attr\">credentials</span>: <span class=\"hljs-string\">&apos;include&apos;</span>,\n      <span class=\"hljs-attr\">headers</span>: <span class=\"hljs-built_in\">Object</span>.assign(request.headers, {\n        <span class=\"hljs-string\">&apos;X-Csrf-Token&apos;</span>: <span class=\"hljs-keyword\">this</span>.csrfToken\n      })\n    });\n  }\n}\n\n<span class=\"hljs-class\"><span class=\"hljs-keyword\">class</span> <span class=\"hljs-title\">RateLimitPlugin</span> </span>{\n  isRateLimited(request) {\n    <span class=\"hljs-comment\">/* ... */</span>\n    <span class=\"hljs-keyword\">return</span> <span class=\"hljs-literal\">false</span>;\n  }\n  shouldFetch(request) {\n    <span class=\"hljs-keyword\">return</span> !<span class=\"hljs-keyword\">this</span>.isRateLimited(request);\n  }\n}\n\n<span class=\"hljs-class\"><span class=\"hljs-keyword\">class</span> <span class=\"hljs-title\">TimeoutPlugin</span> </span>{\n  <span class=\"hljs-keyword\">constructor</span>(time=1000) {\n    <span class=\"hljs-keyword\">this</span>.time = time;\n  }\n  fetching({ cancel }) {\n    setTimeout(cancel, <span class=\"hljs-keyword\">this</span>.time);\n  }\n}\n\n<span class=\"hljs-class\"><span class=\"hljs-keyword\">class</span> <span class=\"hljs-title\">MetricsPlugin</span> </span>{\n  willFetch(request) {\n    trackRequest(request);\n  }\n  didFetch(response) {\n    trackResponse(response);\n  }\n}\n\n<span class=\"hljs-class\"><span class=\"hljs-keyword\">class</span> <span class=\"hljs-title\">CachePlugin</span> </span>{\n  fetch(request, next) {\n    <span class=\"hljs-keyword\">if</span> (<span class=\"hljs-keyword\">this</span>.isCached(request)) {\n      <span class=\"hljs-keyword\">return</span> <span class=\"hljs-keyword\">this</span>.get(request);\n    }\n    <span class=\"hljs-keyword\">return</span> next();\n  }\n  isCached(request) {\n    <span class=\"hljs-comment\">// ...</span>\n  }\n  get(request) {\n    <span class=\"hljs-comment\">// ...</span>\n  }\n}\n\n<span class=\"hljs-keyword\">const</span> fetch = fetchEngine({\n  <span class=\"hljs-attr\">plugins</span>: [\n    <span class=\"hljs-keyword\">new</span> CachePlugin(),\n    <span class=\"hljs-keyword\">new</span> TimeoutPlugin(<span class=\"hljs-number\">5000</span>),\n    <span class=\"hljs-keyword\">new</span> CORSAuthPlugin(),\n    <span class=\"hljs-keyword\">new</span> FetchGroup({\n      <span class=\"hljs-attr\">filters</span>: [ <span class=\"hljs-keyword\">new</span> PathPrefixFilter(<span class=\"hljs-string\">&apos;/1.1/&apos;</span>) ],\n      <span class=\"hljs-attr\">plugins</span>: [ <span class=\"hljs-keyword\">new</span> RateLimitPlugin() ]\n    }),\n    <span class=\"hljs-keyword\">new</span> MetricsPlugin()\n  ]\n});</pre><h2>Developing Fetch Engine</h2>\n<ul>\n<li>Clone the repo: <code>git clone https://github.com/phuu/fetch-engine.git</code></li>\n<li><code>cd fetch-engine &amp;&amp; npm install</code></li>\n<li>To run the tests, you need a <a href=\"https://saucelabs.com\">Sauce Labs</a> account. Follow the <a href=\"https://github.com/defunctzombie/zuul/wiki/Cloud-testing\">zuul documentation</a> instructions.</li>\n<li><code>npm test</code> to check it&apos;s all working</li>\n</ul>\n<p>Fetch Engine uses <a href=\"https://www.typescriptlang.org/\">TypeScript</a>. To help you write great code, I&apos;d recommend that you get a plugin for your editor or use an IDE like <a href=\"https://code.visualstudio.com/\">VS Code</a>.</p>\n<p>Every commit should pass <code>npm test</code>. We use <a href=\"https://github.com/gtramontina/ghooks\">ghooks</a> to enforce this.</p>\n<h3>Compiling &amp; running tests locally</h3>\n<p>There is a <code>tsc</code> watch task you can run to build files as they change:</p>\n<pre>$ npm <span class=\"hljs-keyword\">run</span><span class=\"bash\"> watch</span></pre><p>Your editor may do this for you.</p>\n<p>To run browser tests locally, run:</p>\n<pre>$ npm <span class=\"hljs-keyword\">run</span><span class=\"bash\"> zuul</span></pre><p>Follow the instructions it gives you.</p>\n<h2>Goals of the project</h2>\n<p>These were the original goals of the project:</p>\n<ul>\n<li>Highly configurable</li>\n<li>Do nothing by default</li>\n<li>Support plug-ins to add functionality</li>\n<li>Provide useful plugins to solve common problems:<ul>\n<li>respect common HTTP error codes (eg. 503 retry with exponential backoff to a limit)</li>\n<li>throttle requests to a rate-limited API endpoint</li>\n<li>deduplicate identical in-flight requests</li>\n<li>retry on network-failure</li>\n</ul>\n</li>\n<li>Instrumentable for performance and behaviour monitoring</li>\n<li>Work in IE9+ (stretch-goal, IE6+)</li>\n<li>Node-compatible</li>\n<li>Drop-in replacement for <code>fetch</code></li>\n</ul>\n"
+    },
+    {
+      "component": "footer",
+      "links": [
+        {
+          "href": "https://github.com/phuu/fetch-engine",
+          "text": "GitHub"
+        },
+        {
+          "href": "https://github.com/phuu",
+          "text": "phuu"
+        }
+      ]
+    }
+  ]
+}
