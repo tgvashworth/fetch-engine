@@ -2,24 +2,24 @@
 "use strict";
 import test = require("tape");
 import wrap from "./utils/wrapPromiseTest";
-import fetchEngine, { Request, FetchGroup, Response } from "./fetch-engine-browser";
+import fetchEngine, { Request, FetchGroup, Response } from "./fetch-engine-node";
 
-test("browser fetchEngine is requireable", t => {
+test("node fetchEngine is requireable", t => {
   t.plan(1);
   t.ok(fetchEngine);
 });
 
-test("browser FetchGroup is requireable", t => {
+test("node FetchGroup is requireable", t => {
   t.plan(1);
   t.ok(FetchGroup);
 });
 
-test("browser Request is requireable", t => {
+test("node Request is requireable", t => {
   t.plan(1);
   t.ok(Request);
 });
 
-test("browser Response is requireable", t => {
+test("node Response is requireable", t => {
   t.plan(1);
   t.ok(Response);
 });
@@ -27,7 +27,7 @@ test("browser Response is requireable", t => {
 test("browser fetchEngine can make a request to the test server", wrap(t => {
   t.plan(2);
   const req = new Request(
-    `/echo/text/${encodeURIComponent("Hello fetch-browser")}`
+    `/echo/text/${encodeURIComponent("Hello fetch-node")}`
   );
   const fetch = fetchEngine();
   return fetch(req)
@@ -36,6 +36,6 @@ test("browser fetchEngine can make a request to the test server", wrap(t => {
       return res.text();
     })
     .then(text => {
-      t.equal(text, "Hello fetch-browser");
+      t.equal(text, "Hello fetch-node");
     });
 }));

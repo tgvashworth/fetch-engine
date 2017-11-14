@@ -3,4 +3,11 @@
 
 import makeFetchEngine from "./fetchEngine";
 import fetch from "./fetch/fetch-node";
-module.exports = makeFetchEngine(fetch);
+import FetchGroup from "./FetchGroup";
+import Request from "./Request";
+import Response from "./Response";
+
+const fetchEngine = makeFetchEngine(fetch);
+export default fetchEngine;
+export { FetchGroup, Request, Response };
+
