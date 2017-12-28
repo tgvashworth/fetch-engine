@@ -1,18 +1,4 @@
 {
   "name": "fetch-engine",
-  "version": false,
-  "ambientDependencies": {
-    "es6-shim": "registry:dt/es6-shim#0.31.2+20160317120654",
-    "node": "github:DefinitelyTyped/DefinitelyTyped/node/node.d.ts#fb2b3b1e068c9ff7d8f9b0851c08d37d96c95c38"
-  },
-  "dependencies": {
-    "es6-promise": "registry:npm/es6-promise#3.0.0+20160211003958"
-  },
-  "ambientDevDependencies": {
-    "boom": "registry:dt/boom#0.0.0+20160317120654",
-    "hapi": "registry:dt/hapi#13.0.0+20160406115650"
-  },
-  "devDependencies": {
-    "yargs": "registry:npm/yargs#3.31.0+20160316010718"
-  }
+  "version": false
 }

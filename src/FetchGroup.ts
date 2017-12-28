@@ -1,28 +1,34 @@
-/// <reference path="./.d.ts"/>
-"use strict";
+import {
+  FetchNext,
+  IFetchEnginePlugin,
+  IFetchFetchingArgs,
+  IFetchGroupOptions,
+} from "./d";
+import composeContinuation from "./utils/composeContinuation";
 import composeEvery from "./utils/composeEvery";
 import composePromise from "./utils/composePromise";
 import composeVoid from "./utils/composeVoid";
-import composeContinuation from "./utils/composeContinuation";
 import getBoundImplementations from "./utils/getBoundImplementations";
 
-export default class FetchGroup implements FetchEnginePlugin {
+export default class FetchGroup implements IFetchEnginePlugin {
+  /* tslint:disable:variable-name */
   // Filters
-  private _testRequest: (req: FetchRequest) => boolean;
-  private _testResponse: (req: FetchResponse) => boolean;
+  private _testRequest: (req: Request) => boolean;
+  private _testResponse: (req: Response) => boolean;
   // Plugins
-  private _shouldFetch: (req: FetchRequest) => boolean;
-  private _getRequest: (req: FetchRequest) => Promise<FetchRequest>;
-  private _willFetch: (req: FetchRequest) => void;
+  private _shouldFetch: (req: Request) => boolean;
+  private _getRequest: (req: Request) => Promise<Request>;
+  private _willFetch: (req: Request) => void;
   private _fetch: (
-    req: FetchRequest,
-    fetch: Fetch
-  ) => Promise<FetchResponse>;
-  private _fetching: (args: FetchFetchingArgs) => void;
-  private _getResponse: (req: FetchResponse) => Promise<FetchResponse>;
-  private _didFetch: (req: FetchResponse) => void;
-  constructor(opts: FetchGroupOptions = {}) {
-    const { plugins = [], filters = [] }: FetchGroupOptions = opts;
+    req: Request,
+    fetch: Window["fetch"],
+  ) => Promise<Response>;
+  private _fetching: (args: IFetchFetchingArgs) => void;
+  private _getResponse: (req: Response) => Promise<Response>;
+  private _didFetch: (req: Response) => void;
+  /* tslint:enable:variable-name */
+  constructor(opts: IFetchGroupOptions = {}) {
+    const { plugins = [], filters = [] }: IFetchGroupOptions = opts;
 
     // Filters
     this._testRequest =
@@ -38,8 +44,8 @@ export default class FetchGroup implements FetchEnginePlugin {
     this._willFetch =
       composeVoid(getBoundImplementations("willFetch", plugins));
     this._fetch =
-      composeContinuation<FetchRequest, Promise<FetchResponse>>(
-        getBoundImplementations("fetch", plugins)
+      composeContinuation<Request, Promise<Response>>(
+        getBoundImplementations("fetch", plugins),
       );
     this._fetching =
       composeVoid(getBoundImplementations("fetching", plugins));
@@ -49,36 +55,36 @@ export default class FetchGroup implements FetchEnginePlugin {
       composeVoid(getBoundImplementations("didFetch", plugins));
   }
   // Plugins
-  shouldFetch(req: FetchRequest): boolean {
+  public shouldFetch(req: Request): boolean {
     return this._testRequest(req) && this._shouldFetch(req);
   }
-  getRequest(req: FetchRequest): Promise<FetchRequest> {
+  public getRequest(req: Request): Promise<Request> {
     if (this._testRequest(req)) {
       return this._getRequest(req);
     }
     return Promise.resolve(req);
   }
-  willFetch(req: FetchRequest): void {
+  public willFetch(req: Request): void {
     if (this._testRequest(req)) {
       return this._willFetch(req);
     }
   }
-  fetch(request: FetchRequest, fetch: FetchNext): Promise<FetchResponse> {
+  public fetch(request: Request, fetch: FetchNext): Promise<Response> {
     return this._fetch(request, fetch);
   }
-  fetching(args: FetchFetchingArgs): void {
+  public fetching(args: IFetchFetchingArgs): void {
     const { request } = args;
     if (this._testRequest(request)) {
       return this._fetching(args);
     }
   }
-  getResponse(res: FetchResponse): Promise<FetchResponse> {
+  public getResponse(res: Response): Promise<Response> {
     if (this._testResponse(res)) {
       return this._getResponse(res);
     }
     return Promise.resolve(res);
   }
-  didFetch(res: FetchResponse): void {
+  public didFetch(res: Response): void {
     if (this._testResponse(res)) {
       return this._didFetch(res);
     }

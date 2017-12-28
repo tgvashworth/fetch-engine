@@ -1,12 +1,7 @@
-/// <reference path="./.d.ts"/>
-"use strict";
-
-import makeFetchEngine from "./fetchEngine";
 import fetch from "./fetch/fetch-browser";
+import makeFetchEngine from "./fetchEngine";
 import FetchGroup from "./FetchGroup";
-import Request from "./Request";
-import Response from "./Response";
 
 const fetchEngine = makeFetchEngine(fetch);
 export default fetchEngine;
-export { FetchGroup, Request, Response };
+export { FetchGroup };

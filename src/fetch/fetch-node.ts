@@ -1,8 +1,3 @@
-/// <reference path="../.d.ts"/>
-"use strict";
-
-import Response from "../Response";
-
-export default function fetch(request: FetchRequest): Promise<FetchResponse> {
+export default function fetch(request: Request): Promise<Response> {
   return Promise.resolve(new Response());
 }

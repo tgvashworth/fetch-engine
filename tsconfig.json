@@ -8,59 +8,14 @@
         "sourceMap": true
     },
     "exclude": [
-        "typings/node.d.ts",
-        "typings/node",
         "node_modules"
+    ],
+    "include": [
+      "src/**/*.ts"
     ],
     "filesGlob": [
         "src/**/*.ts",
-        "typings/main.d.ts",
         "!./node_modules/**/*.ts"
-    ],
-    "files": [
-        "src/Body.test.ts",
-        "src/Body.ts",
-        "src/fetch-engine-browser.test.ts",
-        "src/fetch-engine-browser.ts",
-        "src/fetch-engine-node.ts",
-        "src/fetch/fetch-browser.test.ts",
-        "src/fetch/fetch-browser.ts",
-        "src/fetch/fetch-node.test.ts",
-        "src/fetch/fetch-node.ts",
-        "src/fetchEngine.test.ts",
-        "src/fetchEngine.ts",
-        "src/FetchGroup.test.ts",
-        "src/FetchGroup.ts",
-        "src/Headers.test.ts",
-        "src/Headers.ts",
-        "src/integration-tests/routes.ts",
-        "src/integration-tests/server.ts",
-        "src/Request/index.ts",
-        "src/Request/Request.test.ts",
-        "src/Request/Request.ts",
-        "src/Response/index.ts",
-        "src/Response/Response.test.ts",
-        "src/Response/Response.ts",
-        "src/test-browser.ts",
-        "src/test-globals.ts",
-        "src/utils/composeContinuation.test.ts",
-        "src/utils/composeContinuation.ts",
-        "src/utils/composeEvery.test.ts",
-        "src/utils/composeEvery.ts",
-        "src/utils/composePromise.test.ts",
-        "src/utils/composePromise.ts",
-        "src/utils/composeVoid.test.ts",
-        "src/utils/composeVoid.ts",
-        "src/utils/getBoundImplementations.test.ts",
-        "src/utils/getBoundImplementations.ts",
-        "src/utils/headers.test.ts",
-        "src/utils/headers.ts",
-        "src/utils/http.ts",
-        "src/utils/mocks.ts",
-        "src/utils/sideEffect.test.ts",
-        "src/utils/sideEffect.ts",
-        "src/utils/wrapPromiseTest.ts",
-        "typings/main.d.ts"
     ],
     "atom": {
         "rewriteTsconfig": true

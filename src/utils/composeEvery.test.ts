@@ -1,27 +1,25 @@
-/// <reference path="../.d.test.ts" />
-"use strict";
-import test = require("tape");
+import * as test from "tape";
 import composeEvery from "./composeEvery";
 
-test("composeEvery is requireable", (t: TapeTestAssertions) => {
+test("composeEvery is requireable", (t) => {
   t.plan(1);
   t.ok(composeEvery);
 });
 
 test(
   "it composes identity functions to produce passed value",
-  (t: TapeTestAssertions) => {
+  (t) => {
     t.plan(2);
-    const id = x => x;
+    const id = (x) => x;
     const f = composeEvery([id, id]);
     t.equal(f(true), true);
     t.equal(f(false), false);
-  }
+  },
 );
 
 test(
   "it composes value generating functions",
-  (t: TapeTestAssertions) => {
+  (t) => {
     t.plan(8);
     const yes = () => true;
     const no = () => false;
@@ -33,5 +31,5 @@ test(
     t.equal(composeEvery([no,  yes])(false), false);
     t.equal(composeEvery([no,  no ])(true),  false);
     t.equal(composeEvery([no,  no ])(false), false);
-  }
+  },
 );

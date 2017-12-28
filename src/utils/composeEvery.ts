@@ -1,13 +1,11 @@
-/// <reference path="../.d.ts"/>
-
 export default function composeEvery<T>(
-  fns: Array<(v: T) => boolean>
+  fns: Array<(v: T) => boolean>,
 ): (v: T) => boolean {
   type Fn = (v: T) => boolean;
   return fns.reduceRight(
     (
       next: Fn,
-      f: Fn
+      f: Fn,
     ): Fn => (
       (v: T): boolean => (
         f(v)
@@ -15,6 +13,6 @@ export default function composeEvery<T>(
           : false
       )
     ),
-    (_: T): boolean => true
+    (_: T): boolean => true,
   );
-};
+}

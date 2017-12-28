@@ -1,36 +1,34 @@
-/// <reference path="../.d.test.ts" />
-"use strict";
-import test = require("tape");
+import * as test from "tape";
 import getBoundImplementations from "./getBoundImplementations";
 
-test("getBoundImplementations is requireable", (t: TapeTestAssertions) => {
+test("getBoundImplementations is requireable", (t) => {
   t.plan(1);
   t.ok(getBoundImplementations);
 });
 
 test(
   "it extracts methods from objects and calls with correct context",
-  (t: TapeTestAssertions) => {
+  (t) => {
     t.plan(5);
-    const makeTestObj = (): Object => {
+    const makeTestObj = (): object => {
       const self = {
         fn(v): void {
           t.ok(this);
           t.equal(v, true);
-        }
+        },
       };
       return self;
     };
 
-    const objs: Array<any> = [
+    const objs: any[] = [
       makeTestObj(),
       makeTestObj(),
-      {}
+      {},
     ];
     const impls = getBoundImplementations("fn", objs);
     t.equal(impls.length, 2);
-    impls.forEach(impl => {
+    impls.forEach((impl) => {
       impl(true);
     });
-  }
+  },
 );

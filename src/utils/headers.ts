@@ -20,19 +20,19 @@ const forbiddenHeaderNames = [
   "trailer",
   "transfer-encoding",
   "upgrade",
-  "via"
+  "via",
 ];
 
 const forbiddenResponseHeaderNames = [
-  "set-cookie", "set-cookie2"
+  "set-cookie", "set-cookie2",
 ];
 
 const simpleHeaderNames = [
-   "accept", "accept-language", "content-language", "content-type"
+   "accept", "accept-language", "content-language", "content-type",
 ];
 
 const simpleHeaderMIMETypes = [
-  "application/x-www-form-urlencoded", "multipart/form-data", "text/plain"
+  "application/x-www-form-urlencoded", "multipart/form-data", "text/plain",
 ];
 
 export function getNormalizedHeaderName(name: string): string {
@@ -53,7 +53,7 @@ export function isForbiddenResponseHeaderName(name: string): boolean {
 }
 
 export function isSimpleHeader(name: string, value?: string): boolean {
-  let isSimpleHeaderName = simpleHeaderNames
+  const isSimpleHeaderName = simpleHeaderNames
     .map(this.getNormalizedHeaderName)
     .some((v) => v === getNormalizedHeaderName(name));
   // If the simple headername is a Content-Type
