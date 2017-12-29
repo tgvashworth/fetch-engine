@@ -1,6 +1,6 @@
 # fetch-engine
 
-[![Build Status](https://travis-ci.org/phuu/fetch-engine.svg?branch=master)](https://travis-ci.org/phuu/fetch-engine) [![Stories in Ready](https://badge.waffle.io/phuu/fetch-engine.svg?label=ready&title=Ready)](http://waffle.io/phuu/fetch-engine)
+[![Build Status](https://travis-ci.org/tgvashworth/fetch-engine.svg?branch=master)](https://travis-ci.org/tgvashworth/fetch-engine) [![Stories in Ready](https://badge.waffle.io/tgvashworth/fetch-engine.svg?label=ready&title=Ready)](http://waffle.io/tgvashworth/fetch-engine)
 
 A smart request-making library that makes sure your Javascript client is a good citizen of your distributed system.
 
@@ -370,7 +370,7 @@ const fetch = fetchEngine({
 
 ## Developing Fetch Engine
 
-- Clone the repo: `git clone https://github.com/phuu/fetch-engine.git`
+- Clone the repo: `git clone https://github.com/tgvashworth/fetch-engine.git`
 - `cd fetch-engine && npm install`
 - To run the tests, you need a [Sauce Labs](https://saucelabs.com) account. Follow the [zuul documentation](https://github.com/defunctzombie/zuul/wiki/Cloud-testing) instructions.
 - `npm test` to check it's all working

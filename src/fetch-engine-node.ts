@@ -1,6 +1,6 @@
-/// <reference path="./.d.ts"/>
-"use strict";
-
-import makeFetchEngine from "./fetchEngine";
 import fetch from "./fetch/fetch-node";
-module.exports = makeFetchEngine(fetch);
+import makeFetchEngine from "./fetchEngine";
+import FetchGroup from "./FetchGroup";
+
+export default makeFetchEngine(fetch);
+export { FetchGroup };

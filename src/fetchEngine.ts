@@ -1,19 +1,22 @@
-/// <reference path="./.d.ts"/>
-"use strict";
+import {
+  IFetchEnginePlugin,
+  IFetchGroupOptions,
+} from "./d";
 import FetchGroup from "./FetchGroup";
 import sideEffect from "./utils/sideEffect";
-import Request from "./Request";
+
+type PluginOrOpts = IFetchEnginePlugin & IFetchGroupOptions;
 
 // makeFetchEngine takes an implementation of fetch so that we can make
 // versions of the library for node and the browser.
 export default function makeFetchEngine(
-  innerFetch: Fetch
-): (plugin?: FetchEnginePlugin | FetchGroupOptions) => Fetch {
+  innerFetch: Window["fetch"],
+): (plugin?: PluginOrOpts) => Window["fetch"] {
   // Here is the actual implementation of the fetch-engine, where we've
   // closed over the 'inner' fetch implementation.
   return function fetchEngine(
-    pluginOrOpts: FetchEnginePlugin | FetchGroupOptions = new FetchGroup()
-  ): Fetch {
+    pluginOrOpts: PluginOrOpts = new FetchGroup(),
+  ): Window["fetch"] {
     // Marshal the input to make sure it's a valid plugin that implements all the methods
     // that we assume to be in place below
     const plugin = (
@@ -23,47 +26,55 @@ export default function makeFetchEngine(
     );
 
     return function fetch(
-      input: string | FetchRequest,
-      init: FetchRequestInit = {}
-    ): Promise<FetchResponse> {
-      // Normalise the fetch API sugary API into a Request
+      input: string | Request,
+      init: RequestInit,
+    ): Promise<Response> {
+      // Normalise the fetch API sugar into a Request
       const originalRequest = new Request(input, init);
-      // Let's go!
-      return Promise.resolve(originalRequest)
-        .then(sideEffect((request: FetchRequest) => {
-          if (!plugin.shouldFetch(request)) {
-            throw new Error("shouldFetch prevented the request from being made");
-          }
-        }))
-        .then(plugin.getRequest.bind(plugin))
-        .then(sideEffect(plugin.willFetch.bind(plugin)))
-        .then((request: FetchRequest): Promise<FetchResponse> => {
-          return Promise.resolve(
-            plugin.fetch(
-              request,
-              () => {
-                const pFetch = innerFetch(request);
-                // Side effects!
-                plugin.fetching({
-                  promise: pFetch,
-                  request: request,
-                  // cancel: TODO
-                });
-                return pFetch;
-              }
-            )
-          );
-        })
-        .then(plugin.getResponse.bind(plugin))
-        .then(sideEffect(plugin.didFetch.bind(plugin)));
+
+      const pReq = Promise.resolve(originalRequest);
+
+      const pShouldFetch = pReq.then(sideEffect((request: Request) => {
+        if (!plugin.shouldFetch(request)) {
+          throw new Error("shouldFetch prevented the request from being made");
+        }
+      }));
+
+      const pGetRequest = pShouldFetch.then(plugin.getRequest.bind(plugin));
+
+      const pWillFetch = pGetRequest.then(sideEffect(plugin.willFetch.bind(plugin)));
+
+      const pFetching = pWillFetch.then((request: Request): Promise<Response> => {
+        return Promise.resolve(
+          plugin.fetch(
+            request,
+            (): Promise<Response> => {
+              const pFetch = innerFetch(request);
+              // Side effects!
+              plugin.fetching({
+                promise: pFetch,
+                request,
+                // cancel: TODO
+              });
+              return pFetch;
+            },
+          ),
+        );
+      });
+
+      const pGetResponse = pFetching.then(plugin.getResponse.bind(plugin));
+
+      const pDidFetch = pGetResponse.then(sideEffect<Response>(plugin.didFetch.bind(plugin)));
+
+      return pDidFetch;
     };
   };
 }
 
-function isPlugin(o: FetchEnginePlugin | FetchGroupOptions = {}): o is FetchEnginePlugin {
+function isPlugin(o: PluginOrOpts = {}): o is IFetchEnginePlugin {
   return [
     "shouldFetch", "getRequest", "willFetch",
     "fetch", "fetching",
-    "getResponse", "didFetch"
-  ].every(k => typeof o[k] === "function");
+    "getResponse", "didFetch",
+  ].every((k) => typeof o[k] === "function");
 }

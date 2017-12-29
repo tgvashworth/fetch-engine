@@ -1,5 +1,3 @@
-/// <reference path="../.d.ts"/>
-
 export type BaseFn<T, U> = (v: T) => U;
 export type ComposedFn<T, U> = (v: T, base: BaseFn<T, U>) => U;
 export type InputFn<T, U> = (v: T, next: () => U) => U;
@@ -21,7 +19,7 @@ export type InputFn<T, U> = (v: T, next: () => U) => U;
  *    f(5, () => false);
  */
 export default function composeContinuation<T, U>(
-  fns: Array<InputFn<T, U>>
+  fns: Array<InputFn<T, U>>,
 ): ComposedFn<T, U> {
   return fns.reduceRight(
     // 'next' is always a function that takes a value (some T) and a 'base'
@@ -44,6 +42,6 @@ export default function composeContinuation<T, U>(
     // This is the innermost function of the composition. It just passes the
     // value (some T) into the base function that will have been passed through
     // the chain up to this point.
-    (v: T, base: BaseFn<T, U>): U => base(v)
+    (v: T, base: BaseFn<T, U>): U => base(v),
   );
-};
+}
