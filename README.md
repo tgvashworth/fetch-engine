@@ -181,14 +181,46 @@ class TimeoutPlugin {
 
 ####  `getResponse`
 
-Allows plugins to add data to `Response`, or produce an entirely new `Response`.
+Allows plugins to add data to `Response`, produce an entirely new `Response`, or retry the whole fetch.
 
-It's passed the current `Response` object and should return a `Promise` for a `Response`.
+It's passed the current `Response` object, a `retry` function, and should return a `Promise` for a `Response`.
 
 ```js
 class SuperResponseWrapperPlugin {
-  getResponse(response) {
+  getResponse(response, retry) {
     return new SuperResponse(response);
+  }
+}
+```
+
+Use the `retry` function to start the whole request again:
+
+```js
+// Note: your retry plugin needs to be smarter than this as this implementation
+//       could cause a retry-storm or self-DDoS.
+class RetryPlugin {
+  getResponse(response, retry) {
+    if (response.status === 503) {
+      return retry();
+    } else {
+      return response;
+    }
+  }
+}
+```
+
+Or to try a different request:
+
+```js
+// Note: your retry plugin needs to be smarter than this as this implementation
+//       could cause a retry-storm or self-DDoS.
+class RetryPlugin {
+  getResponse(response, retry) {
+    if (response.status === 503) {
+      return retry(new Request("/somewhere-else"));
+    } else {
+      return response;
+    }
   }
 }
 ```

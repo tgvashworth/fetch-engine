@@ -44,3 +44,16 @@ test(
       });
   }),
 );
+
+test(
+  "it supports passing through other arguments",
+  wrap((t) => {
+    t.plan(1);
+    const returNthArg = (n) => (...args) => Promise.resolve(args[n]);
+    const f = composePromise([returNthArg(1), returNthArg(2)]);
+    return f(1, 2, 3)
+      .then((v) => {
+        t.equal(v, 3);
+      });
+  }),
+);

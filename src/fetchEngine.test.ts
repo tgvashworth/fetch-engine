@@ -4,6 +4,7 @@ require("isomorphic-fetch");
 import * as test from "tape";
 import {
   FetchNext,
+  FetchRetry,
   IFetchFetchingArgs,
   IFetchGroupOptions,
 } from "./d";
@@ -145,6 +146,94 @@ test(
 );
 
 test(
+  "fetchEngine with getResponse passes root fetch method for retries",
+  wrap((t) => {
+    t.plan(2);
+    const mockReq = new Request("/mock");
+    const mockRes = new Response();
+    const fetch = makeFetchEngine(mockFetch)(new FetchGroup({
+      plugins: [
+        {
+          getResponse: (res: Response, retry: FetchRetry): Promise<Response> => {
+            t.equal(typeof retry, "function");
+            return Promise.resolve(mockRes);
+          },
+        },
+      ],
+    }));
+    return fetch(mockReq).then((res) => {
+      t.equal(res, mockRes);
+    });
+  }),
+);
+
+test(
+  "fetchEngine with getResponse can retry original request",
+  wrap((t) => {
+    t.plan(2);
+    let calls = 0;
+    const mockReq = new Request("/mock");
+    const mockRes = new Response();
+    const fetch = makeFetchEngine(mockFetch)(new FetchGroup({
+      plugins: [
+        {
+          willFetch() {
+            calls = calls + 1;
+          },
+          getResponse(res: Response, retry: FetchRetry) {
+            if (calls === 1) {
+              return retry();
+            } else {
+              return mockRes;
+            }
+          },
+        },
+      ],
+    }));
+    return fetch(mockReq).then((res) => {
+      t.equal(calls, 2);
+      t.equal(res, mockRes);
+    });
+  }),
+);
+
+test(
+  "fetchEngine with getResponse can retry new request",
+  wrap((t) => {
+    t.plan(4);
+    let calls = 0;
+    const mockReq = new Request("/mock");
+    const mockRetryReq = new Request("/mock-retry");
+    const mockRes = new Response();
+    const fetch = makeFetchEngine(mockFetch)(new FetchGroup({
+      plugins: [
+        {
+          willFetch(req) {
+            calls = calls + 1;
+            if (calls === 1) {
+              t.deepEqual(req, mockReq);
+            } else {
+              t.deepEqual(req, mockRetryReq);
+            }
+          },
+          getResponse(res: Response, retry: FetchRetry) {
+            if (calls === 1) {
+              return retry(mockRetryReq);
+            } else {
+              return mockRes;
+            }
+          },
+        },
+      ],
+    }));
+    return fetch(mockReq).then((res) => {
+      t.equal(calls, 2);
+      t.equal(res, mockRes);
+    });
+  }),
+);
+
+test(
   "fetchEngine flows through full stack in order",
   wrap((t) => {
     t.plan(6);
@@ -175,7 +264,7 @@ test(
           fetching: (args: IFetchFetchingArgs): void => {
             t.deepEqual(args.request, secondMockReq);
           },
-          getResponse: (res: Response): Promise<Response> => {
+          getResponse: (res: Response, retry): Promise<Response> => {
             // TODO find a way to fake the retured response
             return Promise.resolve(firstMockRes);
           },
