@@ -98,7 +98,7 @@ test("fetch-browser can send cookies to same-origin", wrap((t) => {
   document.cookie = `example-cookie=;`;
   document.cookie = `example-cookie=example`;
   const req = new Request("/echo/cookie/example-cookie", {
-    credentials: "include",
+    credentials: "same-origin",
   });
   return fetchBrowser(req)
     .then((res) => res.text())
