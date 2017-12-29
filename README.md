@@ -6,10 +6,10 @@ A smart request-making library that makes sure your Javascript client is a good 
 
 ## install
 
-To get `fetch-engine`, install it with npm:
+To get `fetch-engine`, install it with yarn:
 
 ```
-npm install --save fetch-engine
+yarn install --save fetch-engine
 ```
 
 ## Getting started
@@ -212,7 +212,7 @@ class ResponseMetricsPlugin {
 Groups of plugins can be created using something called a `FetchGroup`. A group lets you pull together functionality in a way that can be reused as plugin:
 
 ```js
-import  { FetchGroup, fetchEngine } from 'fetch-engine';
+import fetchEngine, { FetchGroup } from 'fetch-engine';
 
 const combinedMetricsGroup = new FetchGroup({
   plugins: [
@@ -284,7 +284,7 @@ This project aims to make it easy to build JavaScript clients that are good citi
 ## Example
 
 ```js
-import { fetchEngine, FetchGroup } from 'fetch-engine';
+import fetchEngine, { FetchGroup } from 'fetch-engine';
 
 class PathPrefixFilter {
   constructor(prefix) {
@@ -371,20 +371,21 @@ const fetch = fetchEngine({
 ## Developing Fetch Engine
 
 - Clone the repo: `git clone https://github.com/tgvashworth/fetch-engine.git`
-- `cd fetch-engine && npm install`
+- `cd fetch-engine`
+- `yarn`
 - To run the tests, you need a [Sauce Labs](https://saucelabs.com) account. Follow the [zuul documentation](https://github.com/defunctzombie/zuul/wiki/Cloud-testing) instructions.
-- `npm test` to check it's all working
+- `yarn test` to check it's all working
 
-Fetch Engine uses [TypeScript](https://www.typescriptlang.org/). To help you write great code, I'd recommend that you get a plugin for your editor or use an IDE like [VS Code](https://code.visualstudio.com/).
+`fetch-engine` uses [TypeScript](https://www.typescriptlang.org/). To help you write great code, I'd recommend that you get a plugin for your editor or use an IDE like [VS Code](https://code.visualstudio.com/).
 
-Every commit should pass `npm test`. We use [ghooks](https://github.com/gtramontina/ghooks) to enforce this.
+Every commit should pass `yarn test`. We use [ghooks](https://github.com/gtramontina/ghooks) to enforce this.
 
 ### Compiling & running tests locally
 
 There is a `tsc` watch task you can run to build files as they change:
 
 ```
-$ npm run watch
+$ yarn watch
 ```
 
 Your editor may do this for you.
@@ -392,7 +393,7 @@ Your editor may do this for you.
 To run browser tests locally, run:
 
 ```
-$ npm run zuul
+$ yarn run zuul
 ```
 
 Follow the instructions it gives you.
