@@ -20,6 +20,8 @@ yarn install --save fetch-engine
 import fetchEngine from 'fetch-engine';
 ```
 
+**Note:** `fetch-engine` relies on `window.fetch` internally. This API is [not implemented in all browsers][caniuse] so you might need to polyfill it with a module like [isomorphic-fetch][].
+
 The default export, `fetchEngine`, is a function. When called, it returns an implementation of the [fetch API][fetch-api] — a request-making function that you might call `fetch`:
 
 ```js
@@ -51,6 +53,8 @@ const fetch = fetchEngine({
 ```
 
 ## Using `fetch-engine`
+
+**Note:** `fetch-engine` relies on `window.fetch` internally. This API is [not implemented in all browsers][caniuse] so you might need to polyfill it with a module like [isomorphic-fetch][].
 
 `fetch-engine` allows you to combine plugins in groups or sequences to add behaviour to the [Fetch API][fetch-api]. The basic building block is the plugin.
 
@@ -452,3 +456,5 @@ These were the original goals of the project:
 [finagle-timeouts]: http://twitter.github.io/finagle/guide/Clients.html#timeouts-expiration
 [finagle-retries]: http://twitter.github.io/finagle/guide/Clients.html#retries
 [fetch-api]: https://developer.mozilla.org/en/docs/Web/API/Fetch_API
+[isomorphic-fetch]: https://github.com/matthew-andrews/isomorphic-fetch
+[caniuse]: https://caniuse.com/#feat=fetch
