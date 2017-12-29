@@ -1,14 +1,18 @@
+type Fn<T> = (v: T, ...rest: any[]) => Promise<T>;
+
 export default function composePromise<T>(
-  fns: Array<(t: T) => Promise<T>>,
-): (T) => Promise<T> {
-  type Fn = (v: T) => Promise<T>;
+  fns: Array<Fn<T>>,
+): Fn<T> {
   return fns.reduceRight(
     (
-      next: Fn,
-      f: Fn,
-    ): Fn => (
-      (v: T): Promise<T> => Promise.resolve(v).then(f).then(next)
+      next: Fn<T>,
+      f: Fn<T>,
+    ): Fn<T> => (
+      (v: T, ...rest: any[]): Promise<T> =>
+        Promise.resolve(v)
+          .then((w) => f(w, ...rest))
+          .then((x) => next(x, ...rest))
     ),
-    (v: T): Promise<T> => Promise.resolve(v),
+    (v: T) => Promise.resolve(v),
   );
 }

@@ -1,4 +1,5 @@
 import {
+  FetchRetry,
   IFetchEnginePlugin,
   IFetchGroupOptions,
 } from "./d";
@@ -27,10 +28,19 @@ export default function makeFetchEngine(
 
     return function fetch(
       input: string | Request,
-      init: RequestInit,
+      init?: RequestInit,
     ): Promise<Response> {
       // Normalise the fetch API sugar into a Request
       const originalRequest = new Request(input, init);
+
+      // In order to retry we have to close over the original input
+      const retry: FetchRetry = (req?: Request) => {
+        if (typeof req !== "undefined") {
+          return fetch(req);
+        } else {
+          return fetch(originalRequest);
+        }
+      };
 
       const pReq = Promise.resolve(originalRequest);
 
@@ -49,6 +59,7 @@ export default function makeFetchEngine(
           plugin.fetch(
             request,
             (): Promise<Response> => {
+              // Business time.
               const pFetch = innerFetch(request);
               // Side effects!
               plugin.fetching({
@@ -62,7 +73,9 @@ export default function makeFetchEngine(
         );
       });
 
-      const pGetResponse = pFetching.then(plugin.getResponse.bind(plugin));
+      const pGetResponse = pFetching.then((res: Response) =>
+        plugin.getResponse(res, retry),
+      );
 
       const pDidFetch = pGetResponse.then(sideEffect<Response>(plugin.didFetch.bind(plugin)));
 

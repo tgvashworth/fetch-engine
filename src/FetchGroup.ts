@@ -1,5 +1,6 @@
 import {
   FetchNext,
+  FetchRetry,
   IFetchEnginePlugin,
   IFetchFetchingArgs,
   IFetchGroupOptions,
@@ -24,7 +25,7 @@ export default class FetchGroup implements IFetchEnginePlugin {
     fetch: Window["fetch"],
   ) => Promise<Response>;
   private _fetching: (args: IFetchFetchingArgs) => void;
-  private _getResponse: (req: Response) => Promise<Response>;
+  private _getResponse: (req: Response, retry: FetchRetry) => Promise<Response>;
   private _didFetch: (req: Response) => void;
   /* tslint:enable:variable-name */
   constructor(opts: IFetchGroupOptions = {}) {
@@ -78,9 +79,16 @@ export default class FetchGroup implements IFetchEnginePlugin {
       return this._fetching(args);
     }
   }
-  public getResponse(res: Response): Promise<Response> {
+  public getResponse(res: Response, maybeRetry?: FetchRetry): Promise<Response> {
+    // If no retry is supplied by the engine then we should just continue
+    // with the same response.
+    const retry = (
+      typeof maybeRetry === "function" ?
+        maybeRetry :
+        () => Promise.resolve(res)
+    );
     if (this._testResponse(res)) {
-      return this._getResponse(res);
+      return this._getResponse(res, retry);
     }
     return Promise.resolve(res);
   }

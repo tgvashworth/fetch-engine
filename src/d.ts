@@ -1,6 +1,7 @@
 // fetch-engine types
 
 export type FetchNext = () => Promise<Response>;
+export type FetchRetry = (req?: Request) => Promise<Response>;
 
 export interface IFetchFetchingArgs {
   request: Request;
@@ -17,7 +18,7 @@ export interface IFetchEnginePlugin {
   fetch?: (req: Request, next: FetchNext) => Promise<Response>;
   fetching?: (args: IFetchFetchingArgs) => void;
   // post-fetch
-  getResponse?: (req: Response) => Promise<Response>|Response;
+  getResponse?: (req: Response, retry: FetchRetry) => Promise<Response>|Response;
   didFetch?: (req: Response) => void;
 }
 
