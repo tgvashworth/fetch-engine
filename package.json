@@ -56,8 +56,5 @@
     "typings": "^1.0.4",
     "yargs": "^6.1.1",
     "zuul": "^3.10.1"
-  },
-  "dependencies": {
-    "parse-headers": "^2.0.1"
   }
 }
