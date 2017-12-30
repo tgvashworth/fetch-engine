@@ -268,7 +268,52 @@ const fetch = fetchEngine({
 });
 ```
 
-<!-- TODO make fetchGroup({ ... }) factory -->
+#### Reusable groups
+
+Some kinds of Group need to be stateful, for functionality like rate limiting and tracking retries.
+
+`fetch-engine` exports a utility to help you to this: `makeFetchGroup`.
+
+`makeFetchGroup` takes a function that, when called, should return an object of `FetchGroup` options, and it returns a constructor function.
+
+The first argument passed to the group constructor is forwared to the options function, allowing you to customise the configuration of the group on an instance-by-instance basis.
+
+Here's two examples:
+
+```js
+const RateLimitGroup = makeFetchGroup(() => ({
+  filters: [
+    new MethodFilter("GET")
+  ],
+  plugins: [
+    new RateLimitPlugin()
+  ]
+}));
+
+const fetch = fetchEngine({
+  plugins: [
+    new RateLimitGroup()
+  ]
+});
+
+const PathRateLimitGroup = makeFetchGroup((opts = {}) => ({
+  filters: [
+    new MethodFilter("GET"),
+    new PathFilter(opts.path || /.*/))
+  ],
+  plugins: [
+    new RateLimitPlugin()
+  ]
+}));
+
+const fetch = fetchEngine({
+  plugins: [
+    new PathRateLimitGroup({
+      path: /^\/1\.1/
+    })
+  ]
+});
+```
 
 ### Filters
 

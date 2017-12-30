@@ -1,6 +1,7 @@
 import {
   FetchNext,
   FetchRetry,
+  IFetchEngineFilter,
   IFetchEnginePlugin,
   IFetchFetchingArgs,
   IFetchGroupOptions,
@@ -12,6 +13,8 @@ import composeVoid from "./utils/composeVoid";
 import getBoundImplementations from "./utils/getBoundImplementations";
 
 export default class FetchGroup implements IFetchEnginePlugin {
+  public plugins: IFetchEnginePlugin[];
+  public filters: IFetchEngineFilter[];
   /* tslint:disable:variable-name */
   // Filters
   private _testRequest: (req: Request) => boolean;
@@ -30,6 +33,10 @@ export default class FetchGroup implements IFetchEnginePlugin {
   /* tslint:enable:variable-name */
   constructor(opts: IFetchGroupOptions = {}) {
     const { plugins = [], filters = [] }: IFetchGroupOptions = opts;
+
+    // Store the original filters & plugins
+    this.plugins = plugins;
+    this.filters = filters;
 
     // Filters
     this._testRequest =

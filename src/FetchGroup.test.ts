@@ -1,4 +1,4 @@
-// tslint:disable:no-var-requires
+// tslint:disable:no-var-requires max-classes-per-file
 require("isomorphic-fetch");
 import * as test from "tape";
 import {
