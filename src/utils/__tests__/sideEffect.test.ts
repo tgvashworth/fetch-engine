@@ -1,51 +1,45 @@
-import * as test from "tape";
-import sideEffect from "./sideEffect";
+import sideEffect from "../sideEffect";
 
-test("sideEffect is requireable", (t) => {
-  t.plan(1);
-  t.ok(sideEffect);
-});
-
-test(
+it(
   "it returns passed in value",
-  (t) => {
-    t.plan(2);
+  () => {
+    expect.assertions(2);
     const id = (x) => x;
     const f = sideEffect(id);
-    t.equal(f(true), true);
-    t.equal(f(false), false);
+    expect(f(true)).toEqual(true);
+    expect(f(false)).toEqual(false);
   },
 );
 
-test(
+it(
   "calls supplied function",
-  (t) => {
-    t.plan(1);
+  () => {
+    expect.assertions(1);
     const inner = (x) => {
-      t.equal(x, true);
+      expect(x).toEqual(true);
       return false;
     };
     sideEffect(inner)(true);
   },
 );
 
-test(
+it(
   "passes many arguments to supplied function",
-  (t) => {
-    t.plan(2);
+  () => {
+    expect.assertions(2);
     const inner = (x, y) => {
-      t.equal(x, true);
-      t.equal(y, false);
+      expect(x).toEqual(true);
+      expect(y).toEqual(false);
     };
     sideEffect(inner)(true, false);
   },
 );
 
-test(
+it(
   "ignored function's return value",
-  (t) => {
-    t.plan(1);
+  () => {
+    expect.assertions(1);
     const result = sideEffect((_) => false)(true);
-    t.equal(result, true);
+    expect(result).toEqual(true);
   },
 );
