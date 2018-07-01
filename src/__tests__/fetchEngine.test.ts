@@ -1,42 +1,39 @@
 /* tslint:disable:object-literal-sort-keys */
 // tslint:disable:no-var-requires
-require("isomorphic-fetch");
-import * as test from "tape";
+import "whatwg-fetch";
 import {
   FetchNext,
   FetchRetry,
   IFetchFetchingArgs,
   IFetchGroupOptions,
-} from "./d";
-import makeFetchEngine from "./fetchEngine";
-import FetchGroup from "./FetchGroup";
-import wrap from "./utils/wrapPromiseTest";
+} from "../d";
+import makeFetchEngine from "../fetchEngine";
+import FetchGroup from "../FetchGroup";
 
 function mockFetch(request: Request): Promise<Response> {
   return Promise.resolve(new Response());
 }
 
-test("makeFetchEngine is requireable", (t) => {
-  t.plan(1);
-  t.ok(makeFetchEngine);
+it("makeFetchEngine is requireable", () => {
+  expect(makeFetchEngine).toBeDefined();
 });
 
-test(
+it(
   "fetchEngine with no args returns a response",
-  wrap((t) => {
-    t.plan(1);
+  () => {
+    expect.assertions(1);
     const fetch = makeFetchEngine(mockFetch)();
     return fetch(new Request("/mock"))
       .then((res: Response) => {
-        t.ok(res);
+        expect(res).toBeDefined();
       });
-  }),
+  },
 );
 
-test(
+it(
   "fetchEngine with shouldFetch false throws",
-  wrap((t) => {
-    t.plan(1);
+  () => {
+    expect.assertions(1);
     const fetch = makeFetchEngine(mockFetch)(new FetchGroup({
       plugins: [
         {
@@ -44,46 +41,39 @@ test(
         },
       ],
     }));
-    return fetch(new Request("/mock"))
-      .then(
-        () => t.fail(),
-        (err) => {
-          t.equal(
-            err.message,
-            "shouldFetch prevented the request from being made",
-          );
-        },
-      );
-  }),
+    return expect(fetch(new Request("/mock"))).rejects.toThrow(
+      "shouldFetch prevented the request from being made",
+    );
+  },
 );
 
-test(
+it(
   "fetchEngine with getRequest passes transformed request to willFetch",
-  wrap((t) => {
-    t.plan(2);
+  () => {
+    expect.assertions(2);
     const firstMockReq = new Request("/mock");
     const secondMockReq = new Request("/mock/other");
     const fetch = makeFetchEngine(mockFetch)(new FetchGroup({
       plugins: [
         {
           getRequest: (req: Request): Promise<Request> => {
-            t.deepEqual(req, firstMockReq);
+            expect(req).toEqual(firstMockReq);
             return Promise.resolve(secondMockReq);
           },
           willFetch: (req: Request): void => {
-            t.deepEqual(req, secondMockReq);
+            expect(req).toEqual(secondMockReq);
           },
         },
       ],
     }));
     return fetch(firstMockReq);
-  }),
+  },
 );
 
-test(
+it(
   "fetchEngine with fetch passes request and next function",
-  wrap((t) => {
-    t.plan(2);
+  () => {
+    expect.assertions(2);
     const mockReq = new Request("/mock");
     const fetch = makeFetchEngine(mockFetch)(new FetchGroup({
       plugins: [
@@ -92,41 +82,41 @@ test(
             req: Request,
             next: () => Promise<Response>,
           ): Promise<Response> => {
-            t.deepEqual(req, mockReq);
-            t.equal(typeof next, "function");
+            expect(req).toEqual(mockReq);
+            expect(typeof next).toBe("function");
             return next();
           },
         },
       ],
     }));
     return fetch(mockReq);
-  }),
+  },
 );
 
-test(
+it(
   "fetchEngine with fetching passes promise and original request",
-  wrap((t) => {
-    t.plan(3);
+  () => {
+    expect.assertions(3);
     const mockReq = new Request("/mock");
     const fetch = makeFetchEngine(mockFetch)(new FetchGroup({
       plugins: [
         {
           fetching: (args: IFetchFetchingArgs): void => {
-            t.deepEqual(args.request, mockReq);
-            t.ok(args.promise);
-            t.equal(typeof args.promise.then, "function");
+            expect(args.request).toEqual(mockReq);
+            expect(args.promise).toBeDefined();
+            expect(typeof args.promise.then).toBe("function");
           },
         },
       ],
     }));
     return fetch(mockReq);
-  }),
+  },
 );
 
-test(
+it(
   "fetchEngine with getResponse passes transformed response to didFetch",
-  wrap((t) => {
-    t.plan(1);
+  () => {
+    expect.assertions(1);
     const mockReq = new Request("/mock");
     const mockRes = new Response();
     const fetch = makeFetchEngine(mockFetch)(new FetchGroup({
@@ -136,41 +126,41 @@ test(
             return Promise.resolve(mockRes);
           },
           didFetch: (res: Response): void => {
-            t.deepEqual(res, mockRes);
+            expect(res).toBe(mockRes);
           },
         },
       ],
     }));
     return fetch(mockReq);
-  }),
+  },
 );
 
-test(
+it(
   "fetchEngine with getResponse passes root fetch method for retries",
-  wrap((t) => {
-    t.plan(2);
+  () => {
+    expect.assertions(2);
     const mockReq = new Request("/mock");
     const mockRes = new Response();
     const fetch = makeFetchEngine(mockFetch)(new FetchGroup({
       plugins: [
         {
           getResponse: (res: Response, retry: FetchRetry): Promise<Response> => {
-            t.equal(typeof retry, "function");
+            expect(typeof retry).toBe("function");
             return Promise.resolve(mockRes);
           },
         },
       ],
     }));
     return fetch(mockReq).then((res) => {
-      t.equal(res, mockRes);
+      expect(res).toBe(mockRes);
     });
-  }),
+  },
 );
 
-test(
+it(
   "fetchEngine with getResponse can retry original request",
-  wrap((t) => {
-    t.plan(2);
+  () => {
+    expect.assertions(2);
     let calls = 0;
     const mockReq = new Request("/mock");
     const mockRes = new Response();
@@ -191,16 +181,16 @@ test(
       ],
     }));
     return fetch(mockReq).then((res) => {
-      t.equal(calls, 2);
-      t.equal(res, mockRes);
+      expect(calls).toBe(2);
+      expect(res).toBe(mockRes);
     });
-  }),
+  },
 );
 
-test(
+it(
   "fetchEngine with getResponse can retry new request",
-  wrap((t) => {
-    t.plan(4);
+  () => {
+    expect.assertions(4);
     let calls = 0;
     const mockReq = new Request("/mock");
     const mockRetryReq = new Request("/mock-retry");
@@ -211,9 +201,9 @@ test(
           willFetch(req) {
             calls = calls + 1;
             if (calls === 1) {
-              t.deepEqual(req, mockReq);
+              expect(req).toEqual(mockReq);
             } else {
-              t.deepEqual(req, mockRetryReq);
+              expect(req).toEqual(mockRetryReq);
             }
           },
           getResponse(res: Response, retry: FetchRetry) {
@@ -227,16 +217,16 @@ test(
       ],
     }));
     return fetch(mockReq).then((res) => {
-      t.equal(calls, 2);
-      t.equal(res, mockRes);
+      expect(calls).toBe(2);
+      expect(res).toEqual(mockRes);
     });
-  }),
+  },
 );
 
-test(
+it(
   "fetchEngine flows through full stack in order",
-  wrap((t) => {
-    t.plan(6);
+  () => {
+    expect.assertions(6);
     const firstMockReq = new Request("/mock");
     const secondMockReq = new Request("/mock");
     const firstMockRes = new Response();
@@ -244,44 +234,44 @@ test(
       plugins: [
         {
           shouldFetch: (req: Request): boolean => {
-            t.deepEqual(req, firstMockReq);
+            expect(req).toEqual(firstMockReq);
             return true;
           },
           getRequest: (req: Request): Promise<Request> => {
-            t.deepEqual(req, firstMockReq);
+            expect(req).toEqual(firstMockReq);
             return Promise.resolve(secondMockReq);
           },
           willFetch: (req: Request): void => {
-            t.deepEqual(req, secondMockReq);
+            expect(req).toEqual(secondMockReq);
           },
           fetch: (
             req: Request,
             next: () => Promise<Response>,
           ): Promise<Response> => {
-            t.deepEqual(req, secondMockReq);
+            expect(req).toEqual(secondMockReq);
             return next();
           },
           fetching: (args: IFetchFetchingArgs): void => {
-            t.deepEqual(args.request, secondMockReq);
+            expect(args.request).toEqual(secondMockReq);
           },
           getResponse: (res: Response, retry): Promise<Response> => {
             // TODO find a way to fake the retured response
             return Promise.resolve(firstMockRes);
           },
           didFetch: (res: Response): void => {
-            t.deepEqual(res, firstMockRes);
+            expect(res).toEqual(firstMockRes);
           },
         },
       ],
     }));
     return fetch(firstMockReq);
-  }),
+  },
 );
 
-test(
+it(
   "fetchEngine with opts creates FetchGroup and flows through full stack in order",
-  wrap((t) => {
-    t.plan(12);
+  () => {
+    expect.assertions(12);
     const firstMockReq = new Request("/mock");
     const secondMockReq = new Request("/mock");
     const firstMockRes = new Response();
@@ -289,11 +279,11 @@ test(
       filters: [
         {
           testRequest: (req: Request): boolean => {
-            t.deepEqual(req, firstMockReq);
+            expect(req).toEqual(firstMockReq);
             return true;
           },
           testResponse: (res: Response): boolean => {
-            t.deepEqual(res, firstMockRes);
+            expect(res).toEqual(firstMockRes);
             return true;
           },
         },
@@ -301,36 +291,36 @@ test(
       plugins: [
         {
           shouldFetch: (req: Request): boolean => {
-            t.deepEqual(req, firstMockReq);
+            expect(req).toEqual(firstMockReq);
             return true;
           },
           getRequest: (req: Request): Promise<Request> => {
-            t.deepEqual(req, firstMockReq);
+            expect(req).toEqual(firstMockReq);
             return Promise.resolve(secondMockReq);
           },
           willFetch: (req: Request): void => {
-            t.deepEqual(req, secondMockReq);
+            expect(req).toEqual(secondMockReq);
           },
           fetch: (
             req: Request,
             next: () => Promise<Response>,
           ): Promise<Response> => {
-            t.deepEqual(req, secondMockReq);
+            expect(req).toEqual(secondMockReq);
             return next();
           },
           fetching: (args: IFetchFetchingArgs): void => {
-            t.deepEqual(args.request, secondMockReq);
+            expect(args.request).toEqual(secondMockReq);
           },
           getResponse: (res: Response): Promise<Response> => {
             // TODO find a way to fake the retured response
             return Promise.resolve(firstMockRes);
           },
           didFetch: (res: Response): void => {
-            t.deepEqual(res, firstMockRes);
+            expect(res).toEqual(firstMockRes);
           },
         },
       ],
     });
     return fetch(firstMockReq);
-  }),
+  },
 );

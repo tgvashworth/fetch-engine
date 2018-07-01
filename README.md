@@ -9,7 +9,7 @@ A smart request-making library that makes sure your Javascript client is a good 
 To get `fetch-engine`, install it with yarn:
 
 ```
-yarn install --save fetch-engine
+yarn add etch-engine
 ```
 
 ## Getting started
@@ -20,7 +20,7 @@ yarn install --save fetch-engine
 import fetchEngine from 'fetch-engine';
 ```
 
-**Note:** `fetch-engine` relies on `window.fetch` internally. This API is [not implemented in all browsers][caniuse] so you might need to polyfill it with a module like [isomorphic-fetch][].
+**Note:** `fetch-engine` relies on `window.fetch` internally. This API is [not implemented in all browsers][caniuse] so you might need to polyfill it with a module like [cross-fetch][].
 
 The default export, `fetchEngine`, is a function. When called, it returns an implementation of the [fetch API][fetch-api] — a request-making function that you might call `fetch`:
 
@@ -54,7 +54,7 @@ const fetch = fetchEngine({
 
 ## Using `fetch-engine`
 
-**Note:** `fetch-engine` relies on `window.fetch` internally. This API is [not implemented in all browsers][caniuse] so you might need to polyfill it with a module like [isomorphic-fetch][].
+**Note:** `fetch-engine` relies on `window.fetch` internally. This API is [not implemented in all browsers][caniuse] so you might need to polyfill it with a module like [cross-fetch][].
 
 `fetch-engine` allows you to combine plugins in groups or sequences to add behaviour to the [Fetch API][fetch-api]. The basic building block is the plugin.
 
@@ -121,9 +121,10 @@ class CORSAuthPlugin {
     return new Request(request, {
       mode: 'cors',
       credentials: 'include',
-      headers: Object.assign(request.headers, {
+      headers: {
+        ...request.headers,
         'X-Csrf-Token': this.csrfToken
-      })
+      }
     });
   }
 }
@@ -454,7 +455,6 @@ const fetch = fetchEngine({
 - Clone the repo: `git clone https://github.com/tgvashworth/fetch-engine.git`
 - `cd fetch-engine`
 - `yarn`
-- To run the tests, you need a [Sauce Labs](https://saucelabs.com) account. Follow the [zuul documentation](https://github.com/defunctzombie/zuul/wiki/Cloud-testing) instructions.
 - `yarn test` to check it's all working
 
 `fetch-engine` uses [TypeScript](https://www.typescriptlang.org/). To help you write great code, I'd recommend that you get a plugin for your editor or use an IDE like [VS Code](https://code.visualstudio.com/).
@@ -463,21 +463,11 @@ Every commit should pass `yarn test`. We use [ghooks](https://github.com/gtramon
 
 ### Compiling & running tests locally
 
-There is a `tsc` watch task you can run to build files as they change:
-
 ```
-$ yarn watch
+$ jest -w
 ```
 
 Your editor may do this for you.
-
-To run browser tests locally, run:
-
-```
-$ yarn run zuul
-```
-
-Follow the instructions it gives you.
 
 ## Goals of the project
 
@@ -501,5 +491,5 @@ These were the original goals of the project:
 [finagle-timeouts]: http://twitter.github.io/finagle/guide/Clients.html#timeouts-expiration
 [finagle-retries]: http://twitter.github.io/finagle/guide/Clients.html#retries
 [fetch-api]: https://developer.mozilla.org/en/docs/Web/API/Fetch_API
-[isomorphic-fetch]: https://github.com/matthew-andrews/isomorphic-fetch
+[cross-fetch]: https://github.com/lquixada/cross-fetch
 [caniuse]: https://caniuse.com/#feat=fetch
