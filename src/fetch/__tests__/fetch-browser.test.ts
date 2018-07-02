@@ -1,6 +1,6 @@
 // tslint:disable:no-var-requires
 import "whatwg-fetch";
-import { ORIGIN, SAME_ORIGIN } from "../../integration-tests/jest";
+import { CROSS_ORIGIN, ORIGIN, SAME_ORIGIN } from "../../integration-tests/jest";
 import fetchBrowser from "../fetch-browser";
 
 it(
@@ -239,6 +239,24 @@ it(
       .then((json) => {
         expect(json.method).toEqual("delete");
         expect(json.payload).toEqual(null);
+      });
+  },
+);
+
+it(
+  "can send requests cross-origin",
+  () => {
+    expect.assertions(2);
+    const req = new Request(
+      `${CROSS_ORIGIN}/cors/echo/text/${encodeURIComponent("Hello fetch-browser")}`,
+    );
+    return fetchBrowser(req)
+      .then((res) => {
+        expect(res).toBeTruthy();
+        return res.text();
+      })
+      .then((text) => {
+        expect(text).toEqual("Hello fetch-browser");
       });
   },
 );
