@@ -8,8 +8,9 @@
     "build": "npm run clean && tsc",
     "watch": "npm run clean && tsc --watch",
     "test": "npm run specs && npm run lint",
+    "prepublish": "npm run build",
     "lint": "find src -name '*.ts' | xargs tslint",
-    "specs": "jest",
+    "specs": "jest -i",
     "semantic-release": "semantic-release"
   },
   "jest": {
