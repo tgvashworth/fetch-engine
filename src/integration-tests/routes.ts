@@ -1,7 +1,7 @@
 import Boom = require("boom");
 import { IRouteConfiguration, Response } from "hapi";
 
-export const routes: IRouteConfiguration[] = [
+const basicRoutes: IRouteConfiguration[] = [
   {
     handler(request, reply): Response {
       return reply({
@@ -55,6 +55,17 @@ export const routes: IRouteConfiguration[] = [
     path: "/error/{code}",
   },
 ];
+
+const corsRoutes: IRouteConfiguration[] = basicRoutes.map((route) => ({
+  ...route,
+  config: {
+    ...route.config,
+    cors: true,
+  },
+  path: `/cors${route.path}`,
+}));
+
+export const routes: IRouteConfiguration[] = basicRoutes.concat(corsRoutes);
 
 export const states = [
   {
