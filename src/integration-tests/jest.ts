@@ -12,11 +12,11 @@ const CROSS_ORIGIN_PORT = SAME_ORIGIN_PORT + 1;
 beforeAll(() => {
   servers.push(makeServer({ port: `${SAME_ORIGIN_PORT}` }));
   servers.push(makeServer({ port: `${CROSS_ORIGIN_PORT}` }));
-  servers.map((s) => s.start());
+  return Promise.all(servers.map((s) => s.start()));
 });
 
 afterAll(() => {
-  servers.map((s) => s.stop());
+  return Promise.all(servers.map((s) => s.stop()));
 });
 
 const ORIGIN = `http://localhost:${SAME_ORIGIN_PORT}`;
