@@ -9,7 +9,7 @@ A smart request-making library that makes sure your Javascript client is a good 
 To get `fetch-engine`, install it with yarn:
 
 ```
-yarn add etch-engine
+yarn add fetch-engine
 ```
 
 ## Getting started

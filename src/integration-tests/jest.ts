@@ -9,6 +9,10 @@ const parsedJestUrl = url.parse(jestUrl);
 const SAME_ORIGIN_PORT = parseInt(parsedJestUrl.port, 10);
 const CROSS_ORIGIN_PORT = SAME_ORIGIN_PORT + 1;
 
+const timeout = (t, v) => new Promise((res) => {
+  setTimeout(() => res(v), t);
+});
+
 beforeAll(() => {
   servers.push(makeServer({ port: `${SAME_ORIGIN_PORT}` }));
   servers.push(makeServer({ port: `${CROSS_ORIGIN_PORT}` }));
